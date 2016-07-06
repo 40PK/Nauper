@@ -1,0 +1,21 @@
+{
+  "name": "nauper",
+  "version": "0.0.1",
+  "description": "Web engine for visual novels",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Perkovec/Nauper.git"
+  },
+  "author": "Perkovec",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Perkovec/Nauper/issues"
+  },
+  "homepage": "https://github.com/Perkovec/Nauper#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-eslint": "^3.0.1",
+    "gulp-uglify": "^1.5.4"
+  }
+}
