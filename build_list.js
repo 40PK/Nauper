@@ -1,3 +1,3 @@
 module.exports = [
-  // 'src/nauper.js'
+  'src/nauper.js'
 ];
