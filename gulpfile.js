@@ -23,4 +23,4 @@ gulp.task('build-release', function() {
       .pipe(gulp.dest('dist'));
 });
 
-gulp.task(['build-dev', 'build-release']);
+gulp.task('build', ['build-dev', 'build-release']);
