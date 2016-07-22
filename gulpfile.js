@@ -22,6 +22,7 @@ gulp.task('build-release', function() {
       .pipe(uglify())
       .pipe(concat('nauper.js'))
       .pipe(gulp.dest('dist'))
+      .pipe(gulp.dest('example'))
       .pipe(connect.reload());;
 });
 
