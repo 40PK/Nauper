@@ -11,7 +11,7 @@ gulp.task('build-dev', function() {
       .pipe(eslint.format())
       .pipe(eslint.failOnError())
       .pipe(concat('nauper-dev.js'))
-      .pipe(gulp.dest('dist'));
+      .pipe(gulp.dest('build'));
 });
 
 gulp.task('build-release', function() {
@@ -19,10 +19,15 @@ gulp.task('build-release', function() {
       .pipe(eslint())
       .pipe(eslint.format())
       .pipe(eslint.failOnError())
-      .pipe(uglify())
       .pipe(concat('nauper.js'))
-      .pipe(gulp.dest('dist'))
+      .pipe(gulp.dest('build'))
       .pipe(gulp.dest('example'))
+
+      .pipe(uglify())
+      .pipe(concat('nauper.min.js'))
+      .pipe(gulp.dest('build'))
+      .pipe(gulp.dest('example'))
+      
       .pipe(connect.reload());;
 });
 

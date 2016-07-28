@@ -1,3 +1,7 @@
 module.exports = [
-  'src/nauper.js'
+  'src/nauper.js',
+  'src/engine.js',
+  'src/dialog.js',
+  'src/hero.js',
+  'src/sprite.js'
 ];
