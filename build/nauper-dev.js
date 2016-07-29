@@ -90,22 +90,44 @@ Engine.prototype.nextScene = function nextScene() {
     var data = DIALOGS[SCENE];
     // draw cover
     RENDER.drawImage(data.background, 0, 0, this.width, this.height);
-    // dialog bg
-    RENDER.fillStyle = 'white';
-    RENDER.fillRect(30, this.height-150, this.width-60, 140);
-    // set font
-    RENDER.font = '16px verdana';
-    // set text color
-    RENDER.fillStyle = 'black';
-    // if is hero
-    if(data.author >= 0) {
-      // draw author name
-      RENDER.fillText(HEROES[data.author].name + ':', 50, this.height-125);
-      // draw text
-      RENDER.fillText(data.text, 50, this.height-100);
-    } else {
-      // draw text
-      RENDER.fillText(data.text, 50, this.height-125);
+    // draw heroes
+    if(data.heroes.length > 0) {
+      var i;
+      for(i = 0; i < data.heroes.length; i++) {
+        var heroData = data.heroes[i].split(":");
+        heroData[0] = +heroData[0];
+
+        RENDER.drawImage(
+          // image
+          HEROES[heroData[0]].emotion[heroData[1]],
+          // position
+          HEROES[heroData[0]].position.x,
+          HEROES[heroData[0]].position.y,
+          // size
+          HEROES[heroData[0]].size.width,
+          HEROES[heroData[0]].size.height
+        )
+        
+      }
+    }
+    if(data.type === 'dialog') {
+      // dialog bg
+      RENDER.fillStyle = 'white';
+      RENDER.fillRect(30, this.height-150, this.width-60, 140);
+      // set font
+      RENDER.font = '16px verdana';
+      // set text color
+      RENDER.fillStyle = 'black';
+      // if is hero
+      if(data.author >= 0) {
+        // draw author name
+        RENDER.fillText(HEROES[data.author].name + ':', 50, this.height-125);
+        // draw text
+        wrapText(RENDER, data.text, 50, this.height-100, this.width-100, 20);
+      } else {
+        // draw text
+        RENDER.fillText(data.text, 50, this.height-125);
+      }
     }
     
   }
@@ -122,9 +144,9 @@ Engine.prototype.run = function run() {
   CANVAS.width = RESIZE.width;
   // Set canvas height
   CANVAS.height = RESIZE.height;
-  // start
+  // start scene
   RENDER.font = '18px verdana'
-  RENDER.fillText('Nauper', 50, RESIZE.height-50);
+  RENDER.fillText('Nauper Engine', 50, RESIZE.height-50);
   // Add event
   CANVAS.addEventListener('click', this.nextScene);
 };
@@ -176,6 +198,8 @@ DialogsSystem.prototype.getLength = function getLength() {
  */
 function DialogSystem(args) {
   args = args || {};
+  args.type = args.type || 'dialog';
+  args.heroes = args.heroes || [];
   this.map = args;
 }
 /**
@@ -264,10 +288,9 @@ function HeroSystem(args) {
       y: 0
     },
     size: {
-      width: 1,
-      height: 1
-    },
-    emotion: args.emotion || new EmotionsSystem()
+      width: 50,
+      height: 120
+    }
   };
 }
 /**
@@ -297,8 +320,8 @@ HeroSystem.prototype.setPosition = function setPosition(x, y) {
 HeroSystem.prototype.setSize = function setSize(width, height) {
   width = width || 50;
   height = height || 120;
-  this.map.position.width = width;
-  this.map.position.height = height;
+  this.map.size.width = width;
+  this.map.size.height = height;
   return this;
 };
 /**
@@ -307,7 +330,7 @@ HeroSystem.prototype.setSize = function setSize(width, height) {
  * @since alpha 0.2
  */
 HeroSystem.prototype.setEmotions = function setEmotions(map) {
-  this.map.emotion = map;
+  this.map.emotion = map.emotions;
   return this;
 };
 /**
@@ -316,7 +339,16 @@ HeroSystem.prototype.setEmotions = function setEmotions(map) {
  * @since alpha 0.2
  */
 HeroSystem.prototype.addEmotion = function addEmotion(map) {
-  this.map.emotion.push(map);
+  this.map.emotion.push(map.emotion);
+  return this;
+};
+/**
+ * Set active emotion
+ * @param name emotion name
+ * @since alpha 0.2
+ */
+HeroSystem.prototype.activeEmotion = function activeEmotion(name) {
+  this.map.active = name;
   return this;
 };
 
@@ -332,15 +364,16 @@ function EmotionsSystem() {
  * Add new emotions
  * @param name emotion name
  * @param map obj class EmotionSystem
+ * @since alpha 0.2 
  */
 EmotionsSystem.prototype.add = function add(name, map) {
-  var map = map || new EmotionSystem();
-  this.emotions[name] = map;
+  this.emotions[name] = map.emotion;
   return this;
 };
 /**
  * Remove emotions
  * @param name emotion name
+ * @since alpha 0.2 
  */
 EmotionsSystem.prototype.remove = function remove(name) {
   delete this.emotions[name];
@@ -351,9 +384,8 @@ EmotionsSystem.prototype.remove = function remove(name) {
  * Basic emotion class
  * @since alpha 0.2 
  */
-function EmotionSystem(args) {
-  args = args || {};
-  this.emotion = args;
+function EmotionSystem() {
+  this.emotion = new Image();
 }
 /**
  * Set emotion image
@@ -361,9 +393,26 @@ function EmotionSystem(args) {
  * @since alpha 0.2
  */
 EmotionSystem.prototype.setImage = function setImage(path) {
-  this.emotion.image = new Image();
-  this.emotion.image.src = path;
+  this.emotion.src = path;
   return this;
 };
 
 
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+  var words = text.split(' ');
+  var line = '';
+
+  for(var n = 0; n < words.length; n++) {
+    var testLine = line + words[n] + ' ';
+    var metrics = context.measureText(testLine);
+    var testWidth = metrics.width;
+    if (testWidth > maxWidth && n > 0) {
+      context.fillText(line, x, y);
+      line = words[n] + ' ';
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  context.fillText(line, x, y);
+}

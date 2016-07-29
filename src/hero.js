@@ -36,10 +36,9 @@ function HeroSystem(args) {
       y: 0
     },
     size: {
-      width: 1,
-      height: 1
-    },
-    emotion: args.emotion || new EmotionsSystem()
+      width: 50,
+      height: 120
+    }
   };
 }
 /**
@@ -69,8 +68,8 @@ HeroSystem.prototype.setPosition = function setPosition(x, y) {
 HeroSystem.prototype.setSize = function setSize(width, height) {
   width = width || 50;
   height = height || 120;
-  this.map.position.width = width;
-  this.map.position.height = height;
+  this.map.size.width = width;
+  this.map.size.height = height;
   return this;
 };
 /**
@@ -79,7 +78,7 @@ HeroSystem.prototype.setSize = function setSize(width, height) {
  * @since alpha 0.2
  */
 HeroSystem.prototype.setEmotions = function setEmotions(map) {
-  this.map.emotion = map;
+  this.map.emotion = map.emotions;
   return this;
 };
 /**
@@ -88,7 +87,16 @@ HeroSystem.prototype.setEmotions = function setEmotions(map) {
  * @since alpha 0.2
  */
 HeroSystem.prototype.addEmotion = function addEmotion(map) {
-  this.map.emotion.push(map);
+  this.map.emotion.push(map.emotion);
+  return this;
+};
+/**
+ * Set active emotion
+ * @param name emotion name
+ * @since alpha 0.2
+ */
+HeroSystem.prototype.activeEmotion = function activeEmotion(name) {
+  this.map.active = name;
   return this;
 };
 
@@ -104,15 +112,16 @@ function EmotionsSystem() {
  * Add new emotions
  * @param name emotion name
  * @param map obj class EmotionSystem
+ * @since alpha 0.2 
  */
 EmotionsSystem.prototype.add = function add(name, map) {
-  var map = map || new EmotionSystem();
-  this.emotions[name] = map;
+  this.emotions[name] = map.emotion;
   return this;
 };
 /**
  * Remove emotions
  * @param name emotion name
+ * @since alpha 0.2 
  */
 EmotionsSystem.prototype.remove = function remove(name) {
   delete this.emotions[name];
@@ -123,9 +132,8 @@ EmotionsSystem.prototype.remove = function remove(name) {
  * Basic emotion class
  * @since alpha 0.2 
  */
-function EmotionSystem(args) {
-  args = args || {};
-  this.emotion = args;
+function EmotionSystem() {
+  this.emotion = new Image();
 }
 /**
  * Set emotion image
@@ -133,8 +141,7 @@ function EmotionSystem(args) {
  * @since alpha 0.2
  */
 EmotionSystem.prototype.setImage = function setImage(path) {
-  this.emotion.image = new Image();
-  this.emotion.image.src = path;
+  this.emotion.src = path;
   return this;
 };
 

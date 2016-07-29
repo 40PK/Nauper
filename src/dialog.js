@@ -44,6 +44,8 @@ DialogsSystem.prototype.getLength = function getLength() {
  */
 function DialogSystem(args) {
   args = args || {};
+  args.type = args.type || 'dialog';
+  args.heroes = args.heroes || [];
   this.map = args;
 }
 /**
