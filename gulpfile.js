@@ -19,10 +19,6 @@ gulp.task('build-release', function() {
       .pipe(eslint())
       .pipe(eslint.format())
       .pipe(eslint.failOnError())
-      .pipe(concat('nauper.js'))
-      .pipe(gulp.dest('build'))
-      .pipe(gulp.dest('example/js'))
-
       .pipe(uglify())
       .pipe(concat('nauper.min.js'))
       .pipe(gulp.dest('build'))
