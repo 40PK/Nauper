@@ -3,5 +3,5 @@ module.exports = [
   'src/engine.js',
   'src/dialog.js',
   'src/hero.js',
-  'src/sprite.js'
+  'src/ui.js'
 ];

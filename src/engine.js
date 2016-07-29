@@ -12,11 +12,11 @@ function Engine(args) {
   // if args is empty
   args = args || {};
   // if width not indicated
-  this.width = args.width || RESIZE.width;
+  RESIZE.width = args.width || RESIZE.width;
   // if height not indicated
-  this.height = args.height || RESIZE.height;
+  RESIZE.height = args.height || RESIZE.height;
   // if title not indicated
-  this.title = args.title || 'Nauper';
+  TITLE = args.title || TITLE;
 }
 /**
  * Edit canvas size
@@ -25,12 +25,8 @@ function Engine(args) {
  * @return object class
  */
 Engine.prototype.setSize = function setSize(width, height) {
-  width = width || RESIZE.width;
-  height = height || RESIZE.height;
-
-  this.width = width;
-  this.height = height;
-
+  RESIZE.width = width;
+  RESIZE.height = height;
   return this;
 };
 /**
@@ -39,34 +35,75 @@ Engine.prototype.setSize = function setSize(width, height) {
  * @return object class
  */
 Engine.prototype.setTitle = function setTitle(title) {
-  title = title || 'Nauper';
-
-  this.title = title;
-  
+  TITLE = title;
   return this;
 };
 /**
- * Load game dialogs
- * @param map object class 'DialogSystem'
- * @return object class
+ * Set dialog
+ * @param map dialogs map
+ * @since alpha 0.1 
  */
-Engine.prototype.loadDoalog = function loadDialog(map) {
-  map = map || new DialogSystem();
-
-  this.dialogMap = map;
-
-  return this;
+Engine.prototype.setDialogs = function setDialogs(map) {
+  DIALOGS = map;
+}
+/**
+ * Render dialog
+ * @since alpha 0.1 
+ */
+Engine.prototype.nextScene = function nextScene() {
+  // clear canvas
+  RENDER.clearRect(0, 0, this.width, this.height);
+  if(SCENE > DIALOGS.length-1) SCENE = -1;
+  if(SCENE < 0) {
+    // render menu cover
+    RENDER.drawImage(COVER, 0, 0, this.width, this.height);
+    // set title font
+    RENDER.font = '23px verdana';
+    // set title color
+    RENDER.fillStyle = 'black';
+    // draw title
+    RENDER.fillText(TITLE, 50, 100);
+  } else {
+    // get scene data
+    var data = DIALOGS[SCENE];
+    // draw cover
+    RENDER.drawImage(data.background, 0, 0, this.width, this.height);
+    // dialog bg
+    RENDER.fillStyle = 'white';
+    RENDER.fillRect(30, this.height-150, this.width-60, 140);
+    // set font
+    RENDER.font = '16px verdana';
+    // set text color
+    RENDER.fillStyle = 'black';
+    // if is hero
+    if(data.author >= 0) {
+      // draw author name
+      RENDER.fillText(HEROES[data.author].name + ':', 50, this.height-125);
+      // draw text
+      RENDER.fillText(data.text, 50, this.height-100);
+    } else {
+      // draw text
+      RENDER.fillText(data.text, 50, this.height-125);
+    }
+    
+  }
+  // goto next scene
+  SCENE += 1;
 };
 /**
  * Run game loop
  */
 Engine.prototype.run = function run() {
   // Set title game
-  document.getElementsByTagName('title')[0].innerHTML = this.title;
+  document.getElementsByTagName('title')[0].innerHTML = TITLE;
   // Set canvas width
-  CANVAS.width = this.width;
+  CANVAS.width = RESIZE.width;
   // Set canvas height
-  CANVAS.height = this.height;
+  CANVAS.height = RESIZE.height;
+  // start
+  RENDER.font = '18px verdana'
+  RENDER.fillText('Nauper', 50, RESIZE.height-50);
+  // Add event
+  CANVAS.addEventListener('click', this.nextScene);
 };
-
 

@@ -1,11 +1,23 @@
 // Select canvas
 var CANVAS = document.getElementsByTagName('canvas')[0];
+CANVAS.width = CANVAS.width || 800;
+CANVAS.height = CANVAS.height || 600;
+// Game title
+var TITLE = 'Nauper';
 // Basic canvas resize
 var RESIZE = {
   width: CANVAS.width,
   height: CANVAS.height
 };
+// 
 var RENDER = CANVAS.getContext('2d');
+// Game resource
+var SCENE = -1;
+var DIALOGS = [];
+var HEROES = [];
+// Game menu background
+var COVER = new Image();
+COVER.src = "http://localhost:8000/data/backgrounds/1.jpg";
 
 
 /**
@@ -22,11 +34,11 @@ function Engine(args) {
   // if args is empty
   args = args || {};
   // if width not indicated
-  this.width = args.width || RESIZE.width;
+  RESIZE.width = args.width || RESIZE.width;
   // if height not indicated
-  this.height = args.height || RESIZE.height;
+  RESIZE.height = args.height || RESIZE.height;
   // if title not indicated
-  this.title = args.title || 'Nauper';
+  TITLE = args.title || TITLE;
 }
 /**
  * Edit canvas size
@@ -35,12 +47,8 @@ function Engine(args) {
  * @return object class
  */
 Engine.prototype.setSize = function setSize(width, height) {
-  width = width || RESIZE.width;
-  height = height || RESIZE.height;
-
-  this.width = width;
-  this.height = height;
-
+  RESIZE.width = width;
+  RESIZE.height = height;
   return this;
 };
 /**
@@ -49,46 +57,87 @@ Engine.prototype.setSize = function setSize(width, height) {
  * @return object class
  */
 Engine.prototype.setTitle = function setTitle(title) {
-  title = title || 'Nauper';
-
-  this.title = title;
-  
+  TITLE = title;
   return this;
 };
 /**
- * Load game dialogs
- * @param map object class 'DialogSystem'
- * @return object class
+ * Set dialog
+ * @param map dialogs map
+ * @since alpha 0.1 
  */
-Engine.prototype.loadDoalog = function loadDialog(map) {
-  map = map || new DialogSystem();
-
-  this.dialogMap = map;
-
-  return this;
+Engine.prototype.setDialogs = function setDialogs(map) {
+  DIALOGS = map;
+}
+/**
+ * Render dialog
+ * @since alpha 0.1 
+ */
+Engine.prototype.nextScene = function nextScene() {
+  // clear canvas
+  RENDER.clearRect(0, 0, this.width, this.height);
+  if(SCENE > DIALOGS.length-1) SCENE = -1;
+  if(SCENE < 0) {
+    // render menu cover
+    RENDER.drawImage(COVER, 0, 0, this.width, this.height);
+    // set title font
+    RENDER.font = '23px verdana';
+    // set title color
+    RENDER.fillStyle = 'black';
+    // draw title
+    RENDER.fillText(TITLE, 50, 100);
+  } else {
+    // get scene data
+    var data = DIALOGS[SCENE];
+    // draw cover
+    RENDER.drawImage(data.background, 0, 0, this.width, this.height);
+    // dialog bg
+    RENDER.fillStyle = 'white';
+    RENDER.fillRect(30, this.height-150, this.width-60, 140);
+    // set font
+    RENDER.font = '16px verdana';
+    // set text color
+    RENDER.fillStyle = 'black';
+    // if is hero
+    if(data.author >= 0) {
+      // draw author name
+      RENDER.fillText(HEROES[data.author].name + ':', 50, this.height-125);
+      // draw text
+      RENDER.fillText(data.text, 50, this.height-100);
+    } else {
+      // draw text
+      RENDER.fillText(data.text, 50, this.height-125);
+    }
+    
+  }
+  // goto next scene
+  SCENE += 1;
 };
 /**
  * Run game loop
  */
 Engine.prototype.run = function run() {
   // Set title game
-  document.getElementsByTagName('title')[0].innerHTML = this.title;
+  document.getElementsByTagName('title')[0].innerHTML = TITLE;
   // Set canvas width
-  CANVAS.width = this.width;
+  CANVAS.width = RESIZE.width;
   // Set canvas height
-  CANVAS.height = this.height;
+  CANVAS.height = RESIZE.height;
+  // start
+  RENDER.font = '18px verdana'
+  RENDER.fillText('Nauper', 50, RESIZE.height-50);
+  // Add event
+  CANVAS.addEventListener('click', this.nextScene);
 };
 
 
-
 /**
- * Basic dialog class
- * @param args basic dialog
+ * Basic dialogs class
+ * @param args basic dialogs
  * @since alpha 0.1 
  */
-function DialogSystem(args) {
+function DialogsSystem(args) {
   args = args || [];
-  this.dialog = args;
+  this.map = args;
 }
 /**
  * Add data in dialog
@@ -99,11 +148,8 @@ function DialogSystem(args) {
  * @param data.heroes     dialog heroes
  * @param data.background background scene
  */
-DialogSystem.prototype.add = function add(data) {
-  data.text = data.text || 'Hello world';
-  data.author = data.author || -1;
-  data.heroes = data.heroes || [];
-  this.dialog.push(data);
+DialogsSystem.prototype.add = function add(data) {
+  this.map.push(data.map);
   return this;
 };
 /**
@@ -111,21 +157,99 @@ DialogSystem.prototype.add = function add(data) {
  * @param id dialog id for get data
  * 
  */
-DialogSystem.prototype.get = function get(id) {
+DialogsSystem.prototype.get = function get(id) {
   id = +id || 0;
-  return this.dialog[id];
+  return this.map[id];
 };
 /**
  * Get num dialog length
  * @return int
  */
-DialogSystem.prototype.getLength = function getLength() {
-  return this.dialog.length - 1;
+DialogsSystem.prototype.getLength = function getLength() {
+  return this.map.length - 1;
+};
+
+/**
+ * Basic dialog class
+ * @param args basic dialog
+ * @since alpha 0.1 
+ */
+function DialogSystem(args) {
+  args = args || {};
+  this.map = args;
+}
+/**
+ * Set dialog text
+ * @param text dialog text
+ * @since alpha 0.1 
+ */
+DialogSystem.prototype.setText = function setText(text) {
+  this.map.text = text;
+  return this;
+};
+/**
+ * Set author text
+ * @param id author id
+ * @since alpha 0.1 
+ */
+DialogSystem.prototype.setAuthor = function setAuthor(id) {
+  this.map.author = id;
+  return this;
+};
+/**
+ * Set dialog background
+ * @param path path to image
+ * @since alpha 0.1 
+ */
+DialogSystem.prototype.setBackground = function setBackground(path) {
+  this.map.background = new Image();
+  this.map.background.src = path;
+  return this;
+};
+/**
+ * Set heroes dialog list
+ * @param map heroes list map
+ * @since alpha 0.1 
+ */
+DialogSystem.prototype.setHeroes = function setHeroes(map) {
+  this.map.heroes = map;
+  return this;
+};
+/**
+ * Add hero to map
+ * @param map hero map
+ * @since alpha 0.1 
+ */
+DialogSystem.prototype.addHero = function addHero(map) {
+  this.map.heroes.push(map);
+  return this;
 };
 
 
 /**
  * Basic hero class
+ * @param args basic hero settings
+ * @since alpha 0.2 
+ */
+function HeroesSystem() { }
+/**
+ * Add new hero
+ * @param hero map hero
+ * @since alpha 0.1
+ */
+HeroesSystem.prototype.add = function add(hero) {
+  HEROES.push(hero.map)
+};
+/**
+ * Remove hero 
+ * @param id hero id
+ * @since alpha 0.1
+ */
+HeroesSystem.prototype.remove = function remove(id) {
+  delete HEROES[id];
+};
+/**
+ * Basic heroes class
  * @param args basic hero settings
  * @since alpha 0.1 
  */
@@ -133,24 +257,73 @@ function HeroSystem(args) {
   // If args is empty
   var args = args || {};
 
-  this.hero = {
+  this.map = {
     name: args.name || 'Nauper',
     position: {
       x: 0,
       y: 0
     },
     size: {
-      x: 1,
-      y: 1
+      width: 1,
+      height: 1
     },
     emotion: args.emotion || new EmotionsSystem()
   };
 }
+/**
+ * Set hero name
+ * @param name hero name
+ * @since alpha 0.1
+ */
+HeroSystem.prototype.setName = function setName(name) {
+  this.map.name = name;
+  return this;
+};
+/**
+ * Set hero position in scene
+ * @param x, y hero position
+ * @since alpha 0.2
+ */
+HeroSystem.prototype.setPosition = function setPosition(x, y) {
+  this.map.position.x = x;
+  this.map.position.y = y;
+  return this;
+};
+/**
+ * Add new hero
+ * @param width, height hero image size
+ * @since alpha 0.2
+ */
+HeroSystem.prototype.setSize = function setSize(width, height) {
+  width = width || 50;
+  height = height || 120;
+  this.map.position.width = width;
+  this.map.position.height = height;
+  return this;
+};
+/**
+ * Set emotions
+ * @param map emotions map
+ * @since alpha 0.2
+ */
+HeroSystem.prototype.setEmotions = function setEmotions(map) {
+  this.map.emotion = map;
+  return this;
+};
+/**
+ * Add new emotion
+ * @param map emotion map
+ * @since alpha 0.2
+ */
+HeroSystem.prototype.addEmotion = function addEmotion(map) {
+  this.map.emotion.push(map);
+  return this;
+};
 
 
 /**
  * Basic emotions class
- * @since alpha 0.1 
+ * @since alpha 0.2 
  */
 function EmotionsSystem() {
   this.emotions = {};
@@ -164,7 +337,7 @@ EmotionsSystem.prototype.add = function add(name, map) {
   var map = map || new EmotionSystem();
   this.emotions[name] = map;
   return this;
-}
+};
 /**
  * Remove emotions
  * @param name emotion name
@@ -172,19 +345,25 @@ EmotionsSystem.prototype.add = function add(name, map) {
 EmotionsSystem.prototype.remove = function remove(name) {
   delete this.emotions[name];
   return this;
-}
+};
 
 /**
  * Basic emotion class
- * @since alpha 0.1 
+ * @since alpha 0.2 
  */
 function EmotionSystem(args) {
-
+  args = args || {};
+  this.emotion = args;
 }
+/**
+ * Set emotion image
+ * @param path image path
+ * @since alpha 0.2
+ */
+EmotionSystem.prototype.setImage = function setImage(path) {
+  this.emotion.image = new Image();
+  this.emotion.image.src = path;
+  return this;
+};
 
-
-
-function SpriteSystem() {
-  
-}
 
