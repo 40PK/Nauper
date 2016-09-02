@@ -63,7 +63,7 @@ basicDialog.add(threeScene);
 // Create Canvas
 var engine = new Engine({
   title: 'Everlasting summer',
-  width: 1000,
+  width: 800,
   height: 600
 });
 // Set dialog

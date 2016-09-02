@@ -10,7 +10,7 @@ gulp.task('build-dev', function() {
       .pipe(eslint())
       .pipe(eslint.format())
       .pipe(eslint.failOnError())
-      .pipe(concat('nauper-dev.js'))
+      .pipe(concat('novellix-dev.js'))
       .pipe(gulp.dest('build'));
 });
 
@@ -20,7 +20,7 @@ gulp.task('build-release', function() {
       .pipe(eslint.format())
       .pipe(eslint.failOnError())
       .pipe(uglify())
-      .pipe(concat('nauper.min.js'))
+      .pipe(concat('novellix.min.js'))
       .pipe(gulp.dest('build'))
       .pipe(gulp.dest('example/js'))
       
@@ -29,7 +29,7 @@ gulp.task('build-release', function() {
 
 gulp.task('webserver', function() {
   connect.server({
-    name: 'Nauper app',
+    name: 'Novellix app',
     root: 'example',
     port: 8000,
     livereload: true
