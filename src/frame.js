@@ -12,6 +12,7 @@ function Frame (args) {
             render.fillStyle = text.textcolor;
             render.fillText(text.text, size.width * 0.10, size.height * 0.85);
         }
+        this.type = "frame";
         this.draw = function () {
             render.clearRect(0, 0, size.width, size.height);
             canvas.style.backgroundImage = "url(./data/images/backgrounds/" + args.background + ")";

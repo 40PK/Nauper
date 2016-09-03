@@ -41,8 +41,19 @@ var frameTwo = new Frame({
     },
     "background": "4.jpg"
 });
-var scene = new Scene({
-	"frames": [frameOne, frameTwo]
+var questionOne = new Question({
+    "background": "#fff",
+    "boxcolor": "#888",
+    "textcolor": "#000",
+    "map": [{
+        "text": "в начало",
+        "address": "0"
+    },
+    {
+        "text": "вперед",
+        "address": "2"
+    }
+    ]
 });
-var engine = new Engine([scene]);
+var engine = new Engine([frameOne, questionOne, frameTwo]);
 engine.start();
