@@ -2,7 +2,6 @@ function Engine (elements) {
     var index = 0;
     nextElement = function () {
         index = Number(index) + 1;
-        console.log("new index - " + index);
         if (index == elements.length) {
             canvas.removeEventListener("click", nextElement);
         } else {
@@ -32,10 +31,8 @@ function Engine (elements) {
     }
     this.start = function () {
         if (elements[0].type == "frame") {
-            console.log("it's a frame");
             canvas.addEventListener("click", nextElement);
         } else if (elements[1].type == "choice") {
-            console.log("it's a choice");
             canvas.addEventListener("click", choice);
         }
         elements[0].draw();

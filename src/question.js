@@ -12,7 +12,7 @@ function Question (args) {
                 render.fillStyle = boxcolor;
                 render.fillRect(0, index * 0.25 * size.height, size.width, size.height * 0.25);
                 render.fillStyle = textcolor;
-                render.fillText(i.text, size.width * 0.50, index * 0.25 * size.height + 0.01);
+                render.fillText(i.text, size.width * 0.50, size.height * (index * 0.25 + 0.125));
             });
         }
     } else {
