@@ -5,7 +5,6 @@ function Scene (args) {
         this.type = "scene";
         this.drawing = false;
         nextFrame = function () {
-            console.log(currentFrame);
             if (currentFrame != (frames.length - 1) || currentFrame == -1) {
                 currentFrame += 1;
                 frames[currentFrame].draw();
@@ -18,7 +17,6 @@ function Scene (args) {
         this.start = function () {
             this.drawing = true;
             canvas.addEventListener("click", nextFrame);
-            nextFrame();
         }
     } else {
         throw new Error;

@@ -5,7 +5,6 @@ function Engine (elements) {
                 if (index == id) {
                     if (i.type == "scene") {
                         i.start();
-                        // while (i.drawing) {};
                         id++;
                     } else if (i.type == "question") {
                         render_(i.draw());
@@ -15,7 +14,7 @@ function Engine (elements) {
         }
         this.start = function () {
             render_(0);
-            console.log("end");
+            return true;
         }
     } else {
         throw new Error;
