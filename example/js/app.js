@@ -1,23 +1,15 @@
 // Init
-var canvas = document.getElementsByTagName("canvas")[0];
-var render = canvas.getContext("2d");
 var doc = document.documentElement;
-canvas.width = doc.clientWidth;
-canvas.height = doc.clientHeight;
-var size = {
-	"width": doc.clientWidth,
-	"height": doc.clientHeight
-};
 // creating app
-var lena = new Character({
+var lena = new Nauper.Character({
 	"path": "./data/images/characters/lena", 
 	"emotions": ["smile"]
 });
-var yulya = new Character({
+var yulya = new Nauper.Character({
     "path": "./data/images/characters/yulya",
     "emotions": ["smile"]
 });
-var frameOne = new Frame({
+var frameOne = new Nauper.Frame({
 	"characters": [lena.smile, yulya.smile], 
 	"displayOrder": [0, 1], 
 	"textbox": {
@@ -29,7 +21,7 @@ var frameOne = new Frame({
 	}, 
 	"background": "1.jpg"
 });
-var frameTwo = new Frame({
+var frameTwo = new Nauper.Frame({
     "characters": [lena.smile, yulya.smile],
     "displayOrder": [false, false, 1, 0],
     "textbox": {
@@ -41,7 +33,7 @@ var frameTwo = new Frame({
     },
     "background": "4.jpg"
 });
-var questionOne = new Question({
+var questionOne = new Nauper.Question({
     "background": "#fff",
     "boxcolor": "#888",
     "textcolor": "#000",
@@ -55,5 +47,15 @@ var questionOne = new Question({
     }
     ]
 });
-var engine = new Engine([frameOne, questionOne, frameTwo]);
+var engine = new Nauper.Engine({
+  canvas: document.getElementsByTagName("canvas")[0],
+  size: {
+	  width: doc.clientWidth,
+	  height: doc.clientHeight
+  }
+}, [
+  frameOne,
+  questionOne,
+  frameTwo
+]);
 engine.start();
