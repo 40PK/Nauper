@@ -4,12 +4,5 @@
 }
 
 body {
-  font-family: verdana;
-  background: deepskyblue;
-}
-
-canvas {
-  background: white;
-  margin: 10px auto;
-  display: block;
+	overflow: hidden;
 }

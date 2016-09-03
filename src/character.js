@@ -1,11 +1,11 @@
 function Character (args) {
-	if (args.name && args.path && args.color && args.emotions.length != 0) {
-		args.emotions.forEach(function (emotion, index, array) {
-			this[emotion] = path + "/" + emotion;
-		});
-		this.name = args.name;
-		this.color = args.color;
-	} else {
-		throw new Error;
-	}
+    if (args.path && args.emotions.length != 0) {
+        var result = {};
+        args.emotions.forEach(function (emotion, index, array) {
+            result[emotion] = args.path + "/" + emotion + ".png";
+        });
+        return result;
+    } else {
+        throw new Error;
+    }
 }

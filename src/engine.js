@@ -1,9 +1,23 @@
-var canvas = document.getElementsByTagName("canvas")[0];
-var render = canvas.getContext("2d");
-var doc = document.documentElement;
-var canvas.style.width = doc.clientWidth.toString() + "px";
-var canvas.style.height = doc.clientHeight.toString() + "px";
-var size = {
-	"width": doc.clientWidth,
-	"height": doc.clientHeight
-};
+function Engine (elements) {
+    if (elements.length != 0) {
+        render_ = function (id) {
+            elements.forEach(function (i, index, array) {
+                if (index == id) {
+                    if (i.type == "scene") {
+                        i.start();
+                        // while (i.drawing) {};
+                        id++;
+                    } else if (i.type == "question") {
+                        render_(i.draw());
+                    }
+                }
+            });
+        }
+        this.start = function () {
+            render_(0);
+            console.log("end");
+        }
+    } else {
+        throw new Error;
+    }
+}

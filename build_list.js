@@ -3,6 +3,5 @@ module.exports = [
   "src/scene.js",
   "src/frame.js",
   "src/character.js",
-  "src/question.js",
-  "src/ui.js"
+  "src/question.js"
 ];
