@@ -1,11 +1,11 @@
 /* global Nauper */
 Nauper.Question = function Question(args) {
-  if (args.map.length !== 0 && args.map.length !== 1 && args.map.length < 5 && args.background && args.boxcolor && args.textcolor) {
-    this.map = args.map;
-    var background = args.background;
-    var boxcolor = args.boxcolor;
+  var background = args.background;
+  var boxcolor = args.boxcolor;
+  var textcolor = args.textcolor;
+  this.map = args.map;
+  if (this.map.length > 1 && this.map.length < 5 && background && boxcolor && textcolor) {
     this.type = 'choice';
-    var textcolor = args.textcolor;
     this.draw = function draw(engine) {
       var render = engine.render;
       var size = engine.size;
@@ -15,7 +15,7 @@ Nauper.Question = function Question(args) {
         render.fillStyle = boxcolor;
         render.fillRect(0, index * 0.25 * size.height, size.width, size.height * 0.25);
         render.fillStyle = textcolor;
-        render.fillText(i.text, size.width * 0.50, size.height * (index * 0.25 + 0.125));
+        render.fillText(i.text, size.width * 0.50, size.height * ((index * 0.25) + 0.125));
       });
     }.bind(this);
   } else {

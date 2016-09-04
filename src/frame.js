@@ -1,10 +1,9 @@
 /* global Nauper */
 Nauper.Frame = function Frame(args) {
-  if (args.characters.length !== 0 && args.displayOrder.length !== 0 && args.textbox && args.background) {
-    var characters = args.characters;
-    var displayOrder = args.displayOrder;
-    var text = args.textbox;
-
+  var characters = args.characters;
+  var displayOrder = args.displayOrder;
+  var text = args.textbox;
+  if (characters.length !== 0 && displayOrder.length !== 0 && text && args.background) {
     this.type = 'frame';
     this.draw = function draw(engine) {
       var render = engine.render;
@@ -25,10 +24,11 @@ Nauper.Frame = function Frame(args) {
       canvas.style.backgroundImage = 'url(./data/images/backgrounds/' + args.background + ')';
       canvas.style.backgroundSize = 'cover';
       displayOrder.forEach(function orderCreator(i, index) {
+        var img;
         if (i !== false || i === 0) {
-          var img = new Image();
+          img = new Image();
           img.onload = function onload() {
-            var ratio = size.height * 1.20 / img.height;
+            var ratio = (size.height * 1.20) / img.height;
             var offsetY = size.height * 0.10;
             var offsetX;
             if (index === 0) {
