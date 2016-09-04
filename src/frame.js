@@ -11,23 +11,23 @@ Nauper.Frame = function Frame(args) {
       var canvas = engine.canvas;
 
       function setText() {
+        var x = size.width * 0.025;
+        var y = size.height * 0.80;
+        var height = size.height * 0.18;
+        var width = size.width * 0.95;
+        var radius = size.height * 0.05;
         render.fillStyle = text.base;
-        if (text.edges == "default") {
+        if (text.edges === 'default') {
           render.fillRect(0, size.height * 0.80, size.width, size.height * 0.20);
-        } else if (text.edges == "rounded") {
-          var x = size.width * 0.05;
-          var y = size.height * 0.80;
-          var height = size.height * 0.18;
-          var width = size.width * 0.90;
-          var radius = size.height * 0.05;
+        } else if (text.edges === 'rounded') {
           render.beginPath();
           render.moveTo(x, y + radius);
-          render.lineTo(x, y + height - radius);
+          render.lineTo(x, (y + height) - radius);
           render.quadraticCurveTo(x, y + height, x + radius, y + height);
-          render.lineTo(x + width - radius, y + height);
-          render.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
+          render.lineTo((x + width) - radius, y + height);
+          render.quadraticCurveTo(x + width, y + height, x + width, (y + height) - radius);
           render.lineTo(x + width, y + radius);
-          render.quadraticCurveTo(x + width, y, x + width - radius, y);
+          render.quadraticCurveTo(x + width, y, (x + width) - radius, y);
           render.lineTo(x + radius, y);
           render.quadraticCurveTo(x, y, x, y + radius);
           render.fill();

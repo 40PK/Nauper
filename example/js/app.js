@@ -13,7 +13,7 @@ var frameOne = new Nauper.Frame({
 	"characters": [lena.smile, yulya.smile], 
 	"displayOrder": [0, 1], 
 	"textbox": {
-        "edges": "default",
+        "edges": "rounded",
 		"base": "#fff", 
 		"namecolor": "#000", 
 		"name": "Лена", 
@@ -36,10 +36,10 @@ var frameTwo = new Nauper.Frame({
     "background": "1.jpg"
 });
 var questionOne = new Nauper.Question({
-    "background": "#fff",
-    "boxcolor": "#888",
+    "background": "1.jpg",
+    "boxcolor": "#fff",
     "textcolor": "#000",
-    "edges": "default",
+    "boxtype": "rounded",
     "map": [{
         "text": "в начало",
         "address": "0"
