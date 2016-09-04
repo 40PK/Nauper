@@ -75,7 +75,26 @@ Nauper.Frame = function Frame(args) {
 
       function setText() {
         render.fillStyle = text.base;
-        render.fillRect(0, size.height * 0.80, size.width, size.height * 0.20);
+        if (text.edges == "default") {
+          render.fillRect(0, size.height * 0.80, size.width, size.height * 0.20);
+        } else if (text.edges == "rounded") {
+          var x = size.width * 0.05;
+          var y = size.height * 0.80;
+          var height = size.height * 0.18;
+          var width = size.width * 0.90;
+          var radius = size.height * 0.05;
+          render.beginPath();
+          render.moveTo(x, y + radius);
+          render.lineTo(x, y + height - radius);
+          render.quadraticCurveTo(x, y + height, x + radius, y + height);
+          render.lineTo(x + width - radius, y + height);
+          render.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
+          render.lineTo(x + width, y + radius);
+          render.quadraticCurveTo(x + width, y, x + width - radius, y);
+          render.lineTo(x + radius, y);
+          render.quadraticCurveTo(x, y, x, y + radius);
+          render.fill();
+        }
         render.fillStyle = text.namecolor;
         render.font = '15pt Arial';
         render.fillText(text.name, size.width * 0.10, size.height * 0.82);
