@@ -1,5 +1,5 @@
 {
-  "extends": "eslint-config-airbnb-es5",
+  "extends": "airbnb/legacy",
   "env": {
     "browser": true
   }

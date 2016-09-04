@@ -62,11 +62,10 @@ Nauper.Engine.prototype.start = function start() {
 
 /* global Nauper */
 Nauper.Frame = function Frame(args) {
-  if (args.characters.length !== 0 && args.displayOrder.length !== 0 && args.textbox && args.background) {
-    var characters = args.characters;
-    var displayOrder = args.displayOrder;
-    var text = args.textbox;
-
+  var characters = args.characters;
+  var displayOrder = args.displayOrder;
+  var text = args.textbox;
+  if (characters.length !== 0 && displayOrder.length !== 0 && text && args.background) {
     this.type = 'frame';
     this.draw = function draw(engine) {
       var render = engine.render;
@@ -106,10 +105,11 @@ Nauper.Frame = function Frame(args) {
       canvas.style.backgroundImage = 'url(./data/images/backgrounds/' + args.background + ')';
       canvas.style.backgroundSize = 'cover';
       displayOrder.forEach(function orderCreator(i, index) {
+        var img;
         if (i !== false || i === 0) {
-          var img = new Image();
+          img = new Image();
           img.onload = function onload() {
-            var ratio = size.height * 1.20 / img.height;
+            var ratio = (size.height * 1.20) / img.height;
             var offsetY = size.height * 0.10;
             var offsetX;
             if (index === 0) {
@@ -135,8 +135,8 @@ Nauper.Frame = function Frame(args) {
 
 /* global Nauper */
 Nauper.Character = function Character(args) {
+  var result = {};
   if (args.path && args.emotions.length !== 0) {
-    var result = {};
     args.emotions.forEach(function characterEmotions(emotion) {
       result[emotion] = args.path + '/' + emotion + '.png';
     });
@@ -147,12 +147,12 @@ Nauper.Character = function Character(args) {
 
 /* global Nauper */
 Nauper.Question = function Question(args) {
-  if (args.map.length !== 0 && args.map.length !== 1 && args.map.length < 5 && args.background && args.boxcolor && args.textcolor) {
-    this.map = args.map;
-    var background = args.background;
-    var boxcolor = args.boxcolor;
+  var background = args.background;
+  var boxcolor = args.boxcolor;
+  var textcolor = args.textcolor;
+  this.map = args.map;
+  if (this.map.length > 1 && this.map.length < 5 && background && boxcolor && textcolor) {
     this.type = 'choice';
-    var textcolor = args.textcolor;
     this.draw = function draw(engine) {
       var render = engine.render;
       var size = engine.size;
@@ -162,7 +162,7 @@ Nauper.Question = function Question(args) {
         render.fillStyle = boxcolor;
         render.fillRect(0, index * 0.25 * size.height, size.width, size.height * 0.25);
         render.fillStyle = textcolor;
-        render.fillText(i.text, size.width * 0.50, size.height * (index * 0.25 + 0.125));
+        render.fillText(i.text, size.width * 0.50, size.height * ((index * 0.25) + 0.125));
       });
     }.bind(this);
   } else {
