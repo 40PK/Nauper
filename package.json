@@ -2,6 +2,9 @@
   "name": "nauper",
   "version": "0.0.1",
   "description": "Web engine for visual novels",
+  "scripts": {
+    "test": "eslint ."
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Perkovec/Nauper.git"
@@ -13,6 +16,11 @@
   },
   "homepage": "https://github.com/Perkovec/Nauper#readme",
   "devDependencies": {
+    "babel-eslint": "^6.1.2",
+    "eslint": "^3.4.0",
+    "eslint-config-airbnb-es5": "^1.0.9",
+    "eslint-plugin-import": "^1.14.0",
+    "eslint-plugin-jsx-a11y": "^2.2.1",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-connect": "^4.2.0",
