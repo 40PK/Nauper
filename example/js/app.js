@@ -46,7 +46,7 @@ var questionOne = new Nauper.Question({
     },
     {
         "text": "вперед",
-        "address": "2"
+        "address": "1"
     }
     ]
 });
@@ -57,8 +57,11 @@ var engine = new Nauper.Engine({
 	  height: doc.clientHeight
   }
 }, [
-  frameOne,
-  questionOne,
-  frameTwo
-]);
+  [
+    frameOne, 
+    questionOne
+  ], 
+  [
+    frameTwo
+  ]]);
 engine.start();

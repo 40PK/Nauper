@@ -7,7 +7,8 @@ Nauper.Engine = function Engine(configs, elements) {
   this.canvas.height = this.size.height;
 
   this.elements = elements;
-  this.index = 0;
+  this.globalIndex = 0;
+  this.localIndex = 0;
   this.clickType = null;
 
   function click(event) {
@@ -28,30 +29,35 @@ Nauper.Engine.prototype.choice = function choice(event) {
   } else if (y < this.size.height * 0.75) {
     buttonID = 2;
   }
-  if (buttonID < this.elements[this.index].map.length) {
-    this.index = this.elements[this.index].map[buttonID].address;
+  if (buttonID < this.elements[this.globalIndex][this.localIndex].map.length) {
+    this.globalIndex = this.elements[this.globalIndex][this.localIndex].map[buttonID].address;
+    this.localIndex = 0;
     this.clickType = 'nextElement';
-    this.elements[this.index].draw.call(null, this);
+    this.elements[this.globalIndex][this.localIndex].draw.call(null, this);
   }
 };
 
 Nauper.Engine.prototype.nextElement = function nextElement() {
-  this.index = Number(this.index) + 1;
-  if (this.index === this.elements.length) {
+  this.localIndex = Number(this.localIndex) + 1;
+  if (this.localIndex === this.elements[this.globalIndex].length) {
     // this.canvas.removeEventListener('click', this.nextElement);
     this.clickType = null;
   } else {
-    this.elements[this.index].draw.call(null, this);
-    this.clickType = this.elements[this.index].type === 'choice' ? 'choice' : this.clickType;
+    this.elements[this.globalIndex][this.localIndex].draw.call(null, this);
+    if (this.elements[this.globalIndex][this.localIndex].type === 'choice') {
+      this.clickType = 'choice';
+    } else {
+      this.clickType = this.clickType;
+    }
   }
 };
 
 Nauper.Engine.prototype.start = function start() {
-  if (this.elements[0].type === 'frame') {
+  if (this.elements[0][0].type === 'frame') {
     this.clickType = 'nextElement';
-  } else if (this.elements[1].type === 'choice') {
+  } else if (this.elements[0][0].type === 'choice') {
     this.clickType = 'choice';
   }
-  this.elements[0].draw.call(null, this);
+  this.elements[0][0].draw.call(null, this);
   return true;
 };

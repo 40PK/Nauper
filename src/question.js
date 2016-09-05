@@ -20,7 +20,6 @@ Nauper.Question = function Question(args) {
       canvas.style.backgroundImage = 'url("./data/images/backgrounds/' + background + '")';
       this.map.forEach(function renderQuestion(i, index) {
         render.fillStyle = boxcolor;
-        // y = (((index * 0.20) + 0.05) * size.height);
         if (index === 0) {
           y = 0.05 * size.height;
         } else {

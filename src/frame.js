@@ -34,9 +34,9 @@ Nauper.Frame = function Frame(args) {
         }
         render.fillStyle = text.namecolor;
         render.font = '15pt Arial';
-        render.fillText(text.name, size.width * 0.10, size.height * 0.83);
+        render.fillText(text.name, size.width * 0.10, (size.height * 0.80) + 27);
         render.fillStyle = text.textcolor;
-        render.fillText(text.text, size.width * 0.10, size.height * 0.85);
+        render.fillText(text.text, size.width * 0.10, (size.height * 0.83) + 27);
       }
 
       render.clearRect(0, 0, size.width, size.height);
