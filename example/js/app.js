@@ -32,11 +32,9 @@ var frameTwo = new Nauper.Frame({
         "name": "Юля",
         "textcolor": "black",
         "text": "я некочан"
-    },
-    "background": "1.jpg"
+    }
 });
 var questionOne = new Nauper.Question({
-    "background": "1.jpg",
     "boxcolor": "#fff",
     "textcolor": "#000",
     "boxtype": "rounded",

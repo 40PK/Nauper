@@ -3,7 +3,7 @@ Nauper.Frame = function Frame(args) {
   var characters = args.characters;
   var displayOrder = args.displayOrder;
   var text = args.textbox;
-  if (characters.length !== 0 && displayOrder.length !== 0 && text && args.background) {
+  if (text) {
     this.type = 'frame';
     this.draw = function draw(engine) {
       var render = engine.render;
@@ -40,8 +40,10 @@ Nauper.Frame = function Frame(args) {
       }
 
       render.clearRect(0, 0, size.width, size.height);
-      canvas.style.backgroundImage = 'url(./data/images/backgrounds/' + args.background + ')';
-      canvas.style.backgroundSize = 'cover';
+      if (args.background) {
+        canvas.style.backgroundImage = 'url(./data/images/backgrounds/' + args.background + ')';
+        canvas.style.backgroundSize = 'cover';
+      }
       displayOrder.forEach(function orderCreator(i, index) {
         var img;
         if (i !== false || i === 0) {
