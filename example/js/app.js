@@ -1,6 +1,13 @@
 // Init
 var doc = document.documentElement;
 // creating app
+var engine = new Nauper.Engine({
+  canvas: document.getElementsByTagName("canvas")[0],
+  size: {
+      width: doc.clientWidth,
+      height: doc.clientHeight
+  }
+}, []);
 var lena = new Nauper.Character({
 	"path": "./data/images/characters/lena", 
 	"emotions": ["smile"]
@@ -9,7 +16,7 @@ var yulya = new Nauper.Character({
     "path": "./data/images/characters/yulya",
     "emotions": ["smile"]
 });
-var frameOne = new Nauper.Frame({
+var frameOne = new Nauper.Frame(engine, {
 	"characters": [lena.smile, yulya.smile], 
 	"displayOrder": [0, 1], 
 	"textbox": {
@@ -18,11 +25,11 @@ var frameOne = new Nauper.Frame({
 		"namecolor": "#000", 
 		"name": "Лена", 
 		"textcolor": "black", 
-		"text": "приветики"
+		"text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 	}, 
 	"background": "1.jpg"
 });
-var frameTwo = new Nauper.Frame({
+var frameTwo = new Nauper.Frame(engine, {
     "characters": [lena.smile, yulya.smile],
     "displayOrder": [false, false, 1, 0],
     "textbox": {
@@ -34,7 +41,7 @@ var frameTwo = new Nauper.Frame({
         "text": "я некочан"
     }
 });
-var questionOne = new Nauper.Question({
+var questionOne = new Nauper.Question(engine, {
     "boxcolor": "#fff",
     "textcolor": "#000",
     "boxtype": "rounded",
@@ -48,18 +55,6 @@ var questionOne = new Nauper.Question({
     }
     ]
 });
-var engine = new Nauper.Engine({
-  canvas: document.getElementsByTagName("canvas")[0],
-  size: {
-	  width: doc.clientWidth,
-	  height: doc.clientHeight
-  }
-}, [
-  [
-    frameOne, 
-    questionOne
-  ], 
-  [
-    frameTwo
-  ]]);
+engine.addScene([frameOne, questionOne]);
+engine.addScene([frameTwo]);
 engine.start();

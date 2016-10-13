@@ -20,8 +20,8 @@ Nauper.Engine = function Engine(configs, elements) {
 };
 
 Nauper.Engine.prototype.choice = function choice(event) {
-  var y = event.pageY;
-  var buttonID = 3;
+  let y = event.pageY;
+  let buttonID = 3;
   if (y < this.size.height * 0.25) {
     buttonID = 0;
   } else if (y < this.size.height * 0.50) {
@@ -60,4 +60,8 @@ Nauper.Engine.prototype.start = function start() {
   }
   this.elements[0][0].draw.call(null, this);
   return true;
+};
+
+Nauper.Engine.prototype.addScene = function addScene(scene) {
+  this.elements.push(scene);
 };

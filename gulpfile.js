@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var babel = require('gulp-babel');
 var concat = require('gulp-concat');
 var connect = require('gulp-connect');
 var eslint = require('gulp-eslint');
@@ -10,6 +11,7 @@ gulp.task('build-dev', function buildDev() {
       .pipe(eslint())
       .pipe(eslint.format())
       .pipe(eslint.failOnError())
+      .pipe(babel({presets: ['es2015']}))
       .pipe(concat('nauper.js'))
       .pipe(gulp.dest('example/js'))
       .pipe(gulp.dest('build'));
@@ -20,6 +22,7 @@ gulp.task('build-release', function buildRelease() {
       .pipe(eslint())
       .pipe(eslint.format())
       .pipe(eslint.failOnError())
+      .pipe(babel({presets: ['es2015']}))
       .pipe(uglify())
       .pipe(concat('nauper.min.js'))
       .pipe(gulp.dest('build'))

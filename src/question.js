@@ -1,21 +1,26 @@
 /* global Nauper */
-Nauper.Question = function Question(args) {
-  var background = args.background;
-  var boxcolor = args.boxcolor;
-  var textcolor = args.textcolor;
-  var boxtype = args.boxtype;
+Nauper.Question = function Question(engine, args) {
+  let background = args.background;
+  let boxcolor = args.boxcolor;
+  let textcolor = args.textcolor;
+  let boxtype = args.boxtype;
+  let necessary = args.necessary;
+  let render = engine.render;
+  let canvas = engine.canvas;
+  let size = engine.size;
   this.map = args.map;
   if (this.map.length > 1 && this.map.length < 5 && boxcolor && textcolor) {
-    this.type = 'choice';
-    this.draw = function draw(engine) {
-      var render = engine.render;
-      var canvas = engine.canvas;
-      var size = engine.size;
-      var x = size.width * 0.025;
-      var y = 0;
-      var height = size.height * 0.20;
-      var width = size.width * 0.95;
-      var radius = size.height * 0.05;
+    if (necessary === true || necessary === undefined) {
+      this.type = 'choice';
+    } else if (necessary === false) {
+      this.type = 'frame';
+    }
+    this.draw = function draw() {
+      let x = size.width * 0.025;
+      let y = 0;
+      let height = size.height * 0.20;
+      let width = size.width * 0.95;
+      let radius = size.height * 0.05;
       render.clearRect(0, 0, size.width, size.height);
       if (background) {
         canvas.style.backgroundImage = 'url("./data/images/backgrounds/' + background + '")';

@@ -1,6 +1,54 @@
+'use strict';
+
+var wrapText = function wrapText(engine, text, style, maxwidth) {
+  //eslint-disable-line
+  var textElement = document.createElement('p');
+  var words = text.split(' ');
+  var drawingText = '';
+  var height = 0;
+  var width = 0;
+  var result = [];
+  textElement.style.font = style;
+  textElement.style.position = 'relative';
+  textElement.style.zIndex = '-1';
+  textElement.innerHTML = 'Test';
+  document.body.appendChild(textElement);
+  height = textElement.offsetHeight;
+  document.body.removeChild(textElement);
+
+  words.forEach(function (i, index) {
+    if (drawingText === '') {
+      width = engine.render.measureText(i).width;
+    } else {
+      width = engine.render.measureText(drawingText + ' ' + i).width;
+    }
+
+    if (width > maxwidth) {
+      result.push(drawingText);
+      drawingText = i;
+    } else if (width === maxwidth) {
+      result.push(drawingText + ' ' + i);
+      drawingText = '';
+    } else if (width < maxwidth) {
+      if (drawingText) {
+        drawingText = drawingText + ' ' + i;
+      } else {
+        drawingText = i;
+      }
+      if (index + 1 === words.length) {
+        result.push(drawingText);
+      }
+    }
+  });
+
+  return { result: result, height: height };
+};
+'use strict';
+
 var Nauper = { // eslint-disable-line
   version: '0.1'
 };
+'use strict';
 
 /* global Nauper */
 Nauper.Engine = function Engine(configs, elements) {
@@ -66,60 +114,70 @@ Nauper.Engine.prototype.start = function start() {
   return true;
 };
 
+Nauper.Engine.prototype.addScene = function addScene(scene) {
+  this.elements.push(scene);
+};
+'use strict';
+
 /* global Nauper */
-Nauper.Frame = function Frame(args) {
+Nauper.Frame = function Frame(engine, args) {
   var characters = args.characters;
   var displayOrder = args.displayOrder;
   var text = args.textbox;
-  if (text) {
-    this.type = 'frame';
-    this.draw = function draw(engine) {
-      var render = engine.render;
-      var size = engine.size;
-      var canvas = engine.canvas;
+  var render = engine.render;
+  var size = engine.size;
+  var canvas = engine.canvas;
+  var setText = function setText() {
+    //eslint-disable-line
+    var x = size.width * 0.025;
+    var y = size.height * 0.80;
+    var height = size.height * 0.18;
+    var width = size.width * 0.95;
+    var radius = size.height * 0.05;
+    var texts = [];
+    render.fillStyle = text.base;
+    if (text.edges === 'default') {
+      render.fillRect(0, size.height * 0.80, size.width, size.height * 0.20);
+    } else if (text.edges === 'rounded') {
+      render.beginPath();
+      render.moveTo(x, y + radius);
+      render.lineTo(x, y + height - radius);
+      render.quadraticCurveTo(x, y + height, x + radius, y + height);
+      render.lineTo(x + width - radius, y + height);
+      render.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
+      render.lineTo(x + width, y + radius);
+      render.quadraticCurveTo(x + width, y, x + width - radius, y);
+      render.lineTo(x + radius, y);
+      render.quadraticCurveTo(x, y, x, y + radius);
+      render.fill();
+    }
+    render.fillStyle = text.namecolor;
+    render.font = '15pt Arial';
+    render.fillText(text.name, size.width * 0.10, size.height * 0.80 + 27);
+    render.fillStyle = text.textcolor;
+    texts = wrapText(engine, text.text, render.font, size.width * 0.80); //eslint-disable-line
+    texts.result.forEach(function insertText(i, j) {
+      render.fillText(i, size.width * 0.10, size.height * 0.83 + 27 + texts.height * j);
+    });
+  };
 
-      function setText() {
-        var x = size.width * 0.025;
-        var y = size.height * 0.80;
-        var height = size.height * 0.18;
-        var width = size.width * 0.95;
-        var radius = size.height * 0.05;
-        render.fillStyle = text.base;
-        if (text.edges === 'default') {
-          render.fillRect(0, size.height * 0.80, size.width, size.height * 0.20);
-        } else if (text.edges === 'rounded') {
-          render.beginPath();
-          render.moveTo(x, y + radius);
-          render.lineTo(x, (y + height) - radius);
-          render.quadraticCurveTo(x, y + height, x + radius, y + height);
-          render.lineTo((x + width) - radius, y + height);
-          render.quadraticCurveTo(x + width, y + height, x + width, (y + height) - radius);
-          render.lineTo(x + width, y + radius);
-          render.quadraticCurveTo(x + width, y, (x + width) - radius, y);
-          render.lineTo(x + radius, y);
-          render.quadraticCurveTo(x, y, x, y + radius);
-          render.fill();
-        }
-        render.fillStyle = text.namecolor;
-        render.font = '15pt Arial';
-        render.fillText(text.name, size.width * 0.10, (size.height * 0.80) + 27);
-        render.fillStyle = text.textcolor;
-        render.fillText(text.text, size.width * 0.10, (size.height * 0.83) + 27);
-      }
+  this.type = 'frame';
 
-      render.clearRect(0, 0, size.width, size.height);
-      if (args.background) {
-        canvas.style.backgroundImage = 'url(./data/images/backgrounds/' + args.background + ')';
-        canvas.style.backgroundSize = 'cover';
-      }
+  this.draw = function draw() {
+    render.clearRect(0, 0, size.width, size.height);
+    if (args.background) {
+      canvas.style.backgroundImage = 'url(./data/images/backgrounds/' + args.background + ')';
+      canvas.style.backgroundSize = 'cover';
+    }
+    if (displayOrder) {
       displayOrder.forEach(function orderCreator(i, index) {
-        var img;
+        var img = void 0;
         if (i !== false || i === 0) {
           img = new Image();
           img.onload = function onload() {
-            var ratio = (size.height * 1.20) / img.height;
+            var ratio = size.height * 1.20 / img.height;
             var offsetY = size.height * 0.10;
-            var offsetX;
+            var offsetX = void 0;
             if (index === 0) {
               offsetX = 0;
             } else if (index === 1) {
@@ -130,16 +188,15 @@ Nauper.Frame = function Frame(args) {
               offsetX = size.width * 0.675;
             }
             render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
-            setText();
+            setText(); //eslint-disable-line
           };
           img.src = characters[i];
         }
       });
-    };
-  } else {
-    throw new Error();
-  }
+    }
+  };
 };
+'use strict';
 
 /* global Nauper */
 Nauper.Character = function Character(args) {
@@ -152,20 +209,26 @@ Nauper.Character = function Character(args) {
   }
   throw new Error();
 };
+'use strict';
 
 /* global Nauper */
-Nauper.Question = function Question(args) {
+Nauper.Question = function Question(engine, args) {
   var background = args.background;
   var boxcolor = args.boxcolor;
   var textcolor = args.textcolor;
   var boxtype = args.boxtype;
+  var necessary = args.necessary;
+  var render = engine.render;
+  var canvas = engine.canvas;
+  var size = engine.size;
   this.map = args.map;
   if (this.map.length > 1 && this.map.length < 5 && boxcolor && textcolor) {
-    this.type = 'choice';
-    this.draw = function draw(engine) {
-      var render = engine.render;
-      var canvas = engine.canvas;
-      var size = engine.size;
+    if (necessary === true || necessary === undefined) {
+      this.type = 'choice';
+    } else if (necessary === false) {
+      this.type = 'frame';
+    }
+    this.draw = function draw() {
       var x = size.width * 0.025;
       var y = 0;
       var height = size.height * 0.20;
@@ -180,25 +243,25 @@ Nauper.Question = function Question(args) {
         if (index === 0) {
           y = 0.05 * size.height;
         } else {
-          y = (index * 0.30) * size.height;
+          y = index * 0.30 * size.height;
         }
         if (boxtype === 'default') {
           render.fillRect(0, index * 0.25 * size.height, size.width, size.height * 0.25);
         } else if (boxtype === 'rounded') {
           render.beginPath();
           render.moveTo(x, y + radius);
-          render.lineTo(x, (y + height) - radius);
+          render.lineTo(x, y + height - radius);
           render.quadraticCurveTo(x, y + height, x + radius, y + height);
-          render.lineTo((x + width) - radius, y + height);
-          render.quadraticCurveTo(x + width, y + height, x + width, (y + height) - radius);
+          render.lineTo(x + width - radius, y + height);
+          render.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
           render.lineTo(x + width, y + radius);
-          render.quadraticCurveTo(x + width, y, (x + width) - radius, y);
+          render.quadraticCurveTo(x + width, y, x + width - radius, y);
           render.lineTo(x + radius, y);
           render.quadraticCurveTo(x, y, x, y + radius);
           render.fill();
         }
         render.fillStyle = textcolor;
-        render.fillText(i.text, size.width * 0.50, size.height * ((y / size.height) + 0.10));
+        render.fillText(i.text, size.width * 0.50, size.height * (y / size.height + 0.10));
       });
     }.bind(this);
   } else {

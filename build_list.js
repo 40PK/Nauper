@@ -1,6 +1,6 @@
 module.exports = [
-  'src/utils.js',
   'src/nauper.js',
+  'src/utils.js',
   'src/engine.js',
   'src/frame.js',
   'src/character.js',
