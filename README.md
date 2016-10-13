@@ -2,8 +2,8 @@
 Web engine for visual novels
 
 # Code guide
-We use ES5 syntax.
+We use ES6 syntax.
 
-JavaScript style guide: [Airbnb](https://github.com/airbnb/javascript/tree/master/es5)
+JavaScript style guide: [Airbnb](https://github.com/airbnb/javascript/tree/master)
 
-ES6 equivalents for ES5: [es6-features](http://es6-features.org/)
+ES6 translates to older versions using Babel
