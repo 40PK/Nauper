@@ -47,7 +47,7 @@ Nauper.Frame = function Frame(engine, args) {
   };
 
   let displayCharacters = () => {
-    if (displayOrder.length !== 0) {
+    if (displayOrder !== undefined && displayOrder.length !== 0) {
       let loaded = displayOrder.length;
       displayOrder.forEach((i, index) => {
         if (i !== false && i !== undefined) {

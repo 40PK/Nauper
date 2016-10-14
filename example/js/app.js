@@ -45,9 +45,6 @@ var frameTwo = new Nauper.Frame(engine, {
 });
 
 var frameThree = new Nauper.Frame(engine, {
-    "background": false,
-    "characters": [],
-    "displayOrder": [],
     "textbox": {
         "base": "#fff",
         "edges": "rounded",

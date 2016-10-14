@@ -167,7 +167,7 @@ Nauper.Frame = function Frame(engine, args) {
   };
 
   var displayCharacters = function displayCharacters() {
-    if (displayOrder.length !== 0) {
+    if (displayOrder !== undefined && displayOrder.length !== 0) {
       (function () {
         var loaded = displayOrder.length;
         displayOrder.forEach(function (i, index) {
