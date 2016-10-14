@@ -27,13 +27,9 @@ Nauper.Question = function Question(engine, args) {
       }
       this.map.forEach(function renderQuestion(i, index) {
         render.fillStyle = boxcolor;
-        if (index === 0) {
-          y = 0.05 * size.height;
-        } else {
-          y = (index * 0.30) * size.height;
-        }
+        y = ((index * 0.25) + 0.025) * size.height;
         if (boxtype === 'default') {
-          render.fillRect(0, index * 0.25 * size.height, size.width, size.height * 0.25);
+          render.fillRect(x, y, width, height);
         } else if (boxtype === 'rounded') {
           render.beginPath();
           render.moveTo(x, y + radius);

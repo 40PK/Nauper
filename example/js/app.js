@@ -73,6 +73,10 @@ var questionOne = new Nauper.Question(engine, {
     {
         "text": "без персонажей",
         "address": "2"
+    },
+    {
+        "text": "снова в начало",
+        "address": "0"
     }]
 });
 
