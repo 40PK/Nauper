@@ -118,7 +118,7 @@ Nauper.Engine.prototype.addScene = function addScene(scene) {
 };
 'use strict';
 
-/* global Nauper */
+/* global Nauper, wrapText */
 Nauper.Frame = function Frame(engine, args) {
   var characters = args.characters;
   var displayOrder = args.displayOrder;
@@ -154,7 +154,6 @@ Nauper.Frame = function Frame(engine, args) {
     render.font = '15pt Arial';
     render.fillText(text.name, size.width * 0.10, size.height * 0.80 + 27);
     render.fillStyle = text.textcolor;
-    /* global wrapText */
     texts = wrapText(engine, text.text, render.font, size.width * 0.80);
     texts.result.forEach(function insertText(i, j) {
       render.fillText(i, size.width * 0.10, size.height * 0.83 + 27 + texts.height * j);
