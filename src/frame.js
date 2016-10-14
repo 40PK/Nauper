@@ -64,6 +64,8 @@ Nauper.Frame = function Frame(engine, args) {
             }
           });
           img.src = characters[i];
+        } else {
+          loaded -= 1;
         }
       });
     } else {
