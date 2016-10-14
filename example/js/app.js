@@ -22,7 +22,7 @@ var frameOne = new Nauper.Frame(engine, {
 	"characters": [lena.smile, yulya.smile], 
 	"displayOrder": [0, 1], 
 	"textbox": {
-        "edges": "rounded",
+        "edges": "default",
 		"base": "#fff", 
 		"namecolor": "#000", 
 		"name": "Лена", 
