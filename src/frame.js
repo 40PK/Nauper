@@ -6,7 +6,8 @@ Nauper.Frame = function Frame(engine, args) {
   let render = engine.render;
   let size = engine.size;
   let canvas = engine.canvas;
-  let setText = function setText() { //eslint-disable-line
+
+  let setText = () => {
     let x = size.width * 0.025;
     let y = size.height * 0.80;
     let height = size.height * 0.18;
@@ -39,38 +40,47 @@ Nauper.Frame = function Frame(engine, args) {
     });
   };
 
-  this.type = 'frame';
-
-  this.draw = function draw() {
-    render.clearRect(0, 0, size.width, size.height);
+  let setBackground = () => {
     if (args.background) {
-      canvas.style.backgroundImage = 'url(./data/images/backgrounds/' + args.background + ')';
-      canvas.style.backgroundSize = 'cover';
+      canvas.style.backgroundImage = `url(./data/images/backgrounds/${args.background})`;
     }
-    if (displayOrder) {
-      displayOrder.forEach(function orderCreator(i, index) {
-        let img;
-        if (i !== false || i === 0) {
-          img = new Image();
-          img.onload = function onload() {
+  };
+
+  let displayCharacters = () => {
+    if (displayOrder.length !== 0) {
+      displayOrder.forEach((i, index) => {
+        if (i !== false && i !== undefined) {
+          let img = new Image();
+          img.addEventListener('load', () => {
             let ratio = (size.height * 1.20) / img.height;
             let offsetY = size.height * 0.10;
-            let offsetX;
-            if (index === 0) {
-              offsetX = 0;
-            } else if (index === 1) {
-              offsetX = size.width * 0.225;
-            } else if (index === 2) {
-              offsetX = size.width * 0.450;
-            } else if (index === 3) {
-              offsetX = size.width * 0.675;
-            }
+            let offsetX = size.width * (0.225 * index);
             render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
-            setText(); //eslint-disable-line
-          };
+            if (index === (displayOrder.length - 1)) {
+              setText();
+            }
+          });
           img.src = characters[i];
         }
       });
+    } else {
+      setText();
     }
   };
+
+  this.type = 'frame';
+
+  this.check = () => {
+    return true;
+  };
+
+  this.draw = function draw() {
+    if (this.check()) {
+      render.clearRect(0, 0, size.width, size.height);
+      setBackground();
+      displayCharacters();
+    } else {
+      canvas.click();
+    }
+  }.bind(this);
 };

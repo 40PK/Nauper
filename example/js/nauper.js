@@ -1,5 +1,10 @@
 'use strict';
 
+var Nauper = { // eslint-disable-line
+  version: '0.1'
+};
+'use strict';
+
 var wrapText = function wrapText(engine, text, style, maxwidth) {
   //eslint-disable-line
   var textElement = document.createElement('p');
@@ -45,11 +50,6 @@ var wrapText = function wrapText(engine, text, style, maxwidth) {
 };
 'use strict';
 
-var Nauper = { // eslint-disable-line
-  version: '0.1'
-};
-'use strict';
-
 /* global Nauper */
 Nauper.Engine = function Engine(configs, elements) {
   this.canvas = configs.canvas;
@@ -92,7 +92,6 @@ Nauper.Engine.prototype.choice = function choice(event) {
 Nauper.Engine.prototype.nextElement = function nextElement() {
   this.localIndex = Number(this.localIndex) + 1;
   if (this.localIndex === this.elements[this.globalIndex].length) {
-    // this.canvas.removeEventListener('click', this.nextElement);
     this.clickType = null;
   } else {
     this.elements[this.globalIndex][this.localIndex].draw.call(null, this);
@@ -127,8 +126,8 @@ Nauper.Frame = function Frame(engine, args) {
   var render = engine.render;
   var size = engine.size;
   var canvas = engine.canvas;
+
   var setText = function setText() {
-    //eslint-disable-line
     var x = size.width * 0.025;
     var y = size.height * 0.80;
     var height = size.height * 0.18;
@@ -161,40 +160,51 @@ Nauper.Frame = function Frame(engine, args) {
     });
   };
 
-  this.type = 'frame';
-
-  this.draw = function draw() {
-    render.clearRect(0, 0, size.width, size.height);
+  var setBackground = function setBackground() {
     if (args.background) {
       canvas.style.backgroundImage = 'url(./data/images/backgrounds/' + args.background + ')';
-      canvas.style.backgroundSize = 'cover';
-    }
-    if (displayOrder) {
-      displayOrder.forEach(function orderCreator(i, index) {
-        var img = void 0;
-        if (i !== false || i === 0) {
-          img = new Image();
-          img.onload = function onload() {
-            var ratio = size.height * 1.20 / img.height;
-            var offsetY = size.height * 0.10;
-            var offsetX = void 0;
-            if (index === 0) {
-              offsetX = 0;
-            } else if (index === 1) {
-              offsetX = size.width * 0.225;
-            } else if (index === 2) {
-              offsetX = size.width * 0.450;
-            } else if (index === 3) {
-              offsetX = size.width * 0.675;
-            }
-            render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
-            setText(); //eslint-disable-line
-          };
-          img.src = characters[i];
-        }
-      });
     }
   };
+
+  var displayCharacters = function displayCharacters() {
+    if (displayOrder.length !== 0) {
+      displayOrder.forEach(function (i, index) {
+        if (i !== false && i !== undefined) {
+          (function () {
+            var img = new Image();
+            img.addEventListener('load', function () {
+              var ratio = size.height * 1.20 / img.height;
+              var offsetY = size.height * 0.10;
+              var offsetX = size.width * (0.225 * index);
+              render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
+              if (index === displayOrder.length - 1) {
+                setText();
+              }
+            });
+            img.src = characters[i];
+          })();
+        }
+      });
+    } else {
+      setText();
+    }
+  };
+
+  this.type = 'frame';
+
+  this.check = function () {
+    return true;
+  };
+
+  this.draw = function draw() {
+    if (this.check()) {
+      render.clearRect(0, 0, size.width, size.height);
+      setBackground();
+      displayCharacters();
+    } else {
+      canvas.click();
+    }
+  }.bind(this);
 };
 'use strict';
 

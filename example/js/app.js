@@ -8,6 +8,7 @@ var engine = new Nauper.Engine({
       height: doc.clientHeight
   }
 }, []);
+
 var lena = new Nauper.Character({
 	"path": "./data/images/characters/lena", 
 	"emotions": ["smile"]
@@ -16,6 +17,7 @@ var yulya = new Nauper.Character({
     "path": "./data/images/characters/yulya",
     "emotions": ["smile"]
 });
+
 var frameOne = new Nauper.Frame(engine, {
 	"characters": [lena.smile, yulya.smile], 
 	"displayOrder": [0, 1], 
@@ -41,6 +43,21 @@ var frameTwo = new Nauper.Frame(engine, {
         "text": "я некочан"
     }
 });
+
+var frameThree = new Nauper.Frame(engine, {
+    "background": false,
+    "characters": [],
+    "displayOrder": [],
+    "textbox": {
+        "base": "#fff",
+        "edges": "rounded",
+        "namecolor": "#000",
+        "name": "ГГ",
+        "textcolor": "#000",
+        "text": "Текст без героев"
+    }
+});
+
 var questionOne = new Nauper.Question(engine, {
     "boxcolor": "#fff",
     "textcolor": "#000",
@@ -52,9 +69,10 @@ var questionOne = new Nauper.Question(engine, {
     {
         "text": "вперед",
         "address": "1"
-    }
-    ]
+    }]
 });
+
 engine.addScene([frameOne, questionOne]);
-engine.addScene([frameTwo]);
+engine.addScene([frameTwo, frameThree]);
+
 engine.start();

@@ -40,7 +40,6 @@ Nauper.Engine.prototype.choice = function choice(event) {
 Nauper.Engine.prototype.nextElement = function nextElement() {
   this.localIndex = Number(this.localIndex) + 1;
   if (this.localIndex === this.elements[this.globalIndex].length) {
-    // this.canvas.removeEventListener('click', this.nextElement);
     this.clickType = null;
   } else {
     this.elements[this.globalIndex][this.localIndex].draw.call(null, this);
