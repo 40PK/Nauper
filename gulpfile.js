@@ -6,6 +6,15 @@ var eslint = require('gulp-eslint');
 var uglify = require('gulp-uglify');
 var buildFiles = require('./build_list');
 
+gulp.task('help', function help() {
+  console.log('build-dev - builds code');
+  console.log('build-release - builds code and minifies it');
+  console.log('build - runs build-dev and build-release');
+  console.log('watch - spies on files and builds it on change');
+  console.log('webserver - running web server on localhost:8000 with code from example folder');
+  console.log('default - runs webserver, watch and build');
+});
+
 gulp.task('build-dev', function buildDev() {
   return gulp.src(buildFiles)
       .pipe(eslint())
