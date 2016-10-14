@@ -169,23 +169,27 @@ Nauper.Frame = function Frame(engine, args) {
 
   var displayCharacters = function displayCharacters() {
     if (displayOrder.length !== 0) {
-      displayOrder.forEach(function (i, index) {
-        if (i !== false && i !== undefined) {
-          (function () {
-            var img = new Image();
-            img.addEventListener('load', function () {
-              var ratio = size.height * 1.20 / img.height;
-              var offsetY = size.height * 0.10;
-              var offsetX = size.width * (0.225 * index);
-              render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
-              if (index === displayOrder.length - 1) {
-                setText();
-              }
-            });
-            img.src = characters[i];
-          })();
-        }
-      });
+      (function () {
+        var loaded = displayOrder.length;
+        displayOrder.forEach(function (i, index) {
+          if (i !== false && i !== undefined) {
+            (function () {
+              var img = new Image();
+              img.addEventListener('load', function () {
+                var ratio = size.height * 1.20 / img.height;
+                var offsetY = size.height * 0.10;
+                var offsetX = size.width * (0.225 * index);
+                render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
+                loaded -= 1;
+                if (loaded === 0) {
+                  setText();
+                }
+              });
+              img.src = characters[i];
+            })();
+          }
+        });
+      })();
     } else {
       setText();
     }
@@ -206,19 +210,6 @@ Nauper.Frame = function Frame(engine, args) {
       canvas.click();
     }
   }.bind(this);
-};
-'use strict';
-
-/* global Nauper */
-Nauper.Character = function Character(args) {
-  var result = {};
-  if (args.path && args.emotions.length !== 0) {
-    args.emotions.forEach(function characterEmotions(emotion) {
-      result[emotion] = args.path + '/' + emotion + '.png';
-    });
-    return result;
-  }
-  throw new Error();
 };
 'use strict';
 
@@ -278,4 +269,14 @@ Nauper.Question = function Question(engine, args) {
   } else {
     throw new Error();
   }
+};
+'use strict';
+
+/* global Nauper */
+Nauper.Character = function Character(args) {
+  var result = {};
+  args.emotions.forEach(function characterEmotions(emotion) {
+    result[emotion] = args.path + '/' + emotion + '.png';
+  });
+  return result;
 };

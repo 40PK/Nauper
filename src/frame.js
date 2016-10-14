@@ -49,6 +49,7 @@ Nauper.Frame = function Frame(engine, args) {
 
   let displayCharacters = () => {
     if (displayOrder.length !== 0) {
+      let loaded = displayOrder.length;
       displayOrder.forEach((i, index) => {
         if (i !== false && i !== undefined) {
           let img = new Image();
@@ -57,7 +58,8 @@ Nauper.Frame = function Frame(engine, args) {
             let offsetY = size.height * 0.10;
             let offsetX = size.width * (0.225 * index);
             render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
-            if (index === (displayOrder.length - 1)) {
+            loaded -= 1;
+            if (loaded === 0) {
               setText();
             }
           });
