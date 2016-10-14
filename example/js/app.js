@@ -69,10 +69,15 @@ var questionOne = new Nauper.Question(engine, {
     {
         "text": "вперед",
         "address": "1"
+    },
+    {
+        "text": "без персонажей",
+        "address": "2"
     }]
 });
 
 engine.addScene([frameOne, questionOne]);
-engine.addScene([frameTwo, frameThree]);
+engine.addScene([frameTwo]);
+engine.addScene([frameThree]);
 
 engine.start();
