@@ -216,6 +216,8 @@ Nauper.Frame = function Frame(engine, args) {
 
 /* global Nauper */
 Nauper.Question = function Question(engine, args) {
+  var _this = this;
+
   var background = args.background;
   var boxcolor = args.boxcolor;
   var textcolor = args.textcolor;
@@ -224,13 +226,21 @@ Nauper.Question = function Question(engine, args) {
   var render = engine.render;
   var canvas = engine.canvas;
   var size = engine.size;
+  var setBackground = function setBackground() {
+    if (background) {
+      canvas.style.backgroundImage = 'url("./data/images/backgrounds/' + background + '")';
+    }
+  };
+  var setType = function setType() {
+    if (necessary === true || necessary === undefined) {
+      _this.type = 'choice';
+    } else {
+      _this.type = 'frame';
+    }
+  };
   this.map = args.map;
   if (this.map.length > 1 && this.map.length < 5 && boxcolor && textcolor) {
-    if (necessary === true || necessary === undefined) {
-      this.type = 'choice';
-    } else if (necessary === false) {
-      this.type = 'frame';
-    }
+    setType();
     this.draw = function draw() {
       var x = size.width * 0.025;
       var y = 0;
@@ -238,9 +248,7 @@ Nauper.Question = function Question(engine, args) {
       var width = size.width * 0.95;
       var radius = size.height * 0.05;
       render.clearRect(0, 0, size.width, size.height);
-      if (background) {
-        canvas.style.backgroundImage = 'url("./data/images/backgrounds/' + background + '")';
-      }
+      setBackground();
       this.map.forEach(function renderQuestion(i, index) {
         render.fillStyle = boxcolor;
         y = (index * 0.25 + 0.025) * size.height;

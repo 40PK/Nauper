@@ -8,13 +8,21 @@ Nauper.Question = function Question(engine, args) {
   let render = engine.render;
   let canvas = engine.canvas;
   let size = engine.size;
-  this.map = args.map;
-  if (this.map.length > 1 && this.map.length < 5 && boxcolor && textcolor) {
+  let setBackground = () => {
+    if (background) {
+      canvas.style.backgroundImage = `url("./data/images/backgrounds/${background}")`;
+    }
+  };
+  let setType = () => {
     if (necessary === true || necessary === undefined) {
       this.type = 'choice';
-    } else if (necessary === false) {
+    } else {
       this.type = 'frame';
     }
+  };
+  this.map = args.map;
+  if (this.map.length > 1 && this.map.length < 5 && boxcolor && textcolor) {
+    setType();
     this.draw = function draw() {
       let x = size.width * 0.025;
       let y = 0;
@@ -22,9 +30,7 @@ Nauper.Question = function Question(engine, args) {
       let width = size.width * 0.95;
       let radius = size.height * 0.05;
       render.clearRect(0, 0, size.width, size.height);
-      if (background) {
-        canvas.style.backgroundImage = 'url("./data/images/backgrounds/' + background + '")';
-      }
+      setBackground();
       this.map.forEach(function renderQuestion(i, index) {
         render.fillStyle = boxcolor;
         y = ((index * 0.25) + 0.025) * size.height;
