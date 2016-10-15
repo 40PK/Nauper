@@ -1,10 +1,11 @@
 /* global Nauper */
-Nauper.Engine = function Engine(configs, elements) {
+Nauper.Engine = function Engine(configs, elements = []) {
   this.canvas = configs.canvas;
   this.render = this.canvas.getContext('2d');
   this.size = configs.size;
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
+  this.render.font = configs.font;
 
   this.elements = elements;
   this.globalIndex = 0;

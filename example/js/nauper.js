@@ -51,12 +51,15 @@ var wrapText = function wrapText(engine, text, style, maxwidth) {
 'use strict';
 
 /* global Nauper */
-Nauper.Engine = function Engine(configs, elements) {
+Nauper.Engine = function Engine(configs) {
+  var elements = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
   this.canvas = configs.canvas;
   this.render = this.canvas.getContext('2d');
   this.size = configs.size;
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
+  this.render.font = configs.font;
 
   this.elements = elements;
   this.globalIndex = 0;
@@ -128,36 +131,39 @@ Nauper.Frame = function Frame(engine, args) {
   var canvas = engine.canvas;
 
   var setText = function setText() {
-    var x = size.width * 0.025;
-    var y = size.height * 0.80;
-    var height = size.height * 0.18;
-    var width = size.width * 0.95;
-    var radius = size.height * 0.05;
-    var texts = [];
-    render.fillStyle = text.base;
-    if (text.edges === 'default') {
-      render.fillRect(0, size.height * 0.80, size.width, size.height * 0.20);
-    } else if (text.edges === 'rounded') {
-      render.beginPath();
-      render.moveTo(x, y + radius);
-      render.lineTo(x, y + height - radius);
-      render.quadraticCurveTo(x, y + height, x + radius, y + height);
-      render.lineTo(x + width - radius, y + height);
-      render.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
-      render.lineTo(x + width, y + radius);
-      render.quadraticCurveTo(x + width, y, x + width - radius, y);
-      render.lineTo(x + radius, y);
-      render.quadraticCurveTo(x, y, x, y + radius);
-      render.fill();
+    if (text !== undefined) {
+      (function () {
+        var x = size.width * 0.025;
+        var y = size.height * 0.80;
+        var height = size.height * 0.18;
+        var width = size.width * 0.95;
+        var radius = size.height * 0.05;
+        var texts = [];
+        render.fillStyle = text.base;
+        if (text.edges === 'default') {
+          render.fillRect(0, size.height * 0.80, size.width, size.height * 0.20);
+        } else if (text.edges === 'rounded') {
+          render.beginPath();
+          render.moveTo(x, y + radius);
+          render.lineTo(x, y + height - radius);
+          render.quadraticCurveTo(x, y + height, x + radius, y + height);
+          render.lineTo(x + width - radius, y + height);
+          render.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
+          render.lineTo(x + width, y + radius);
+          render.quadraticCurveTo(x + width, y, x + width - radius, y);
+          render.lineTo(x + radius, y);
+          render.quadraticCurveTo(x, y, x, y + radius);
+          render.fill();
+        }
+        render.fillStyle = text.namecolor;
+        render.fillText(text.name, size.width * 0.10, size.height * 0.80 + 27);
+        render.fillStyle = text.textcolor;
+        texts = wrapText(engine, text.text, render.font, size.width * 0.80);
+        texts.result.forEach(function insertText(i, j) {
+          render.fillText(i, size.width * 0.10, size.height * 0.83 + 27 + texts.height * j);
+        });
+      })();
     }
-    render.fillStyle = text.namecolor;
-    render.font = '15pt Arial';
-    render.fillText(text.name, size.width * 0.10, size.height * 0.80 + 27);
-    render.fillStyle = text.textcolor;
-    texts = wrapText(engine, text.text, render.font, size.width * 0.80);
-    texts.result.forEach(function insertText(i, j) {
-      render.fillText(i, size.width * 0.10, size.height * 0.83 + 27 + texts.height * j);
-    });
   };
 
   var setBackground = function setBackground() {
@@ -249,6 +255,10 @@ Nauper.Question = function Question(engine, args) {
     render.fillText(_this.map[index].text, x, y);
   };
   var renderBox = function renderBox(index, active, pos) {
+    var ev = {
+      xwidth: pos.x + pos.width,
+      yheight: pos.y + pos.height
+    };
     if (active) {
       render.fillStyle = activebox.background;
     } else if (!active) {
@@ -260,13 +270,12 @@ Nauper.Question = function Question(engine, args) {
     } else if (boxtype === 'rounded') {
       render.beginPath();
       render.moveTo(pos.x, pos.y + pos.radius);
-      render.lineTo(pos.x, pos.y + pos.height - pos.radius);
-      render.quadraticCurveTo(pos.x, pos.y + pos.height, pos.x + pos.radius, pos.y + pos.height);
-      render.lineTo(pos.x + pos.width - pos.radius, pos.y + pos.height);
-      // will be fixed as fast as I can
-      render.quadraticCurveTo(pos.x + pos.width, pos.y + pos.height, pos.x + pos.width, pos.y + pos.height - pos.radius); //eslint-disable-line
-      render.lineTo(pos.x + pos.width, pos.y + pos.radius);
-      render.quadraticCurveTo(pos.x + pos.width, pos.y, pos.x + pos.width - pos.radius, pos.y);
+      render.lineTo(pos.x, ev.yheight - pos.radius);
+      render.quadraticCurveTo(pos.x, ev.yheight, pos.x + pos.radius, ev.yheight);
+      render.lineTo(ev.xwidth - pos.radius, ev.yheight);
+      render.quadraticCurveTo(ev.xwidth, ev.yheight, ev.xwidth, ev.yheight - pos.radius);
+      render.lineTo(ev.xwidth, pos.y + pos.radius);
+      render.quadraticCurveTo(ev.xwidth, pos.y, ev.xwidth - pos.radius, pos.y);
       render.lineTo(pos.x + pos.radius, pos.y);
       render.quadraticCurveTo(pos.x, pos.y, pos.x, pos.y + pos.radius);
       render.fill();

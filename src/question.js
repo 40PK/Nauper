@@ -31,6 +31,10 @@ Nauper.Question = function Question(engine, args) {
     render.fillText(this.map[index].text, x, y);
   };
   let renderBox = (index, active, pos) => {
+    let ev = {
+      xwidth: pos.x + pos.width,
+      yheight: pos.y + pos.height
+    };
     if (active) {
       render.fillStyle = activebox.background;
     } else if (!active) {
@@ -42,13 +46,12 @@ Nauper.Question = function Question(engine, args) {
     } else if (boxtype === 'rounded') {
       render.beginPath();
       render.moveTo(pos.x, pos.y + pos.radius);
-      render.lineTo(pos.x, (pos.y + pos.height) - pos.radius);
-      render.quadraticCurveTo(pos.x, pos.y + pos.height, pos.x + pos.radius, pos.y + pos.height);
-      render.lineTo((pos.x + pos.width) - pos.radius, pos.y + pos.height);
-      // will be fixed as fast as I can
-      render.quadraticCurveTo(pos.x + pos.width, pos.y + pos.height, pos.x + pos.width, (pos.y + pos.height) - pos.radius); //eslint-disable-line
-      render.lineTo(pos.x + pos.width, pos.y + pos.radius);
-      render.quadraticCurveTo(pos.x + pos.width, pos.y, (pos.x + pos.width) - pos.radius, pos.y);
+      render.lineTo(pos.x, ev.yheight - pos.radius);
+      render.quadraticCurveTo(pos.x, ev.yheight, pos.x + pos.radius, ev.yheight);
+      render.lineTo(ev.xwidth - pos.radius, ev.yheight);
+      render.quadraticCurveTo(ev.xwidth, ev.yheight, ev.xwidth, ev.yheight - pos.radius);
+      render.lineTo(ev.xwidth, pos.y + pos.radius);
+      render.quadraticCurveTo(ev.xwidth, pos.y, ev.xwidth - pos.radius, pos.y);
       render.lineTo(pos.x + pos.radius, pos.y);
       render.quadraticCurveTo(pos.x, pos.y, pos.x, pos.y + pos.radius);
       render.fill();

@@ -3,6 +3,7 @@ var doc = document.documentElement;
 // creating app
 var engine = new Nauper.Engine({
   canvas: document.getElementsByTagName("canvas")[0],
+  font: "15pt Arial",
   size: {
       width: doc.clientWidth,
       height: doc.clientHeight
@@ -43,7 +44,6 @@ var frameTwo = new Nauper.Frame(engine, {
         "text": "я некочан"
     }
 });
-
 var frameThree = new Nauper.Frame(engine, {
     "textbox": {
         "base": "#fff",
@@ -53,6 +53,10 @@ var frameThree = new Nauper.Frame(engine, {
         "textcolor": "#000",
         "text": "Текст без героев"
     }
+});
+var frameFour = new Nauper.Frame(engine, {
+    "characters": [lena.smile, yulya.smile],
+    "displayOrder": [0, false, false, 1]
 });
 
 var questionOne = new Nauper.Question(engine, {
@@ -69,8 +73,8 @@ var questionOne = new Nauper.Question(engine, {
         "address": "2"
     },
     {
-        "text": "снова в начало",
-        "address": "0"
+        "text": "без текста",
+        "address": "3"
     }],
     "textbox": {
         "type": "rounded",
@@ -88,5 +92,6 @@ var questionOne = new Nauper.Question(engine, {
 engine.addScene([frameOne, questionOne]);
 engine.addScene([frameTwo]);
 engine.addScene([frameThree]);
+engine.addScene([frameFour]);
 
 engine.start();

@@ -8,36 +8,37 @@ Nauper.Frame = function Frame(engine, args) {
   let canvas = engine.canvas;
 
   let setText = () => {
-    let x = size.width * 0.025;
-    let y = size.height * 0.80;
-    let height = size.height * 0.18;
-    let width = size.width * 0.95;
-    let radius = size.height * 0.05;
-    let texts = [];
-    render.fillStyle = text.base;
-    if (text.edges === 'default') {
-      render.fillRect(0, size.height * 0.80, size.width, size.height * 0.20);
-    } else if (text.edges === 'rounded') {
-      render.beginPath();
-      render.moveTo(x, y + radius);
-      render.lineTo(x, (y + height) - radius);
-      render.quadraticCurveTo(x, y + height, x + radius, y + height);
-      render.lineTo((x + width) - radius, y + height);
-      render.quadraticCurveTo(x + width, y + height, x + width, (y + height) - radius);
-      render.lineTo(x + width, y + radius);
-      render.quadraticCurveTo(x + width, y, (x + width) - radius, y);
-      render.lineTo(x + radius, y);
-      render.quadraticCurveTo(x, y, x, y + radius);
-      render.fill();
+    if (text !== undefined) {
+      let x = size.width * 0.025;
+      let y = size.height * 0.80;
+      let height = size.height * 0.18;
+      let width = size.width * 0.95;
+      let radius = size.height * 0.05;
+      let texts = [];
+      render.fillStyle = text.base;
+      if (text.edges === 'default') {
+        render.fillRect(0, size.height * 0.80, size.width, size.height * 0.20);
+      } else if (text.edges === 'rounded') {
+        render.beginPath();
+        render.moveTo(x, y + radius);
+        render.lineTo(x, (y + height) - radius);
+        render.quadraticCurveTo(x, y + height, x + radius, y + height);
+        render.lineTo((x + width) - radius, y + height);
+        render.quadraticCurveTo(x + width, y + height, x + width, (y + height) - radius);
+        render.lineTo(x + width, y + radius);
+        render.quadraticCurveTo(x + width, y, (x + width) - radius, y);
+        render.lineTo(x + radius, y);
+        render.quadraticCurveTo(x, y, x, y + radius);
+        render.fill();
+      }
+      render.fillStyle = text.namecolor;
+      render.fillText(text.name, size.width * 0.10, (size.height * 0.80) + 27);
+      render.fillStyle = text.textcolor;
+      texts = wrapText(engine, text.text, render.font, size.width * 0.80);
+      texts.result.forEach(function insertText(i, j) {
+        render.fillText(i, size.width * 0.10, (size.height * 0.83) + 27 + (texts.height * j));
+      });
     }
-    render.fillStyle = text.namecolor;
-    render.font = '15pt Arial';
-    render.fillText(text.name, size.width * 0.10, (size.height * 0.80) + 27);
-    render.fillStyle = text.textcolor;
-    texts = wrapText(engine, text.text, render.font, size.width * 0.80);
-    texts.result.forEach(function insertText(i, j) {
-      render.fillText(i, size.width * 0.10, (size.height * 0.83) + 27 + (texts.height * j));
-    });
   };
 
   let setBackground = () => {
