@@ -293,13 +293,13 @@ Nauper.Question = function Question(engine, args) {
     engine.nextElement();
   }
 };
-'use strict';
+"use strict";
 
 /* global Nauper */
 Nauper.Character = function Character(args) {
   var result = {};
   args.emotions.forEach(function characterEmotions(emotion) {
-    result[emotion] = args.path + '/' + emotion + '.png';
+    result[emotion] = args.path + "/" + emotion + ".png";
   });
   return result;
 };
