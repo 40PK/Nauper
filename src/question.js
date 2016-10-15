@@ -1,79 +1,79 @@
 /* global Nauper */
 Nauper.Question = function Question(engine, args) {
-  let background = args.background;
-  let activebox = args.textbox.active;
-  let inactivebox = args.textbox.inactive;
-  let boxtype = args.textbox.type;
-  let necessary = args.necessary;
-  let render = engine.render;
-  let canvas = engine.canvas;
-  let size = engine.size;
-  let setBackground = () => {
-    if (background) {
-      canvas.style.backgroundImage = `url("./data/images/backgrounds/${background}")`;
+  this.background = args.background;
+  this.activebox = args.textbox.active;
+  this.inactivebox = args.textbox.inactive;
+  this.boxtype = args.textbox.type;
+  this.necessary = args.necessary;
+  this.render = engine.render;
+  this.canvas = engine.canvas;
+  this.size = engine.size;
+  this.setBackground = () => {
+    if (this.background) {
+      this.canvas.style.backgroundImage = `url("./data/images/backgrounds/${this.background}")`;
     }
   };
-  let setType = () => {
-    if (necessary === true || necessary === undefined) {
+  this.setType = () => {
+    if (this.necessary === true || this.necessary === undefined) {
       this.type = 'choice';
     } else {
       this.type = 'frame';
     }
   };
-  let setText = (index, active, pos) => {
-    let x = (size.width * 0.50) - (render.measureText(this.map[index].text).width / 2);
-    let y = (size.height * ((pos.y / size.height) + 0.10));
+  this.setText = (index, active, pos) => {
+    let x = (this.size.width * 0.50) - (this.render.measureText(this.map[index].text).width / 2);
+    let y = (this.size.height * ((pos.y / this.size.height) + 0.10));
     if (active) {
-      render.fillStyle = activebox.text;
+      this.render.fillStyle = this.activebox.text;
     } else if (!active) {
-      render.fillStyle = inactivebox.text;
+      this.render.fillStyle = this.inactivebox.text;
     }
-    render.fillText(this.map[index].text, x, y);
+    this.render.fillText(this.map[index].text, x, y);
   };
-  let renderBox = (index, active, pos) => {
+  this.renderBox = (index, active, pos) => {
     let ev = {
       xwidth: pos.x + pos.width,
       yheight: pos.y + pos.height
     };
     if (active) {
-      render.fillStyle = activebox.background;
+      this.render.fillStyle = this.activebox.background;
     } else if (!active) {
-      render.fillStyle = inactivebox.background;
+      this.render.fillStyle = this.inactivebox.background;
     }
 
-    if (boxtype === 'default') {
-      render.fillRect(pos.x, pos.y, pos.width, pos.height);
-    } else if (boxtype === 'rounded') {
-      render.beginPath();
-      render.moveTo(pos.x, pos.y + pos.radius);
-      render.lineTo(pos.x, ev.yheight - pos.radius);
-      render.quadraticCurveTo(pos.x, ev.yheight, pos.x + pos.radius, ev.yheight);
-      render.lineTo(ev.xwidth - pos.radius, ev.yheight);
-      render.quadraticCurveTo(ev.xwidth, ev.yheight, ev.xwidth, ev.yheight - pos.radius);
-      render.lineTo(ev.xwidth, pos.y + pos.radius);
-      render.quadraticCurveTo(ev.xwidth, pos.y, ev.xwidth - pos.radius, pos.y);
-      render.lineTo(pos.x + pos.radius, pos.y);
-      render.quadraticCurveTo(pos.x, pos.y, pos.x, pos.y + pos.radius);
-      render.fill();
+    if (this.boxtype === 'default') {
+      this.render.fillRect(pos.x, pos.y, pos.width, pos.height);
+    } else if (this.boxtype === 'rounded') {
+      this.render.beginPath();
+      this.render.moveTo(pos.x, pos.y + pos.radius);
+      this.render.lineTo(pos.x, ev.yheight - pos.radius);
+      this.render.quadraticCurveTo(pos.x, ev.yheight, pos.x + pos.radius, ev.yheight);
+      this.render.lineTo(ev.xwidth - pos.radius, ev.yheight);
+      this.render.quadraticCurveTo(ev.xwidth, ev.yheight, ev.xwidth, ev.yheight - pos.radius);
+      this.render.lineTo(ev.xwidth, pos.y + pos.radius);
+      this.render.quadraticCurveTo(ev.xwidth, pos.y, ev.xwidth - pos.radius, pos.y);
+      this.render.lineTo(pos.x + pos.radius, pos.y);
+      this.render.quadraticCurveTo(pos.x, pos.y, pos.x, pos.y + pos.radius);
+      this.render.fill();
     }
-    setText(index, active, pos);
+    this.setText(index, active, pos);
   };
   this.map = args.map;
   if (this.map.length > 1 && this.map.length < 5) {
-    setType();
-    this.draw = function draw() {
-      let x = size.width * 0.025;
+    this.setType();
+    this.draw = () => {
+      let x = this.size.width * 0.025;
       let y = 0;
-      let height = size.height * 0.20;
-      let width = size.width * 0.95;
-      let radius = size.height * 0.05;
-      render.clearRect(0, 0, size.width, size.height);
-      setBackground();
-      this.map.forEach(function renderQuestion(i, index) {
-        y = ((index * 0.25) + 0.025) * size.height;
-        renderBox(index, false, { x, y, height, width, radius });
+      let height = this.size.height * 0.20;
+      let width = this.size.width * 0.95;
+      let radius = this.size.height * 0.05;
+      this.render.clearRect(0, 0, this.size.width, this.size.height);
+      this.setBackground();
+      this.map.forEach((i, index) => {
+        y = ((index * 0.25) + 0.025) * this.size.height;
+        this.renderBox(index, false, { x, y, height, width, radius });
       });
-    }.bind(this);
+    };
   } else {
     engine.nextElement();
   }
