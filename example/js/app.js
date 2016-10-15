@@ -56,9 +56,6 @@ var frameThree = new Nauper.Frame(engine, {
 });
 
 var questionOne = new Nauper.Question(engine, {
-    "boxcolor": "#fff",
-    "textcolor": "#000",
-    "boxtype": "rounded",
     "map": [{
         "text": "в начало",
         "address": "0"
@@ -74,7 +71,18 @@ var questionOne = new Nauper.Question(engine, {
     {
         "text": "снова в начало",
         "address": "0"
-    }]
+    }],
+    "textbox": {
+        "type": "rounded",
+        "inactive": {
+            "background": "#fff",
+            "text": "#000"
+        },
+        "active": {
+            "background": "#000",
+            "text": "#fff"
+        }
+    }
 });
 
 engine.addScene([frameOne, questionOne]);

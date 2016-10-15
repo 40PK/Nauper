@@ -84,7 +84,7 @@ Nauper.Frame = function Frame(engine, args) {
       setBackground();
       displayCharacters();
     } else {
-      canvas.click();
+      engine.nextElement();
     }
   }.bind(this);
 };
