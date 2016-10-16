@@ -123,100 +123,105 @@ Nauper.Engine.prototype.addScene = function addScene(scene) {
 
 /* global Nauper, wrapText */
 Nauper.Frame = function Frame(engine, args) {
-  var characters = args.characters;
-  var displayOrder = args.displayOrder;
-  var text = args.textbox;
-  var render = engine.render;
-  var size = engine.size;
-  var canvas = engine.canvas;
-
-  var setText = function setText() {
-    if (text !== undefined) {
-      (function () {
-        var x = size.width * 0.025;
-        var y = size.height * 0.80;
-        var height = size.height * 0.18;
-        var width = size.width * 0.95;
-        var radius = size.height * 0.05;
-        var texts = [];
-        render.fillStyle = text.base;
-        if (text.edges === 'default') {
-          render.fillRect(0, size.height * 0.80, size.width, size.height * 0.20);
-        } else if (text.edges === 'rounded') {
-          render.beginPath();
-          render.moveTo(x, y + radius);
-          render.lineTo(x, y + height - radius);
-          render.quadraticCurveTo(x, y + height, x + radius, y + height);
-          render.lineTo(x + width - radius, y + height);
-          render.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
-          render.lineTo(x + width, y + radius);
-          render.quadraticCurveTo(x + width, y, x + width - radius, y);
-          render.lineTo(x + radius, y);
-          render.quadraticCurveTo(x, y, x, y + radius);
-          render.fill();
-        }
-        render.fillStyle = text.namecolor;
-        render.fillText(text.name, size.width * 0.10, size.height * 0.80 + 27);
-        render.fillStyle = text.textcolor;
-        texts = wrapText(engine, text.text, render.font, size.width * 0.80);
-        texts.result.forEach(function insertText(i, j) {
-          render.fillText(i, size.width * 0.10, size.height * 0.83 + 27 + texts.height * j);
-        });
-      })();
-    }
-  };
-
-  var setBackground = function setBackground() {
-    if (args.background) {
-      canvas.style.backgroundImage = 'url(./data/images/backgrounds/' + args.background + ')';
-    }
-  };
-
-  var displayCharacters = function displayCharacters() {
-    if (displayOrder !== undefined && displayOrder.length !== 0) {
-      (function () {
-        var loaded = displayOrder.length;
-        displayOrder.forEach(function (i, index) {
-          if (i !== false && i !== undefined) {
-            (function () {
-              var img = new Image();
-              img.addEventListener('load', function () {
-                var ratio = size.height * 1.20 / img.height;
-                var offsetY = size.height * 0.10;
-                var offsetX = size.width * (0.225 * index);
-                render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
-                loaded -= 1;
-                if (loaded === 0) {
-                  setText();
-                }
-              });
-              img.src = characters[i];
-            })();
-          } else {
-            loaded -= 1;
-          }
-        });
-      })();
-    } else {
-      setText();
-    }
-  };
-
+  this.engine = engine;
+  this.render = this.engine.render;
+  this.size = this.engine.size;
+  this.canvas = this.engine.canvas;
+  this.characters = args.characters;
+  this.displayOrder = args.displayOrder;
+  this.background = args.background;
+  this.text = args.textbox;
   this.type = 'frame';
-
-  this.check = function () {
-    return true;
-  };
 
   this.draw = function draw() {
     if (this.check()) {
-      render.clearRect(0, 0, size.width, size.height);
-      setBackground();
-      displayCharacters();
+      this.render.clearRect(0, 0, this.size.width, this.size.height);
+      this.setBackground();
+      this.displayCharacters();
     } else {
-      engine.nextElement();
+      this.engine.nextElement();
     }
   }.bind(this);
+};
+
+Nauper.Frame.prototype.setBackground = function setBackground() {
+  if (this.background) {
+    this.canvas.style.backgroundImage = 'url(./data/images/backgrounds/' + this.background + ')';
+  }
+};
+
+Nauper.Frame.prototype.check = function check() {
+  return true;
+};
+
+Nauper.Frame.prototype.setText = function setText() {
+  if (this.text !== undefined) {
+    var x = this.size.width * 0.025;
+    var y = this.size.height * 0.80;
+    var height = this.size.height * 0.18;
+    var width = this.size.width * 0.95;
+    var radius = this.size.height * 0.05;
+    var textwidth = this.size.width * 0.80;
+    var textx = this.size.width * 0.10;
+    var texty = this.size.height * 0.83 + 27;
+    var texts = [];
+    this.render.fillStyle = this.text.base;
+    if (this.text.edges === 'default') {
+      this.render.fillRect(x, y, width, height);
+    } else if (this.text.edges === 'rounded') {
+      this.render.beginPath();
+      this.render.moveTo(x, y + radius);
+      this.render.lineTo(x, y + height - radius);
+      this.render.quadraticCurveTo(x, y + height, x + radius, y + height);
+      this.render.lineTo(x + width - radius, y + height);
+      this.render.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
+      this.render.lineTo(x + width, y + radius);
+      this.render.quadraticCurveTo(x + width, y, x + width - radius, y);
+      this.render.lineTo(x + radius, y);
+      this.render.quadraticCurveTo(x, y, x, y + radius);
+      this.render.fill();
+    }
+    this.render.fillStyle = this.text.namecolor;
+    this.render.fillText(this.text.name, this.size.width * 0.10, y + 27);
+    this.render.fillStyle = this.text.textcolor;
+    texts = wrapText(this.engine, this.text.text, this.render.font, textwidth);
+    for (var j = 0; j < texts.result.length; j += 1) {
+      var i = texts.result[j];
+      this.render.fillText(i, textx, texty + texts.height * j);
+    }
+  }
+};
+
+Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
+  var _this = this;
+
+  if (this.displayOrder !== undefined && this.displayOrder.length !== 0) {
+    (function () {
+      var loaded = _this.displayOrder.length;
+      _this.displayOrder.forEach(function (i, index) {
+        if (i !== false && i !== undefined) {
+          (function () {
+            var img = new Image();
+            img.addEventListener('load', function () {
+              var ratio = _this.size.height * 1.20 / img.height;
+              var offsetY = _this.size.height * 0.10;
+              var offsetX = _this.size.width * (0.225 * index);
+              _this.render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
+              loaded -= 1;
+              if (loaded === 0) {
+                _this.setText();
+              }
+            });
+            img.src = _this.characters[i];
+          })();
+        } else {
+          loaded -= 1;
+        }
+      });
+    })();
+  } else {
+    this.setText();
+  }
 };
 'use strict';
 
