@@ -76,9 +76,9 @@ Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
       if (i !== false && i !== undefined) {
         let img = new Image();
         img.addEventListener('load', () => {
-          let ratio = (this.size.height * 1.20) / img.height;
-          let offsetY = this.size.height * 0.10;
-          let offsetX = this.size.width * (0.225 * index);
+          const ratio = (this.size.height * 1.20) / img.height;
+          const offsetY = this.size.height * 0.10;
+          const offsetX = this.size.width * (0.225 * index);
           this.render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
           loaded -= 1;
           if (loaded === 0) {
