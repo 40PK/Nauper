@@ -222,85 +222,93 @@ Nauper.Frame = function Frame(engine, args) {
 
 /* global Nauper */
 Nauper.Question = function Question(engine, args) {
-  var _this = this;
-
   this.background = args.background;
   this.activebox = args.textbox.active;
   this.inactivebox = args.textbox.inactive;
   this.boxtype = args.textbox.type;
   this.necessary = args.necessary;
-  this.render = engine.render;
-  this.canvas = engine.canvas;
-  this.size = engine.size;
-  this.setBackground = function () {
-    if (_this.background) {
-      _this.canvas.style.backgroundImage = 'url("./data/images/backgrounds/' + _this.background + '")';
-    }
-  };
-  this.setType = function () {
-    if (_this.necessary === true || _this.necessary === undefined) {
-      _this.type = 'choice';
-    } else {
-      _this.type = 'frame';
-    }
-  };
-  this.setText = function (index, active, pos) {
-    var x = _this.size.width * 0.50 - _this.render.measureText(_this.map[index].text).width / 2;
-    var y = _this.size.height * (pos.y / _this.size.height + 0.10);
-    if (active) {
-      _this.render.fillStyle = _this.activebox.text;
-    } else if (!active) {
-      _this.render.fillStyle = _this.inactivebox.text;
-    }
-    _this.render.fillText(_this.map[index].text, x, y);
-  };
-  this.renderBox = function (index, active, pos) {
-    var ev = {
-      xwidth: pos.x + pos.width,
-      yheight: pos.y + pos.height
-    };
-    if (active) {
-      _this.render.fillStyle = _this.activebox.background;
-    } else if (!active) {
-      _this.render.fillStyle = _this.inactivebox.background;
-    }
-
-    if (_this.boxtype === 'default') {
-      _this.render.fillRect(pos.x, pos.y, pos.width, pos.height);
-    } else if (_this.boxtype === 'rounded') {
-      _this.render.beginPath();
-      _this.render.moveTo(pos.x, pos.y + pos.radius);
-      _this.render.lineTo(pos.x, ev.yheight - pos.radius);
-      _this.render.quadraticCurveTo(pos.x, ev.yheight, pos.x + pos.radius, ev.yheight);
-      _this.render.lineTo(ev.xwidth - pos.radius, ev.yheight);
-      _this.render.quadraticCurveTo(ev.xwidth, ev.yheight, ev.xwidth, ev.yheight - pos.radius);
-      _this.render.lineTo(ev.xwidth, pos.y + pos.radius);
-      _this.render.quadraticCurveTo(ev.xwidth, pos.y, ev.xwidth - pos.radius, pos.y);
-      _this.render.lineTo(pos.x + pos.radius, pos.y);
-      _this.render.quadraticCurveTo(pos.x, pos.y, pos.x, pos.y + pos.radius);
-      _this.render.fill();
-    }
-    _this.setText(index, active, pos);
-  };
+  this.engine = engine;
+  this.render = this.engine.render;
+  this.canvas = this.engine.canvas;
+  this.size = this.engine.size;
   this.map = args.map;
-  if (this.map.length > 1 && this.map.length < 5) {
-    this.setType();
-    this.draw = function () {
-      var x = _this.size.width * 0.025;
-      var y = 0;
-      var height = _this.size.height * 0.20;
-      var width = _this.size.width * 0.95;
-      var radius = _this.size.height * 0.05;
-      _this.render.clearRect(0, 0, _this.size.width, _this.size.height);
-      _this.setBackground();
-      _this.map.forEach(function (i, index) {
-        y = (index * 0.25 + 0.025) * _this.size.height;
-        _this.renderBox(index, false, { x: x, y: y, height: height, width: width, radius: radius });
-      });
-    };
-  } else {
-    engine.nextElement();
+  this.setType();
+
+  this.draw = function draw() {
+    var _this = this;
+
+    if (this.map.length !== 0 && this.map.length <= 4) {
+      (function () {
+        var x = _this.size.width * 0.025;
+        var y = 0;
+        var height = _this.size.height * 0.20;
+        var width = _this.size.width * 0.95;
+        var radius = _this.size.height * 0.05;
+        _this.render.clearRect(0, 0, _this.size.width, _this.size.height);
+        _this.setBackground();
+        _this.map.forEach(function (i, index) {
+          y = (index * 0.25 + 0.025) * _this.size.height;
+          _this.renderBox(index, false, { x: x, y: y, height: height, width: width, radius: radius });
+        });
+      })();
+    } else {
+      this.engine.nextElement();
+    }
+  }.bind(this);
+};
+
+Nauper.Question.prototype.setBackground = function setBackground() {
+  if (this.background) {
+    this.canvas.style.backgroundImage = 'url("./data/images/backgrounds/' + this.background + '")';
   }
+};
+
+Nauper.Question.prototype.setType = function setType() {
+  if (this.necessary === true || this.necessary === undefined) {
+    this.type = 'choice';
+  } else {
+    this.type = 'frame';
+  }
+};
+
+Nauper.Question.prototype.setText = function setText(index, active, pos) {
+  var x = this.size.width * 0.50 - this.render.measureText(this.map[index].text).width / 2;
+  var y = this.size.height * (pos.y / this.size.height + 0.10);
+  if (active) {
+    this.render.fillStyle = this.activebox.text;
+  } else if (!active) {
+    this.render.fillStyle = this.inactivebox.text;
+  }
+  this.render.fillText(this.map[index].text, x, y);
+};
+
+Nauper.Question.prototype.renderBox = function renderBox(index, active, pos) {
+  var ev = {
+    xwidth: pos.x + pos.width,
+    yheight: pos.y + pos.height
+  };
+  if (active) {
+    this.render.fillStyle = this.activebox.background;
+  } else if (!active) {
+    this.render.fillStyle = this.inactivebox.background;
+  }
+
+  if (this.boxtype === 'default') {
+    this.render.fillRect(pos.x, pos.y, pos.width, pos.height);
+  } else if (this.boxtype === 'rounded') {
+    this.render.beginPath();
+    this.render.moveTo(pos.x, pos.y + pos.radius);
+    this.render.lineTo(pos.x, ev.yheight - pos.radius);
+    this.render.quadraticCurveTo(pos.x, ev.yheight, pos.x + pos.radius, ev.yheight);
+    this.render.lineTo(ev.xwidth - pos.radius, ev.yheight);
+    this.render.quadraticCurveTo(ev.xwidth, ev.yheight, ev.xwidth, ev.yheight - pos.radius);
+    this.render.lineTo(ev.xwidth, pos.y + pos.radius);
+    this.render.quadraticCurveTo(ev.xwidth, pos.y, ev.xwidth - pos.radius, pos.y);
+    this.render.lineTo(pos.x + pos.radius, pos.y);
+    this.render.quadraticCurveTo(pos.x, pos.y, pos.x, pos.y + pos.radius);
+    this.render.fill();
+  }
+  this.setText(index, active, pos);
 };
 "use strict";
 
