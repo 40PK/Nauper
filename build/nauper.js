@@ -91,18 +91,18 @@ Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
   var defaults = {
     type: 'default',
     color: '#fff',
-    abs: 0.025,
-    ord: 0.80,
-    h: 0.18,
-    w: 0.95,
-    r: 0.05
+    x: 0.025,
+    y: 0.80,
+    height: 0.18,
+    width: 0.95,
+    radius: 0.05
   };
   var conf = putDefaults(defaults, configs);
-  var x = this.size.width * conf.abs;
-  var y = this.size.height * conf.ord;
-  var height = this.size.height * conf.h;
-  var width = this.size.width * conf.w;
-  var radius = this.size.height * conf.r;
+  var x = this.size.width * conf.x;
+  var y = this.size.height * conf.y;
+  var height = this.size.height * conf.height;
+  var width = this.size.width * conf.width;
+  var radius = this.size.height * conf.radius;
 
   this.render.fillStyle = conf.color;
 
@@ -130,13 +130,13 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
     text: '',
     align: 'wrapped',
     color: '#000',
-    abs: 0.10,
-    ord: 0.85,
+    x: 0.10,
+    y: 0.85,
     width: 0.80
   };
   var conf = putDefaults(defaults, configs);
-  var x = this.size.width * conf.abs;
-  var y = this.size.height * conf.ord;
+  var x = this.size.width * conf.x;
+  var y = this.size.height * conf.y;
   var maxwidth = this.size.width * conf.width;
   this.render.fillStyle = conf.color;
   if (conf.align === 'wrapped') {
@@ -274,13 +274,13 @@ Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
                 });
                 _this.engine.ui.drawText({
                   text: _this.text.name,
-                  abs: 0.10,
-                  ord: 0.82
+                  x: 0.10,
+                  y: 0.82
                 });
                 _this.engine.ui.drawText({
                   text: _this.text.text,
-                  abs: 0.10,
-                  ord: 0.845
+                  x: 0.10,
+                  y: 0.845
                 });
               }
             });
@@ -328,11 +328,11 @@ Nauper.Question = function Question(engine, args) {
           _this.engine.ui.drawTextBox({
             type: _this.boxtype,
             color: _this.inactivebox.background,
-            ord: y,
-            abs: x,
-            h: height,
-            w: width,
-            r: radius
+            y: y,
+            x: x,
+            height: height,
+            width: width,
+            radius: radius
           });
           _this.engine.ui.drawText({
             text: i.text,

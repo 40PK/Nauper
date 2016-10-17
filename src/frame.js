@@ -43,13 +43,13 @@ Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
             });
             this.engine.ui.drawText({
               text: this.text.name,
-              abs: 0.10,
-              ord: 0.82
+              x: 0.10,
+              y: 0.82
             });
             this.engine.ui.drawText({
               text: this.text.text,
-              abs: 0.10,
-              ord: 0.845
+              x: 0.10,
+              y: 0.845
             });
           }
         });

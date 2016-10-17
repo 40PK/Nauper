@@ -16,18 +16,18 @@ Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
   const defaults = {
     type: 'default',
     color: '#fff',
-    abs: 0.025,
-    ord: 0.80,
-    h: 0.18,
-    w: 0.95,
-    r: 0.05
+    x: 0.025,
+    y: 0.80,
+    height: 0.18,
+    width: 0.95,
+    radius: 0.05
   };
   const conf = putDefaults(defaults, configs);
-  const x = this.size.width * conf.abs;
-  const y = this.size.height * conf.ord;
-  const height = this.size.height * conf.h;
-  const width = this.size.width * conf.w;
-  const radius = this.size.height * conf.r;
+  const x = this.size.width * conf.x;
+  const y = this.size.height * conf.y;
+  const height = this.size.height * conf.height;
+  const width = this.size.width * conf.width;
+  const radius = this.size.height * conf.radius;
 
   this.render.fillStyle = conf.color;
 
@@ -53,13 +53,13 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
     text: '',
     align: 'wrapped',
     color: '#000',
-    abs: 0.10,
-    ord: 0.85,
+    x: 0.10,
+    y: 0.85,
     width: 0.80
   };
   const conf = putDefaults(defaults, configs);
-  const x = this.size.width * conf.abs;
-  const y = this.size.height * conf.ord;
+  const x = this.size.width * conf.x;
+  const y = this.size.height * conf.y;
   const maxwidth = this.size.width * conf.width;
   this.render.fillStyle = conf.color;
   if (conf.align === 'wrapped') {

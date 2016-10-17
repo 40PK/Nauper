@@ -26,11 +26,11 @@ Nauper.Question = function Question(engine, args) {
         this.engine.ui.drawTextBox({
           type: this.boxtype,
           color: this.inactivebox.background,
-          ord: y,
-          abs: x,
-          h: height,
-          w: width,
-          r: radius
+          y,
+          x,
+          height,
+          width,
+          radius
         });
         this.engine.ui.drawText({
           text: i.text,
