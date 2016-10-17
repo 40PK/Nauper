@@ -40,3 +40,24 @@ let wrapText = (engine, text, style, maxwidth) => { //eslint-disable-line
 
   return { result, height };
 };
+
+let getTextOffset = (engine, text) => { //eslint-disable-line
+  let textWidth = engine.render.measureText(text).width;
+  let halfScreen = engine.size.width * 0.50;
+  let halfText = textWidth * 0.50;
+  let result = halfScreen - halfText;
+  return result;
+};
+
+let putDefaults = (defaults, given) => { //eslint-disable-line
+  let keys = Object.getOwnPropertyNames(defaults);
+  let result = {};
+  keys.forEach((key) => {
+    if (given[key] === undefined) {
+      result[key] = defaults[key];
+    } else if (given[key] !== undefined) {
+      result[key] = given[key];
+    }
+  });
+  return result;
+};
