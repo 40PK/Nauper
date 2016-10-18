@@ -1,15 +1,15 @@
 # Nauper
 Nauper is a engine for visual novels based on web technologies.
-Nauper uses HTML5 \<canvas> element for rendering and controlling it by JS.
+Nauper uses HTML5 `<canvas>` element for rendering and controlling it by JS.
 
-# Code guide
+## Code guide
 We use ES5 syntax with some ES6 features.
 
 JavaScript style guide: [Airbnb](https://github.com/airbnb/javascript/tree/master)
 
 ES6 translates to ES5 using Babel
 
-# Engine structure
+## Engine structure
 Okay, if you're there, I think you want to know about engine structure.
 That's this:
 * Character, functionality:
@@ -36,8 +36,8 @@ That's what they are:
 * nauper.js, functionality:
   * In that file we can only see Nauper object definition
 
-# Nauper's functionality
+## Nauper's functionality
 Coming soon!
 
-# How to use
+## How to use
 Coming soon!
