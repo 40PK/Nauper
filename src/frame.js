@@ -25,6 +25,22 @@ Nauper.Frame.prototype.check = function check() {
   return true;
 };
 
+Nauper.Frame.prototype.setText = function setText() {
+  this.engine.ui.drawTextBox({
+    type: this.text.edges
+  });
+  this.engine.ui.drawText({
+    text: this.text.name,
+    x: 0.10,
+    y: 0.82
+  });
+  this.engine.ui.drawText({
+    text: this.text.text,
+    x: 0.10,
+    y: 0.845
+  });
+};
+
 Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
   if (this.displayOrder !== undefined && this.displayOrder.length !== 0) {
     let loaded = this.displayOrder.length;
@@ -38,19 +54,7 @@ Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
           this.render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
           loaded -= 1;
           if (loaded === 0) {
-            this.engine.ui.drawTextBox({
-              type: this.text.edges
-            });
-            this.engine.ui.drawText({
-              text: this.text.name,
-              x: 0.10,
-              y: 0.82
-            });
-            this.engine.ui.drawText({
-              text: this.text.text,
-              x: 0.10,
-              y: 0.845
-            });
+            this.setText();
           }
         });
         img.src = this.characters[i];
