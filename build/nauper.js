@@ -342,7 +342,7 @@ Nauper.Question = function Question(engine, args) {
             text: i.text,
             align: 'center',
             color: _this.inactivebox.text,
-            ord: y + 0.10
+            y: y + 0.10
           });
         });
       })();

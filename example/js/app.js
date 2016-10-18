@@ -23,12 +23,12 @@ var frameOne = new Nauper.Frame(engine, {
 	"characters": [lena.smile, yulya.smile], 
 	"displayOrder": [0, 1], 
 	"textbox": {
-        "edges": "default",
+        "edges": "rounded",
 		"base": "#fff", 
 		"namecolor": "#000", 
-		"name": "Лена", 
+		"name": "Lena", 
 		"textcolor": "black", 
-		"text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+		"text": "It's a start frame"
 	}, 
 	"background": "1.jpg"
 });
@@ -37,21 +37,21 @@ var frameTwo = new Nauper.Frame(engine, {
     "displayOrder": [false, false, 1, 0],
     "textbox": {
         "base": "#fff",
-        "edges": "rounded",
+        "edges": "default",
         "namecolor": "#000",
-        "name": "Юля",
+        "name": "Julia",
         "textcolor": "black",
-        "text": "я некочан"
+        "text": "It's a frame with both text and characters"
     }
 });
 var frameThree = new Nauper.Frame(engine, {
     "textbox": {
         "base": "#fff",
-        "edges": "rounded",
+        "edges": "default",
         "namecolor": "#000",
-        "name": "ГГ",
+        "name": "arseniypetrikor",
         "textcolor": "#000",
-        "text": "Текст без героев"
+        "text": "This is a text without characters"
     }
 });
 var frameFour = new Nauper.Frame(engine, {
@@ -61,23 +61,23 @@ var frameFour = new Nauper.Frame(engine, {
 
 var questionOne = new Nauper.Question(engine, {
     "map": [{
-        "text": "в начало",
+        "text": "To start",
         "address": "0"
     },
     {
-        "text": "вперед",
+        "text": "To text and characters",
         "address": "1"
     },
     {
-        "text": "без персонажей",
+        "text": "To only text frame",
         "address": "2"
     },
     {
-        "text": "без текста",
+        "text": "To only characters frame",
         "address": "3"
     }],
     "textbox": {
-        "type": "rounded",
+        "type": "default",
         "inactive": {
             "background": "#fff",
             "text": "#000"
