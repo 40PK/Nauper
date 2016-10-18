@@ -47,7 +47,7 @@ var frameTwo = new Nauper.Frame(engine, {
 var frameThree = new Nauper.Frame(engine, {
     "textbox": {
         "base": "#fff",
-        "edges": "default",
+        "edges": "rounded",
         "namecolor": "#000",
         "name": "arseniypetrikor",
         "textcolor": "#000",

@@ -40,7 +40,31 @@ That's what they are:
   * In that file we can only see **Nauper** object definition
 
 ## Nauper's functionality
-Coming soon!
+You can draw background (oh, really?)
+![Background setting](images/bg.png)
+
+You can draw textboxes with text
+![Default text](images/text_default.png)
+
+Textboxes can be rounded
+![Rounded text](images/text_rounded.png)
+
+You can also change color of text
+![Colored text](images/text_colors.png)
+
+You can draw characters
+![Characters](images/characters.png)
+
+You can also draw characters and text at the same time
+![Characters with text](images/characters_text.png)
+
+You can create questions with maximum of four choices
+![Questions default](images/question_default.png)
+
+Question's textboxes can also be rounded
+![Questions rounded](images/question_rounded.png)
+
+And I think you understand that you can also change color of question's text, so I didn't put picture of this
 
 ## How to use
 Coming soon!
