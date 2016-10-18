@@ -46,4 +46,18 @@ Coming soon!
 Coming soon!
 
 ## TODO
-Write TODO
+For help:
+* Realizeable - functions that we can create in a short period of time
+* Unrealzeable - we need to think and code very much to get this functions done
+
+Realizeable:
+* *Fix* name and text positioning
+* *Fix* characters display on mobile devices
+* *Create* unnecessary choices in addition to unnecessary Questions
+* *Add* default configs to all types
+
+Unrealizeable:
+* *Fix* text positioning on mobile devices in album orientation
+* *Make* all adaptive on desktop
+* *Make* all adaptive on mobile devices
+* Increase performance
