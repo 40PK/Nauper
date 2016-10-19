@@ -32,11 +32,11 @@ That's this:
 So, if you opened /src directory, you saw two more files.
 
 That's what they are:
-* *utils.js*, functions:
+* **utils.js**, functions:
   * wrapText - function, needed by **UI**
   * getTextOffset - function, needed by **UI** too
   * putDefaults - function that expands given object with default object
-* *nauper.js*, functionality:
+* **nauper.js**, functionality:
   * In that file we can only see **Nauper** object definition
 
 ## Nauper's functionality
@@ -71,17 +71,18 @@ Coming soon!
 
 ## TODO
 For help:
-* Realizeable - functions that we can create in a short period of time
-* Unrealzeable - we need to think and code very much to get this functions done
+* *Realizeable* - functions that we can create in a short period of time
+* *Unrealzeable* - we need to think and code very much to get this functions done
 
 Realizeable:
 * *Fix* name and text positioning
 * *Fix* characters display on mobile devices
 * *Create* unnecessary choices in addition to unnecessary Questions
 * *Add* default configs to all types
+* *Add* 'active' state of **Question**'s choice
+* *Add* text color changing to **Question**
 
 Unrealizeable:
 * *Fix* text positioning on mobile devices in album orientation
-* *Make* all adaptive on desktop
-* *Make* all adaptive on mobile devices
+* *Add* opportunity to put images as a textboxes
 * Increase performance
