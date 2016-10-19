@@ -261,13 +261,13 @@ Nauper.Frame.prototype.setText = function setText() {
     text: this.text.name,
     color: this.text.namecolor,
     x: 0.10,
-    y: 0.82
+    y: 0.83
   });
   this.engine.ui.drawText({
     text: this.text.text,
     color: this.text.textcolor,
     x: 0.10,
-    y: 0.845
+    y: 0.855
   });
 };
 
