@@ -77,7 +77,6 @@ For help:
 Realizeable:
 * *Fix* name and text positioning
 * *Fix* characters display on mobile devices
-* *Create* unnecessary choices in addition to unnecessary Questions
 * *Add* default configs to all types
 * *Add* 'active' state of **Question**'s choice
 * *Add* text color changing to **Question**
