@@ -93,13 +93,13 @@ There are two ways to do it:
 * Boring if you think that you're just user
 * Funny if you think that you're more than user
 
-Boring way:
+#### Boring way:
 
 Just go to exaple folder and open 'index.html' using your browser
 
 
 
-Funny way:
+#### Funny way:
 
 Install gulp globally using npm
 ```
@@ -122,7 +122,7 @@ or run just webserver
 gulp webserver
 ```
 
-then open your browser and go to localhost:8000
+then open your browser and go to `localhost:8000`
 
 ## How to use
 Coming soon!
