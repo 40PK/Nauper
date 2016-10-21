@@ -54,4 +54,6 @@ gulp.task('watch', function watch() {
   gulp.watch(['src/**/*.js'], ['build']);
 });
 
+gulp.task('noreload', ['webserver', 'build']);
+
 gulp.task('default', ['webserver', 'watch', 'build']);
