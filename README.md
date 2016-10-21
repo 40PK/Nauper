@@ -66,6 +66,64 @@ Question's textboxes can also be rounded
 
 And I think you understand that you can also change color of question's text, so I didn't put picture of this
 
+## How to build
+
+At first, install NodeJS :)
+
+Install gulp globally using npm
+```
+npm install gulp -g
+```
+
+Go to a project folder and install dependencies
+```
+npm install
+```
+
+Build all using gulp
+```
+gulp build
+```
+
+P.S. If you want to see more gulp tasks just do `gulp help`
+
+## How to run example
+
+There are two ways to do it:
+* Boring if you think that you're just user
+* Funny if you think that you're more than user
+
+Boring way:
+
+Just go to exaple folder and open 'index.html' using your browser
+
+
+
+Funny way:
+
+Install gulp globally using npm
+```
+npm install gulp -g
+```
+
+Go to a project folder and install all requirements
+```
+npm install
+```
+
+Run `default` gulp task to rebuild all
+```
+gulp default
+```
+
+or run just webserver
+
+```
+gulp webserver
+```
+
+then open your browser and go to localhost:8000
+
 ## How to use
 Coming soon!
 
