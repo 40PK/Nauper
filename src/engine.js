@@ -32,10 +32,11 @@ Nauper.Engine.prototype.choice = function choice(event) {
     buttonID = 2;
   }
   if (buttonID < this.elements[this.globalIndex][this.localIndex].map.length) {
-    this.globalIndex = this.elements[this.globalIndex][this.localIndex].map[buttonID].address;
-    this.localIndex = 0;
-    this.clickType = 'nextElement';
-    this.elements[this.globalIndex][this.localIndex].draw.call(null, this);
+    if (this.elements[this.globalIndex][this.localIndex].map[buttonID].address !== false) {
+      this.globalIndex = this.elements[this.globalIndex][this.localIndex].map[buttonID].address;
+      this.localIndex = -1;
+    }
+    this.nextElement();
   }
 };
 
