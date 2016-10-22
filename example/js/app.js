@@ -1,8 +1,10 @@
 // Init
 var doc = document.documentElement;
+var canvaselems = document.getElementsByTagName("canvas");
 // creating app
 var engine = new Nauper.Engine({
-  canvas: document.getElementsByTagName("canvas")[0],
+  canvas: canvaselems[0],
+  offscreen: canvaselems[1],
   font: "15pt Arial",
   size: {
       width: doc.clientWidth,

@@ -3,6 +3,8 @@ Nauper.Engine = function Engine(configs, elements = []) {
   this.canvas = configs.canvas;
   this.render = this.canvas.getContext('2d');
   this.size = configs.size;
+  this.offscreen = configs.offscreen;
+  this.offrender = configs.offrender;
   this.ui = new Nauper.UI(this);
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
