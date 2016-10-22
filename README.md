@@ -137,7 +137,6 @@ Realizeable:
 * *Fix* characters display on mobile devices
 * *Add* default configs to all types
 * *Add* 'active' state of **Question**'s choice
-* *Add* text color changing to **Question**
 
 Unrealizeable:
 * *Fix* text positioning on mobile devices in album orientation
