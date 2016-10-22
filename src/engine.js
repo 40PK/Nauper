@@ -1,14 +1,15 @@
 /* global Nauper */
 Nauper.Engine = function Engine(configs, elements = []) {
+  this.font = configs.font;
   this.canvas = configs.canvas;
-  this.render = this.canvas.getContext('2d');
-  this.size = configs.size;
   this.offscreen = configs.offscreen;
-  this.offrender = configs.offrender;
+  this.render = this.canvas.getContext('2d');
+  this.offrender = this.offscreen.getContext('2d');
+  this.size = configs.size;
   this.ui = new Nauper.UI(this);
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
-  this.render.font = configs.font;
+  this.render.font = this.font;
 
   this.elements = elements;
   this.globalIndex = 0;
@@ -51,7 +52,7 @@ Nauper.Engine.prototype.nextElement = function nextElement() {
     if (this.elements[this.globalIndex][this.localIndex].type === 'choice') {
       this.clickType = 'choice';
     } else {
-      this.clickType = this.clickType;
+      this.clickType = 'nextElement';
     }
   }
 };

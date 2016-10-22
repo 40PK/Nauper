@@ -9,6 +9,10 @@ body {
 	width: 100%;
 }
 
-canvas {
+#main {
   background-size: cover;
+}
+
+#prerender {
+  display: none;
 }

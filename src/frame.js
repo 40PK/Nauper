@@ -26,22 +26,24 @@ Nauper.Frame.prototype.check = function check() {
 };
 
 Nauper.Frame.prototype.setText = function setText() {
-  this.engine.ui.drawTextBox({
-    type: this.text.edges,
-    color: this.text.base
-  });
-  this.engine.ui.drawText({
-    text: this.text.name,
-    color: this.text.namecolor,
-    x: 0.10,
-    y: 0.83
-  });
-  this.engine.ui.drawText({
-    text: this.text.text,
-    color: this.text.textcolor,
-    x: 0.10,
-    y: 0.855
-  });
+  if (this.text !== undefined) {
+    this.engine.ui.drawTextBox({
+      type: this.text.edges,
+      color: this.text.base
+    });
+    this.engine.ui.drawText({
+      text: this.text.name,
+      color: this.text.namecolor,
+      x: 0.10,
+      y: 0.83
+    });
+    this.engine.ui.drawText({
+      text: this.text.text,
+      color: this.text.textcolor,
+      x: 0.10,
+      y: 0.855
+    });
+  }
 };
 
 Nauper.Frame.prototype.displayCharacters = function displayCharacters() {

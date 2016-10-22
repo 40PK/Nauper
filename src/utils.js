@@ -1,23 +1,28 @@
-let wrapText = (engine, text, style, maxwidth) => { //eslint-disable-line
+let getTextHeight = (style) => { //eslint-disable-line
   let textElement = document.createElement('p');
-  let words = text.split(' ');
-  let drawingText = '';
-  let height = 0;
-  let width = 0;
-  let result = [];
+  let result = 0;
   textElement.style.font = style;
   textElement.style.position = 'relative';
   textElement.style.zIndex = '-1';
   textElement.innerHTML = 'Test';
   document.body.appendChild(textElement);
-  height = textElement.offsetHeight;
+  result = textElement.offsetHeight;
   document.body.removeChild(textElement);
+  return result;
+};
+
+let wrapText = (render, text, style, maxwidth) => { //eslint-disable-line
+  let words = text.split(' ');
+  let drawingText = '';
+  let height = getTextHeight(style);
+  let width = 0;
+  let result = [];
 
   words.forEach((i, index) => {
     if (drawingText === '') {
-      width = engine.render.measureText(i).width;
+      width = render.measureText(i).width;
     } else {
-      width = engine.render.measureText(`${drawingText} ${i}`).width;
+      width = render.measureText(`${drawingText} ${i}`).width;
     }
 
     if (width > maxwidth) {
@@ -41,9 +46,9 @@ let wrapText = (engine, text, style, maxwidth) => { //eslint-disable-line
   return { result, height };
 };
 
-let getTextOffset = (engine, text) => { //eslint-disable-line
-  let textWidth = engine.render.measureText(text).width;
-  let halfScreen = engine.size.width * 0.50;
+let getTextOffset = (render, size, text) => { //eslint-disable-line
+  let textWidth = render.measureText(text).width;
+  let halfScreen = size.width * 0.50;
   let halfText = textWidth * 0.50;
   let result = halfScreen - halfText;
   return result;
@@ -59,5 +64,11 @@ let putDefaults = (defaults, given) => { //eslint-disable-line
       result[key] = given[key];
     }
   });
+  return result;
+};
+
+let copyObject = (object) => { //eslint-disable-line
+  let result = {};
+  result = putDefaults(object, {});
   return result;
 };

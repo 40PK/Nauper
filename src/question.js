@@ -23,7 +23,7 @@ Nauper.Question = function Question(engine, args) {
       this.engine.ui.setBackground(this.background);
       this.map.forEach((i, index) => {
         y = ((index * 0.25) + 0.025);
-        this.engine.ui.drawTextBox({
+        /* this.engine.ui.drawTextBox({
           type: this.boxtype,
           color: this.inactivebox.background,
           y,
@@ -37,6 +37,26 @@ Nauper.Question = function Question(engine, args) {
           align: 'center',
           color: this.inactivebox.text,
           y: y + 0.10
+        }); */
+        this.engine.ui.drawTextWithBox({
+          box: {
+            type: this.boxtype,
+            color: this.inactivebox.background,
+            y,
+            x,
+            height,
+            width,
+            radius,
+            render: this.engine.offrender,
+            canvas: this.engine.offscreen
+          },
+          text: {
+            text: i.text,
+            color: this.inactivebox.text,
+            y: y + 0.10,
+            render: this.engine.offrender,
+            canvas: this.engine.offscreen
+          }
         });
       });
     } else {

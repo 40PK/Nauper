@@ -5,27 +5,33 @@ var Nauper = { // eslint-disable-line
 };
 'use strict';
 
-var wrapText = function wrapText(engine, text, style, maxwidth) {
+var getTextHeight = function getTextHeight(style) {
   //eslint-disable-line
   var textElement = document.createElement('p');
-  var words = text.split(' ');
-  var drawingText = '';
-  var height = 0;
-  var width = 0;
-  var result = [];
+  var result = 0;
   textElement.style.font = style;
   textElement.style.position = 'relative';
   textElement.style.zIndex = '-1';
   textElement.innerHTML = 'Test';
   document.body.appendChild(textElement);
-  height = textElement.offsetHeight;
+  result = textElement.offsetHeight;
   document.body.removeChild(textElement);
+  return result;
+};
+
+var wrapText = function wrapText(render, text, style, maxwidth) {
+  //eslint-disable-line
+  var words = text.split(' ');
+  var drawingText = '';
+  var height = getTextHeight(style);
+  var width = 0;
+  var result = [];
 
   words.forEach(function (i, index) {
     if (drawingText === '') {
-      width = engine.render.measureText(i).width;
+      width = render.measureText(i).width;
     } else {
-      width = engine.render.measureText(drawingText + ' ' + i).width;
+      width = render.measureText(drawingText + ' ' + i).width;
     }
 
     if (width > maxwidth) {
@@ -49,10 +55,10 @@ var wrapText = function wrapText(engine, text, style, maxwidth) {
   return { result: result, height: height };
 };
 
-var getTextOffset = function getTextOffset(engine, text) {
+var getTextOffset = function getTextOffset(render, size, text) {
   //eslint-disable-line
-  var textWidth = engine.render.measureText(text).width;
-  var halfScreen = engine.size.width * 0.50;
+  var textWidth = render.measureText(text).width;
+  var halfScreen = size.width * 0.50;
   var halfText = textWidth * 0.50;
   var result = halfScreen - halfText;
   return result;
@@ -71,13 +77,22 @@ var putDefaults = function putDefaults(defaults, given) {
   });
   return result;
 };
+
+var copyObject = function copyObject(object) {
+  //eslint-disable-line
+  var result = {};
+  result = putDefaults(object, {});
+  return result;
+};
 'use strict';
 
-/* global Nauper, putDefaults, getTextOffset, wrapText */
+/* global Nauper, putDefaults, getTextOffset, wrapText, copyObject */
 Nauper.UI = function UI(engine) {
   this.engine = engine;
   this.canvas = this.engine.canvas;
+  this.offscreen = this.engine.offscreen;
   this.render = this.engine.render;
+  this.offrender = this.engine.offrender;
   this.size = this.engine.size;
 };
 
@@ -95,7 +110,9 @@ Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
     y: 0.80,
     height: 0.18,
     width: 0.95,
-    radius: 0.05
+    radius: 0.05,
+    render: this.render,
+    canvas: this.canvas
   };
   var conf = putDefaults(defaults, configs);
   var x = this.size.width * conf.x;
@@ -104,52 +121,92 @@ Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
   var width = this.size.width * conf.width;
   var radius = this.size.height * conf.radius;
 
-  this.render.fillStyle = conf.color;
+  conf.render.fillStyle = conf.color;
 
   if (conf.type === 'default') {
-    this.render.fillRect(x, y, width, height);
+    conf.render.fillRect(x, y, width, height);
   } else if (conf.type === 'rounded') {
-    this.render.beginPath();
-    this.render.moveTo(x, y + radius);
-    this.render.lineTo(x, y + height - radius);
-    this.render.quadraticCurveTo(x, y + height, x + radius, y + height);
-    this.render.lineTo(x + width - radius, y + height);
-    this.render.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
-    this.render.lineTo(x + width, y + radius);
-    this.render.quadraticCurveTo(x + width, y, x + width - radius, y);
-    this.render.lineTo(x + radius, y);
-    this.render.quadraticCurveTo(x, y, x, y + radius);
-    this.render.fill();
+    conf.render.beginPath();
+    conf.render.moveTo(x, y + radius);
+    conf.render.lineTo(x, y + height - radius);
+    conf.render.quadraticCurveTo(x, y + height, x + radius, y + height);
+    conf.render.lineTo(x + width - radius, y + height);
+    conf.render.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
+    conf.render.lineTo(x + width, y + radius);
+    conf.render.quadraticCurveTo(x + width, y, x + width - radius, y);
+    conf.render.lineTo(x + radius, y);
+    conf.render.quadraticCurveTo(x, y, x, y + radius);
+    conf.render.fill();
   }
 };
 
 Nauper.UI.prototype.drawText = function drawText(configs) {
-  var _this = this;
-
   var defaults = {
     text: '',
     align: 'wrapped',
     color: '#000',
     x: 0.10,
     y: 0.85,
-    width: 0.80
+    width: 0.80,
+    render: this.render,
+    canvas: this.canvas
   };
   var conf = putDefaults(defaults, configs);
   var x = this.size.width * conf.x;
   var y = this.size.height * conf.y;
   var maxwidth = this.size.width * conf.width;
-  this.render.fillStyle = conf.color;
+  conf.render.fillStyle = conf.color;
   if (conf.align === 'wrapped') {
     (function () {
-      var texts = wrapText(_this.engine, conf.text, _this.render.font, maxwidth);
+      var texts = wrapText(conf.render, conf.text, /* conf */conf.render.font, maxwidth);
       texts.result.forEach(function (i, j) {
-        _this.render.fillText(i, x, y + texts.height * j);
+        conf.render.fillText(i, x, y + texts.height * j);
       });
     })();
   } else if (conf.align === 'center') {
-    var offset = getTextOffset(this.engine, conf.text);
-    this.render.fillText(conf.text, offset, y);
+    var offset = getTextOffset(conf.render, { width: conf.canvas.width }, conf.text);
+    conf.render.fillText(conf.text, offset, y);
   }
+};
+
+Nauper.UI.prototype.drawTextWithBox = function drawTextWithBox(configs) {
+  var defaultbox = {
+    type: 'default',
+    color: '#fff',
+    x: 0.025,
+    y: 0.80,
+    height: 0.18,
+    width: 0.95,
+    radius: 0.05,
+    render: this.offrender,
+    canvas: this.offscreen
+  };
+  var defaulttext = {
+    text: '',
+    align: 'center',
+    color: '#000',
+    x: 0.10,
+    y: 0.85,
+    width: 0.80,
+    render: this.offrender,
+    canvas: this.offscreen
+  };
+  var confbox = putDefaults(defaultbox, configs.box);
+  var conftext = putDefaults(defaulttext, configs.text);
+  var toprerender = {
+    box: copyObject(confbox),
+    text: copyObject(conftext)
+  };
+  toprerender.text.x -= toprerender.box.x;
+  toprerender.text.y -= toprerender.box.y;
+  toprerender.box.x = 0;
+  toprerender.box.y = 0;
+  this.offscreen.width = confbox.width * this.size.width;
+  this.offscreen.height = confbox.height * this.size.height;
+  this.offrender.font = this.render.font;
+  this.drawTextBox(toprerender.box);
+  this.drawText(toprerender.text);
+  this.render.drawImage(this.offscreen, confbox.x * this.size.width, confbox.y * this.size.height);
 };
 'use strict';
 
@@ -157,13 +214,16 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
 Nauper.Engine = function Engine(configs) {
   var elements = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
+  this.font = configs.font;
   this.canvas = configs.canvas;
+  this.offscreen = configs.offscreen;
   this.render = this.canvas.getContext('2d');
+  this.offrender = this.offscreen.getContext('2d');
   this.size = configs.size;
   this.ui = new Nauper.UI(this);
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
-  this.render.font = configs.font;
+  this.render.font = this.font;
 
   this.elements = elements;
   this.globalIndex = 0;
@@ -206,7 +266,7 @@ Nauper.Engine.prototype.nextElement = function nextElement() {
     if (this.elements[this.globalIndex][this.localIndex].type === 'choice') {
       this.clickType = 'choice';
     } else {
-      this.clickType = this.clickType;
+      this.clickType = 'nextElement';
     }
   }
 };
@@ -254,22 +314,24 @@ Nauper.Frame.prototype.check = function check() {
 };
 
 Nauper.Frame.prototype.setText = function setText() {
-  this.engine.ui.drawTextBox({
-    type: this.text.edges,
-    color: this.text.base
-  });
-  this.engine.ui.drawText({
-    text: this.text.name,
-    color: this.text.namecolor,
-    x: 0.10,
-    y: 0.83
-  });
-  this.engine.ui.drawText({
-    text: this.text.text,
-    color: this.text.textcolor,
-    x: 0.10,
-    y: 0.855
-  });
+  if (this.text !== undefined) {
+    this.engine.ui.drawTextBox({
+      type: this.text.edges,
+      color: this.text.base
+    });
+    this.engine.ui.drawText({
+      text: this.text.name,
+      color: this.text.namecolor,
+      x: 0.10,
+      y: 0.83
+    });
+    this.engine.ui.drawText({
+      text: this.text.text,
+      color: this.text.textcolor,
+      x: 0.10,
+      y: 0.855
+    });
+  }
 };
 
 Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
@@ -333,20 +395,40 @@ Nauper.Question = function Question(engine, args) {
         _this.engine.ui.setBackground(_this.background);
         _this.map.forEach(function (i, index) {
           y = index * 0.25 + 0.025;
-          _this.engine.ui.drawTextBox({
-            type: _this.boxtype,
-            color: _this.inactivebox.background,
-            y: y,
-            x: x,
-            height: height,
-            width: width,
-            radius: radius
+          /* this.engine.ui.drawTextBox({
+            type: this.boxtype,
+            color: this.inactivebox.background,
+            y,
+            x,
+            height,
+            width,
+            radius
           });
-          _this.engine.ui.drawText({
+          this.engine.ui.drawText({
             text: i.text,
             align: 'center',
-            color: _this.inactivebox.text,
+            color: this.inactivebox.text,
             y: y + 0.10
+          }); */
+          _this.engine.ui.drawTextWithBox({
+            box: {
+              type: _this.boxtype,
+              color: _this.inactivebox.background,
+              y: y,
+              x: x,
+              height: height,
+              width: width,
+              radius: radius,
+              render: _this.engine.offrender,
+              canvas: _this.engine.offscreen
+            },
+            text: {
+              text: i.text,
+              color: _this.inactivebox.text,
+              y: y + 0.10,
+              render: _this.engine.offrender,
+              canvas: _this.engine.offscreen
+            }
           });
         });
       })();
