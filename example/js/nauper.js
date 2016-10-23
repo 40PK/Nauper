@@ -158,7 +158,7 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
   conf.render.fillStyle = conf.color;
   if (conf.align === 'wrapped') {
     (function () {
-      var texts = wrapText(conf.render, conf.text, /* conf */conf.render.font, maxwidth);
+      var texts = wrapText(conf.render, conf.text, conf.render.font, maxwidth);
       texts.result.forEach(function (i, j) {
         conf.render.fillText(i, x, y + texts.height * j);
       });

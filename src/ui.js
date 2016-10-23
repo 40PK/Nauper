@@ -69,7 +69,7 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
   const maxwidth = this.size.width * conf.width;
   conf.render.fillStyle = conf.color;
   if (conf.align === 'wrapped') {
-    let texts = wrapText(conf.render, conf.text, /* conf */ conf.render.font, maxwidth);
+    let texts = wrapText(conf.render, conf.text, conf.render.font, maxwidth);
     texts.result.forEach((i, j) => {
       conf.render.fillText(i, x, y + (texts.height * j));
     });
