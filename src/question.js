@@ -4,12 +4,14 @@ Nauper.Question = function Question(engine, args) {
   this.activebox = args.textbox.active;
   this.inactivebox = args.textbox.inactive;
   this.boxtype = args.textbox.type;
+  this.boxlink = args.textbox.link;
   this.necessary = args.necessary;
   this.engine = engine;
   this.render = this.engine.render;
   this.canvas = this.engine.canvas;
   this.size = this.engine.size;
   this.map = args.map;
+  this.enCounter = this.map.length;
   this.setType();
 
   this.draw = function draw() {
@@ -23,41 +25,26 @@ Nauper.Question = function Question(engine, args) {
       this.engine.ui.setBackground(this.background);
       this.map.forEach((i, index) => {
         y = ((index * 0.25) + 0.025);
-        /* this.engine.ui.drawTextBox({
+        this.engine.ui.drawTextBox({
           type: this.boxtype,
           color: this.inactivebox.background,
+          link: this.boxlink,
+          source: this,
           y,
           x,
           height,
           width,
-          radius
+          radius,
+          onimageload: function __onimageload() { conf.source.enCounter -= 1; } //eslint-disable-line
         });
-        this.engine.ui.drawText({
-          text: i.text,
-          align: 'center',
-          color: this.inactivebox.text,
-          y: y + 0.10
-        }); */
-        this.engine.ui.drawTextWithBox({
-          box: {
-            type: this.boxtype,
-            color: this.inactivebox.background,
-            y,
-            x,
-            height,
-            width,
-            radius,
-            render: this.engine.offrender,
-            canvas: this.engine.offscreen
-          },
-          text: {
+        if (this.enCounter === 0) {
+          this.engine.ui.drawText({
             text: i.text,
+            align: 'center',
             color: this.inactivebox.text,
-            y: y + 0.10,
-            render: this.engine.offrender,
-            canvas: this.engine.offscreen
-          }
-        });
+            y: y + 0.10
+          });
+        }
       });
     } else {
       this.engine.nextElement();

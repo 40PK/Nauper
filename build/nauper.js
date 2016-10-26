@@ -106,6 +106,7 @@ Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
   var defaults = {
     type: 'default',
     color: '#fff',
+    link: '',
     x: 0.025,
     y: 0.80,
     height: 0.18,
@@ -137,6 +138,17 @@ Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
     conf.render.lineTo(x + radius, y);
     conf.render.quadraticCurveTo(x, y, x, y + radius);
     conf.render.fill();
+  } else if (conf.type === 'image') {
+    (function () {
+      var image = new Image();
+      image.onload = function imageLoaded() {
+        conf.render.drawImage(image, x, y, width, height);
+        if (conf.onimageload) {
+          conf.onimageload();
+        }
+      };
+      image.src = conf.link;
+    })();
   }
 };
 
@@ -173,6 +185,7 @@ Nauper.UI.prototype.drawTextWithBox = function drawTextWithBox(configs) {
   var defaultbox = {
     type: 'default',
     color: '#fff',
+    link: '',
     x: 0.025,
     y: 0.80,
     height: 0.18,
@@ -373,12 +386,14 @@ Nauper.Question = function Question(engine, args) {
   this.activebox = args.textbox.active;
   this.inactivebox = args.textbox.inactive;
   this.boxtype = args.textbox.type;
+  this.boxlink = args.textbox.link;
   this.necessary = args.necessary;
   this.engine = engine;
   this.render = this.engine.render;
   this.canvas = this.engine.canvas;
   this.size = this.engine.size;
   this.map = args.map;
+  this.enCounter = this.map.length;
   this.setType();
 
   this.draw = function draw() {
@@ -395,41 +410,28 @@ Nauper.Question = function Question(engine, args) {
         _this.engine.ui.setBackground(_this.background);
         _this.map.forEach(function (i, index) {
           y = index * 0.25 + 0.025;
-          /* this.engine.ui.drawTextBox({
-            type: this.boxtype,
-            color: this.inactivebox.background,
-            y,
-            x,
-            height,
-            width,
-            radius
+          _this.engine.ui.drawTextBox({
+            type: _this.boxtype,
+            color: _this.inactivebox.background,
+            link: _this.boxlink,
+            source: _this,
+            y: y,
+            x: x,
+            height: height,
+            width: width,
+            radius: radius,
+            onimageload: function __onimageload() {
+              conf.source.enCounter -= 1;
+            } //eslint-disable-line
           });
-          this.engine.ui.drawText({
-            text: i.text,
-            align: 'center',
-            color: this.inactivebox.text,
-            y: y + 0.10
-          }); */
-          _this.engine.ui.drawTextWithBox({
-            box: {
-              type: _this.boxtype,
-              color: _this.inactivebox.background,
-              y: y,
-              x: x,
-              height: height,
-              width: width,
-              radius: radius,
-              render: _this.engine.offrender,
-              canvas: _this.engine.offscreen
-            },
-            text: {
+          if (_this.enCounter === 0) {
+            _this.engine.ui.drawText({
               text: i.text,
+              align: 'center',
               color: _this.inactivebox.text,
-              y: y + 0.10,
-              render: _this.engine.offrender,
-              canvas: _this.engine.offscreen
-            }
-          });
+              y: y + 0.10
+            });
+          }
         });
       })();
     } else {

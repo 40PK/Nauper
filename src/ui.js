@@ -18,6 +18,7 @@ Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
   const defaults = {
     type: 'default',
     color: '#fff',
+    link: '',
     x: 0.025,
     y: 0.80,
     height: 0.18,
@@ -49,6 +50,15 @@ Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
     conf.render.lineTo(x + radius, y);
     conf.render.quadraticCurveTo(x, y, x, y + radius);
     conf.render.fill();
+  } else if (conf.type === 'image') {
+    let image = new Image();
+    image.onload = function imageLoaded() {
+      conf.render.drawImage(image, x, y, width, height);
+      if (conf.onimageload) {
+        conf.onimageload();
+      }
+    };
+    image.src = conf.link;
   }
 };
 
@@ -83,6 +93,7 @@ Nauper.UI.prototype.drawTextWithBox = function drawTextWithBox(configs) {
   const defaultbox = {
     type: 'default',
     color: '#fff',
+    link: '',
     x: 0.025,
     y: 0.80,
     height: 0.18,
