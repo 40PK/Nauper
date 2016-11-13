@@ -11,7 +11,6 @@ Nauper.Question = function Question(engine, args) {
   this.canvas = this.engine.canvas;
   this.size = this.engine.size;
   this.map = args.map;
-  this.enCounter = this.map.length;
   this.setType();
 
   this.draw = function draw() {
@@ -34,17 +33,14 @@ Nauper.Question = function Question(engine, args) {
           x,
           height,
           width,
-          radius,
-          onimageload: function __onimageload() { conf.source.enCounter -= 1; } //eslint-disable-line
+          radius
         });
-        if (this.enCounter === 0) {
-          this.engine.ui.drawText({
-            text: i.text,
-            align: 'center',
-            color: this.inactivebox.text,
-            y: y + 0.10
-          });
-        }
+        this.engine.ui.drawText({
+          text: i.text,
+          align: 'center',
+          color: this.inactivebox.text,
+          y: y + 0.10
+        });
       });
     } else {
       this.engine.nextElement();

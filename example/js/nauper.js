@@ -113,7 +113,8 @@ Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
     width: 0.95,
     radius: 0.05,
     render: this.render,
-    canvas: this.canvas
+    canvas: this.canvas,
+    expand: {}
   };
   var conf = putDefaults(defaults, configs);
   var x = this.size.width * conf.x;
@@ -393,7 +394,6 @@ Nauper.Question = function Question(engine, args) {
   this.canvas = this.engine.canvas;
   this.size = this.engine.size;
   this.map = args.map;
-  this.enCounter = this.map.length;
   this.setType();
 
   this.draw = function draw() {
@@ -419,19 +419,14 @@ Nauper.Question = function Question(engine, args) {
             x: x,
             height: height,
             width: width,
-            radius: radius,
-            onimageload: function __onimageload() {
-              conf.source.enCounter -= 1;
-            } //eslint-disable-line
+            radius: radius
           });
-          if (_this.enCounter === 0) {
-            _this.engine.ui.drawText({
-              text: i.text,
-              align: 'center',
-              color: _this.inactivebox.text,
-              y: y + 0.10
-            });
-          }
+          _this.engine.ui.drawText({
+            text: i.text,
+            align: 'center',
+            color: _this.inactivebox.text,
+            y: y + 0.10
+          });
         });
       })();
     } else {

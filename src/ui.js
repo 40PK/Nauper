@@ -25,7 +25,8 @@ Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
     width: 0.95,
     radius: 0.05,
     render: this.render,
-    canvas: this.canvas
+    canvas: this.canvas,
+    onimageload: function __onimageload() {}
   };
   const conf = putDefaults(defaults, configs);
   const x = this.size.width * conf.x;
