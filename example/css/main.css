@@ -12,7 +12,3 @@ body {
 #main {
   background-size: cover;
 }
-
-#prerender {
-  display: none;
-}

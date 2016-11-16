@@ -28,18 +28,19 @@ Nauper.Question = function Question(engine, args) {
           type: this.boxtype,
           color: this.inactivebox.background,
           link: this.boxlink,
-          source: this,
           y,
           x,
           height,
           width,
-          radius
-        });
-        this.engine.ui.drawText({
-          text: i.text,
-          align: 'center',
-          color: this.inactivebox.text,
-          y: y + 0.10
+          radius,
+          callback: () => {
+            this.engine.ui.drawText({
+              text: i.text,
+              align: 'center',
+              color: this.inactivebox.text,
+              y: y + 0.10
+            });
+          }
         });
       });
     } else {

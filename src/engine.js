@@ -2,9 +2,7 @@
 Nauper.Engine = function Engine(configs, elements = []) {
   this.font = configs.font;
   this.canvas = configs.canvas;
-  this.offscreen = configs.offscreen;
   this.render = this.canvas.getContext('2d');
-  this.offrender = this.offscreen.getContext('2d');
   this.size = configs.size;
   this.ui = new Nauper.UI(this);
   this.canvas.width = this.size.width;
@@ -25,22 +23,25 @@ Nauper.Engine = function Engine(configs, elements = []) {
 };
 
 Nauper.Engine.prototype.choice = function choice(event) {
+  let x = event.pageX;
   let y = event.pageY;
-  let buttonID = 3;
-  if (y < this.size.height * 0.25) {
-    buttonID = 0;
-  } else if (y < this.size.height * 0.50) {
-    buttonID = 1;
-  } else if (y < this.size.height * 0.75) {
-    buttonID = 2;
-  }
-  if (buttonID < this.elements[this.globalIndex][this.localIndex].map.length) {
-    if (this.elements[this.globalIndex][this.localIndex].map[buttonID].address !== false) {
-      this.globalIndex = this.elements[this.globalIndex][this.localIndex].map[buttonID].address;
-      this.localIndex = -1;
+  this.elements[this.globalIndex][this.localIndex].map.forEach((i, index) => {
+    let sizes = {
+      x: 0.025 * this.size.width,
+      y: ((index * 0.25) + 0.025) * this.size.height,
+      height: 0.20 * this.size.height,
+      width: 0.95 * this.size.width
+    };
+    if (x >= sizes.x && x <= (sizes.x + sizes.width)) {
+      if (y >= sizes.y && y <= (sizes.y + sizes.height)) {
+        if (i.address !== false) {
+          this.globalIndex = i.address;
+          this.localIndex = -1;
+        }
+        this.nextElement();
+      }
     }
-    this.nextElement();
-  }
+  });
 };
 
 Nauper.Engine.prototype.nextElement = function nextElement() {
