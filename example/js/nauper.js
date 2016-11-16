@@ -292,52 +292,65 @@ Nauper.Frame.prototype.check = function check() {
 };
 
 Nauper.Frame.prototype.setText = function setText() {
+  var _this = this;
+
   if (this.text !== undefined) {
     this.engine.ui.drawTextBox({
-      type: this.text.edges,
-      color: this.text.base
-    });
-    this.engine.ui.drawText({
-      text: this.text.name,
-      color: this.text.namecolor,
-      x: 0.10,
-      y: 0.83
-    });
-    this.engine.ui.drawText({
-      text: this.text.text,
-      color: this.text.textcolor,
-      x: 0.10,
-      y: 0.855
+      type: this.text.type,
+      color: this.text.background,
+      link: this.text.link,
+      callback: function callback() {
+        _this.engine.ui.drawText({
+          text: _this.text.name,
+          color: _this.text.ncl,
+          x: 0.10,
+          y: 0.83
+        });
+        _this.engine.ui.drawText({
+          text: _this.text.text,
+          color: _this.text.color,
+          x: 0.10,
+          y: 0.86
+        });
+      }
     });
   }
 };
 
 Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
-  var _this = this;
+  var _this2 = this;
 
   if (this.displayOrder !== undefined && this.displayOrder.length !== 0) {
     (function () {
-      var loaded = _this.displayOrder.length;
-      _this.displayOrder.forEach(function (i, index) {
+      var loaded = _this2.displayOrder.length;
+
+      var _loop = function _loop(index) {
+        var i = _this2.displayOrder[index];
         if (i !== false && i !== undefined) {
           (function () {
             var img = new Image();
-            img.addEventListener('load', function () {
-              var ratio = _this.size.height * 1.20 / img.height;
-              var offsetY = _this.size.height * 0.10;
-              var offsetX = _this.size.width * (0.225 * index);
-              _this.render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
+            // Trying to fix it as fast as I can
+            img.onload = function () {
+              //eslint-disable-line
+              var ratio = _this2.size.height * 1.20 / img.height;
+              var offsetY = _this2.size.height * 0.10;
+              var offsetX = _this2.size.width * (0.225 * index);
+              _this2.render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
               loaded -= 1;
               if (loaded === 0) {
-                _this.setText();
+                _this2.setText();
               }
-            });
-            img.src = _this.characters[i];
+            };
+            img.src = _this2.characters[i];
           })();
         } else {
           loaded -= 1;
         }
-      });
+      };
+
+      for (var index = 0; index < _this2.displayOrder.length; index += 1) {
+        _loop(index);
+      }
     })();
   } else {
     this.setText();

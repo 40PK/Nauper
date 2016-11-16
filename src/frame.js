@@ -28,20 +28,23 @@ Nauper.Frame.prototype.check = function check() {
 Nauper.Frame.prototype.setText = function setText() {
   if (this.text !== undefined) {
     this.engine.ui.drawTextBox({
-      type: this.text.edges,
-      color: this.text.base
-    });
-    this.engine.ui.drawText({
-      text: this.text.name,
-      color: this.text.namecolor,
-      x: 0.10,
-      y: 0.83
-    });
-    this.engine.ui.drawText({
-      text: this.text.text,
-      color: this.text.textcolor,
-      x: 0.10,
-      y: 0.855
+      type: this.text.type,
+      color: this.text.background,
+      link: this.text.link,
+      callback: () => {
+        this.engine.ui.drawText({
+          text: this.text.name,
+          color: this.text.ncl,
+          x: 0.10,
+          y: 0.83
+        });
+        this.engine.ui.drawText({
+          text: this.text.text,
+          color: this.text.color,
+          x: 0.10,
+          y: 0.86
+        });
+      }
     });
   }
 };
@@ -49,10 +52,12 @@ Nauper.Frame.prototype.setText = function setText() {
 Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
   if (this.displayOrder !== undefined && this.displayOrder.length !== 0) {
     let loaded = this.displayOrder.length;
-    this.displayOrder.forEach((i, index) => {
+    for (let index = 0; index < this.displayOrder.length; index += 1) {
+      let i = this.displayOrder[index];
       if (i !== false && i !== undefined) {
         let img = new Image();
-        img.addEventListener('load', () => {
+        // Trying to fix it as fast as I can
+        img.onload = () => { //eslint-disable-line
           const ratio = (this.size.height * 1.20) / img.height;
           const offsetY = this.size.height * 0.10;
           const offsetX = this.size.width * (0.225 * index);
@@ -61,12 +66,12 @@ Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
           if (loaded === 0) {
             this.setText();
           }
-        });
+        };
         img.src = this.characters[i];
       } else {
         loaded -= 1;
       }
-    });
+    }
   } else {
     this.setText();
   }

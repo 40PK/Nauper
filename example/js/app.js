@@ -25,11 +25,12 @@ var frameOne = new Nauper.Frame(engine, {
 	"characters": [lena.smile, yulya.smile], 
 	"displayOrder": [0, 1], 
 	"textbox": {
-        "edges": "rounded",
-		"base": "#fff", 
-		"namecolor": "#000", 
+        "type": "image",
+        "link": "./data/images/boxes/wb.png",
+		"background": "#fff", 
+		"ncl": "#000", 
 		"name": "Lena", 
-		"textcolor": "black", 
+		"color": "black", 
 		"text": "It's a start frame"
 	}, 
 	"background": "1.jpg"
@@ -38,21 +39,21 @@ var frameTwo = new Nauper.Frame(engine, {
     "characters": [lena.smile, yulya.smile],
     "displayOrder": [false, false, 1, 0],
     "textbox": {
-        "base": "#fff",
-        "edges": "default",
-        "namecolor": "#000",
+        "background": "#fff",
+        "type": "default",
+        "ncl": "#000",
         "name": "Julia",
-        "textcolor": "black",
+        "text": "black",
         "text": "It's a frame with both text and characters"
     }
 });
 var frameThree = new Nauper.Frame(engine, {
     "textbox": {
-        "base": "#fff",
-        "edges": "rounded",
-        "namecolor": "#000",
+        "background": "#fff",
+        "type": "rounded",
+        "ncl": "#000",
         "name": "arseniypetrikor",
-        "textcolor": "#000",
+        "color": "#000",
         "text": "This is a text without characters"
     }
 });
