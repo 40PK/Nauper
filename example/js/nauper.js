@@ -364,36 +364,38 @@ Nauper.Question = function Question(engine, args) {
     var _this = this;
 
     if (this.map.length !== 0 && this.map.length <= 4) {
-      (function () {
-        var x = 0.025;
-        var y = 0;
-        var height = 0.20;
-        var width = 0.95;
-        var radius = 0.05;
-        _this.render.clearRect(0, 0, _this.size.width, _this.size.height);
-        _this.engine.ui.setBackground(_this.background);
-        _this.map.forEach(function (i, index) {
-          y = index * 0.25 + 0.025;
-          _this.engine.ui.drawTextBox({
-            type: _this.boxtype,
-            color: _this.inactivebox.background,
-            link: _this.boxlink,
-            y: y,
-            x: x,
-            height: height,
-            width: width,
-            radius: radius,
-            callback: function callback() {
-              _this.engine.ui.drawText({
-                text: i.text,
-                align: 'center',
-                color: _this.inactivebox.text,
-                y: y + 0.10
-              });
-            }
-          });
+      var x = 0.025;
+      var height = 0.20;
+      var width = 0.95;
+      var radius = 0.05;
+      this.render.clearRect(0, 0, this.size.width, this.size.height);
+      this.engine.ui.setBackground(this.background);
+
+      var _loop = function _loop(index) {
+        var i = _this.map[index];
+        _this.engine.ui.drawTextBox({
+          type: _this.boxtype,
+          color: _this.inactivebox.background,
+          link: _this.boxlink,
+          y: index * 0.25 + 0.025,
+          x: x,
+          height: height,
+          width: width,
+          radius: radius,
+          callback: function callback() {
+            _this.engine.ui.drawText({
+              text: i.text,
+              align: 'center',
+              color: _this.inactivebox.text,
+              y: index * 0.25 + 0.125
+            });
+          }
         });
-      })();
+      };
+
+      for (var index = 0; index < this.map.length; index += 1) {
+        _loop(index);
+      }
     } else {
       this.engine.nextElement();
     }

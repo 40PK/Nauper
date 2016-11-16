@@ -79,7 +79,7 @@ var questionOne = new Nauper.Question(engine, {
         "address": "3"
     }],
     "textbox": {
-        "type": "default",
+        "type": "image",
         "link": "./data/images/boxes/wb.png",
         "inactive": {
             "background": "#fff",
