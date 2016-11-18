@@ -1,16 +1,7 @@
-// Init
-var doc = document.documentElement;
-var canvaselems = document.getElementsByTagName("canvas");
 // creating app
 var engine = new Nauper.Engine({
-  canvas: canvaselems[0],
-  offscreen: canvaselems[1],
-  font: "15pt Arial",
-  size: {
-      width: doc.clientWidth,
-      height: doc.clientHeight
-  }
-}, []);
+  font: "15pt Arial"
+});
 
 var lena = new Nauper.Character({
 	"path": "./data/images/characters/lena", 

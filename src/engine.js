@@ -1,10 +1,15 @@
 /* global Nauper */
 Nauper.Engine = function Engine(configs, elements = []) {
   this.font = configs.font;
-  this.canvas = configs.canvas;
+  this.audio = document.getElementById('audio');
+  this.canvas = document.getElementById('canvas');
   this.render = this.canvas.getContext('2d');
-  this.size = configs.size;
+  this.size = {
+    width: document.documentElement.clientWidth,
+    height: document.documentElement.clientHeight
+  };
   this.ui = new Nauper.UI(this);
+  this.sound = new Nauper.Sound(this);
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
   this.render.font = this.font;
