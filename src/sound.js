@@ -17,3 +17,12 @@ Nauper.Sound.prototype.stop = function stop() {
   this.pause();
   this.audio.src = '';
 };
+
+Nauper.Sound.prototype.process = function process(audio) {
+  if (audio !== undefined) {
+    this.stop();
+    if (audio) {
+      this.play(audio);
+    }
+  }
+};

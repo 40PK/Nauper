@@ -19,12 +19,23 @@ Nauper.Engine = function Engine(configs, elements = []) {
   this.localIndex = 0;
   this.clickType = null;
 
-  function click(event) {
-    if (this.clickType) {
-      this[this.clickType].call(this, event);
+  this.elementProcessor = function elementProcessor(event) {
+    let task = this.ui.process(event);
+    if (task === 'redraw') {
+      this.elements[this.globalIndex][this.localIndex].draw();
+    } else if (task === 'next') {
+      this.click(event);
+      this.sound.process(this.elements[this.globalIndex][this.localIndex].audio);
     }
+  }.bind(this);
+
+  this.canvas.addEventListener('click', this.elementProcessor, false);
+};
+
+Nauper.Engine.prototype.click = function click(event) {
+  if (this.clickType) {
+    this[this.clickType].call(this, event);
   }
-  this.canvas.addEventListener('click', click.bind(this), false);
 };
 
 Nauper.Engine.prototype.choice = function choice(event) {

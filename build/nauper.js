@@ -183,6 +183,44 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
     this.render.fillText(conf.text, offset, y);
   }
 };
+
+Nauper.UI.prototype.process = function process(event) {
+  var result = void 0;
+  if (event) {
+    result = 'next';
+  }
+  return result;
+};
+'use strict';
+
+/* global Nauper */
+Nauper.Sound = function Sound(engine) {
+  this.engine = engine;
+  this.audio = this.engine.audio;
+};
+
+Nauper.Sound.prototype.play = function play(filename) {
+  this.audio.src = './data/sounds/' + filename;
+  this.audio.play();
+};
+
+Nauper.Sound.prototype.pause = function pause() {
+  this.audio.pause();
+};
+
+Nauper.Sound.prototype.stop = function stop() {
+  this.pause();
+  this.audio.src = '';
+};
+
+Nauper.Sound.prototype.process = function process(audio) {
+  if (audio !== undefined) {
+    this.stop();
+    if (audio) {
+      this.play(audio);
+    }
+  }
+};
 'use strict';
 
 /* global Nauper */
@@ -190,10 +228,15 @@ Nauper.Engine = function Engine(configs) {
   var elements = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
   this.font = configs.font;
-  this.canvas = configs.canvas;
+  this.audio = document.getElementById('audio');
+  this.canvas = document.getElementById('canvas');
   this.render = this.canvas.getContext('2d');
-  this.size = configs.size;
+  this.size = {
+    width: document.documentElement.clientWidth,
+    height: document.documentElement.clientHeight
+  };
   this.ui = new Nauper.UI(this);
+  this.sound = new Nauper.Sound(this);
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
   this.render.font = this.font;
@@ -203,12 +246,23 @@ Nauper.Engine = function Engine(configs) {
   this.localIndex = 0;
   this.clickType = null;
 
-  function click(event) {
-    if (this.clickType) {
-      this[this.clickType].call(this, event);
+  this.elementProcessor = function elementProcessor(event) {
+    var task = this.ui.process(event);
+    if (task === 'redraw') {
+      this.elements[this.globalIndex][this.localIndex].draw();
+    } else if (task === 'next') {
+      this.click(event);
+      this.sound.process(this.elements[this.globalIndex][this.localIndex].audio);
     }
+  }.bind(this);
+
+  this.canvas.addEventListener('click', this.elementProcessor, false);
+};
+
+Nauper.Engine.prototype.click = function click(event) {
+  if (this.clickType) {
+    this[this.clickType].call(this, event);
   }
-  this.canvas.addEventListener('click', click.bind(this), false);
 };
 
 Nauper.Engine.prototype.choice = function choice(event) {

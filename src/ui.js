@@ -87,3 +87,11 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
     this.render.fillText(conf.text, offset, y);
   }
 };
+
+Nauper.UI.prototype.process = function process(event) {
+  let result;
+  if (event) {
+    result = 'next';
+  }
+  return result;
+};
