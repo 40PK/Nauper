@@ -5,13 +5,13 @@ Nauper.Question = function Question(engine, args) {
   this.inactivebox = args.textbox.inactive;
   this.boxtype = args.textbox.type;
   this.boxlink = args.textbox.link;
+  this.type = 'choice';
   this.necessary = args.necessary;
   this.engine = engine;
   this.render = this.engine.render;
   this.canvas = this.engine.canvas;
   this.size = this.engine.size;
   this.map = args.map;
-  this.setType();
 
   this.draw = function draw() {
     if (this.map.length !== 0 && this.map.length <= 4) {
@@ -46,12 +46,4 @@ Nauper.Question = function Question(engine, args) {
       this.engine.nextElement();
     }
   }.bind(this);
-};
-
-Nauper.Question.prototype.setType = function setType() {
-  if (this.necessary === true || this.necessary === undefined) {
-    this.type = 'choice';
-  } else {
-    this.type = 'frame';
-  }
 };

@@ -95,3 +95,7 @@ Nauper.UI.prototype.process = function process(event) {
   }
   return result;
 };
+
+Nauper.UI.prototype.move = function move(event) {
+  console.log(`X: ${event.pageX} Y: ${event.pageY}`);
+};

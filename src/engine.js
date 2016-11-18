@@ -1,18 +1,16 @@
-/* global Nauper */
+/* global Nauper, getWindowSize */
 Nauper.Engine = function Engine(configs, elements = []) {
   this.font = configs.font;
   this.audio = document.getElementById('audio');
   this.canvas = document.getElementById('canvas');
   this.render = this.canvas.getContext('2d');
-  this.size = {
-    width: document.documentElement.clientWidth,
-    height: document.documentElement.clientHeight
-  };
+  this.size = getWindowSize();
   this.ui = new Nauper.UI(this);
   this.sound = new Nauper.Sound(this);
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
   this.render.font = this.font;
+  this.element = null;
 
   this.elements = elements;
   this.globalIndex = 0;
@@ -22,23 +20,29 @@ Nauper.Engine = function Engine(configs, elements = []) {
   this.elementProcessor = function elementProcessor(event) {
     let task = this.ui.process(event);
     if (task === 'redraw') {
-      this.elements[this.globalIndex][this.localIndex].draw();
+      this.element.draw();
     } else if (task === 'next') {
       this.click(event);
-      this.sound.process(this.elements[this.globalIndex][this.localIndex].audio);
+      this.sound.process(this.element.audio, this.element.once);
     }
   }.bind(this);
 
   this.resize = function resize() {
-    this.size.width = document.documentElement.clientWidth;
-    this.size.height = document.documentElement.clientHeight;
+    this.size = getWindowSize();
     this.canvas.width = this.size.width;
     this.canvas.height = this.size.height;
     this.elements[this.globalIndex][this.localIndex].draw();
   }.bind(this);
 
+  this.move = function move(event) {
+    this.ui.move(event);
+    // now is only one function, at future we might use multiple
+  }.bind(this);
+
   this.canvas.addEventListener('click', this.elementProcessor, false);
+
   window.addEventListener('resize', this.resize, false);
+  window.addEventListener('mousemove', this.move, false);
 };
 
 Nauper.Engine.prototype.click = function click(event) {
@@ -50,7 +54,7 @@ Nauper.Engine.prototype.click = function click(event) {
 Nauper.Engine.prototype.choice = function choice(event) {
   let x = event.pageX;
   let y = event.pageY;
-  this.elements[this.globalIndex][this.localIndex].map.forEach((i, index) => {
+  this.element.map.forEach((i, index) => {
     let sizes = {
       x: 0.025 * this.size.width,
       y: ((index * 0.25) + 0.025) * this.size.height,
@@ -74,9 +78,14 @@ Nauper.Engine.prototype.nextElement = function nextElement() {
   if (this.localIndex === this.elements[this.globalIndex].length) {
     this.clickType = null;
   } else {
-    this.elements[this.globalIndex][this.localIndex].draw.call(null, this);
-    if (this.elements[this.globalIndex][this.localIndex].type === 'choice') {
-      this.clickType = 'choice';
+    this.element = this.elements[this.globalIndex][this.localIndex];
+    this.element.draw.call(null, this);
+    if (this.element.type === 'choice') {
+      if (this.element.necessary || this.element.necessary === undefined) {
+        this.clickType = 'choice';
+      } else {
+        this.clickType = 'nextElement';
+      }
     } else {
       this.clickType = 'nextElement';
     }

@@ -72,3 +72,10 @@ let copyObject = (object) => { //eslint-disable-line
   result = putDefaults(object, {});
   return result;
 };
+
+let getWindowSize = () => { //eslint-disable-line
+  return {
+    width: document.documentElement.clientWidth,
+    height: document.documentElement.clientHeight
+  };
+};
