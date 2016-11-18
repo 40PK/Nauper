@@ -100,6 +100,7 @@ Nauper.UI = function UI(engine) {
   this.canvas = this.engine.canvas;
   this.render = this.engine.render;
   this.size = this.engine.size;
+  this.lastActive = undefined;
 };
 
 Nauper.UI.prototype.setBackground = function setBackground(background) {
@@ -201,7 +202,33 @@ Nauper.UI.prototype.process = function process(event) {
 };
 
 Nauper.UI.prototype.move = function move(event) {
-  console.log('X: ' + event.pageX + ' Y: ' + event.pageY);
+  if (this.engine.element.type === 'choice') {
+    var x = event.pageX;
+    var y = event.pageY;
+    var flag = false;
+    for (var index = 0; index < this.engine.element.map.length; index += 1) {
+      var sizes = {
+        x: 0.025 * this.size.width,
+        y: (index * 0.25 + 0.025) * this.size.height,
+        height: 0.20 * this.size.height,
+        width: 0.95 * this.size.width
+      };
+      if (x >= sizes.x && x <= sizes.x + sizes.width) {
+        if (y >= sizes.y && y <= sizes.y + sizes.height) {
+          this.engine.element.active = index;
+          flag = true;
+          break;
+        }
+      }
+    }
+    if (!flag) {
+      this.engine.element.active = undefined;
+    }
+    if (this.engine.element.active !== this.lastActive) {
+      this.lastActive = this.engine.element.active;
+      this.engine.element.draw();
+    }
+  }
 };
 'use strict';
 
@@ -359,6 +386,7 @@ Nauper.Engine.prototype.start = function start() {
   } else if (this.elements[0][0].type === 'choice') {
     this.clickType = 'choice';
   }
+  this.element = this.elements[0][0];
   this.elements[0][0].draw.call(null, this);
   return true;
 };
@@ -476,6 +504,7 @@ Nauper.Question = function Question(engine, args) {
   this.canvas = this.engine.canvas;
   this.size = this.engine.size;
   this.map = args.map;
+  this.active = undefined;
 
   this.draw = function draw() {
     var _this = this;
@@ -490,9 +519,15 @@ Nauper.Question = function Question(engine, args) {
 
       var _loop = function _loop(index) {
         var i = _this.map[index];
+        var box = void 0;
+        if (_this.active !== undefined && _this.active === index) {
+          box = _this.activebox;
+        } else {
+          box = _this.inactivebox;
+        }
         _this.engine.ui.drawTextBox({
           type: _this.boxtype,
-          color: _this.inactivebox.background,
+          color: box.background,
           link: _this.boxlink,
           y: index * 0.25 + 0.025,
           x: x,
@@ -503,7 +538,7 @@ Nauper.Question = function Question(engine, args) {
             _this.engine.ui.drawText({
               text: i.text,
               align: 'center',
-              color: _this.inactivebox.text,
+              color: box.text,
               y: index * 0.25 + 0.125
             });
           }

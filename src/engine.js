@@ -98,6 +98,7 @@ Nauper.Engine.prototype.start = function start() {
   } else if (this.elements[0][0].type === 'choice') {
     this.clickType = 'choice';
   }
+  this.element = this.elements[0][0];
   this.elements[0][0].draw.call(null, this);
   return true;
 };

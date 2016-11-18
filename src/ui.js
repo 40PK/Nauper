@@ -4,6 +4,7 @@ Nauper.UI = function UI(engine) {
   this.canvas = this.engine.canvas;
   this.render = this.engine.render;
   this.size = this.engine.size;
+  this.lastActive = undefined;
 };
 
 Nauper.UI.prototype.setBackground = function setBackground(background) {
@@ -97,5 +98,31 @@ Nauper.UI.prototype.process = function process(event) {
 };
 
 Nauper.UI.prototype.move = function move(event) {
-  console.log(`X: ${event.pageX} Y: ${event.pageY}`);
+  if (this.engine.element.type === 'choice') {
+    let x = event.pageX;
+    let y = event.pageY;
+    let flag = false;
+    for (let index = 0; index < this.engine.element.map.length; index += 1) {
+      let sizes = {
+        x: 0.025 * this.size.width,
+        y: ((index * 0.25) + 0.025) * this.size.height,
+        height: 0.20 * this.size.height,
+        width: 0.95 * this.size.width
+      };
+      if (x >= sizes.x && x <= (sizes.x + sizes.width)) {
+        if (y >= sizes.y && y <= (sizes.y + sizes.height)) {
+          this.engine.element.active = index;
+          flag = true;
+          break;
+        }
+      }
+    }
+    if (!flag) {
+      this.engine.element.active = undefined;
+    }
+    if (this.engine.element.active !== this.lastActive) {
+      this.lastActive = this.engine.element.active;
+      this.engine.element.draw();
+    }
+  }
 };
