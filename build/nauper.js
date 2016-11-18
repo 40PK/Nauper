@@ -226,7 +226,7 @@ Nauper.UI.prototype.move = function move(event) {
     }
     if (this.engine.element.active !== this.lastActive) {
       this.lastActive = this.engine.element.active;
-      this.engine.element.draw();
+      this.engine.element.draw(false);
     }
   }
 };
@@ -509,40 +509,48 @@ Nauper.Question = function Question(engine, args) {
   this.draw = function draw() {
     var _this = this;
 
+    var clear = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
     if (this.map.length !== 0 && this.map.length <= 4) {
       var x = 0.025;
       var height = 0.20;
       var width = 0.95;
       var radius = 0.05;
-      this.render.clearRect(0, 0, this.size.width, this.size.height);
+      if (clear) {
+        this.render.clearRect(0, 0, this.size.width, this.size.height);
+      }
       this.engine.ui.setBackground(this.background);
 
       var _loop = function _loop(index) {
-        var i = _this.map[index];
-        var box = void 0;
-        if (_this.active !== undefined && _this.active === index) {
-          box = _this.activebox;
-        } else {
-          box = _this.inactivebox;
-        }
-        _this.engine.ui.drawTextBox({
-          type: _this.boxtype,
-          color: box.background,
-          link: _this.boxlink,
-          y: index * 0.25 + 0.025,
-          x: x,
-          height: height,
-          width: width,
-          radius: radius,
-          callback: function callback() {
-            _this.engine.ui.drawText({
-              text: i.text,
-              align: 'center',
-              color: box.text,
-              y: index * 0.25 + 0.125
+        if (_this.active === undefined || _this.active === index) {
+          (function () {
+            var i = _this.map[index];
+            var box = void 0;
+            if (_this.active === index) {
+              box = _this.activebox;
+            } else {
+              box = _this.inactivebox;
+            }
+            _this.engine.ui.drawTextBox({
+              type: _this.boxtype,
+              color: box.background,
+              link: _this.boxlink,
+              y: index * 0.25 + 0.025,
+              x: x,
+              height: height,
+              width: width,
+              radius: radius,
+              callback: function callback() {
+                _this.engine.ui.drawText({
+                  text: i.text,
+                  align: 'center',
+                  color: box.text,
+                  y: index * 0.25 + 0.125
+                });
+              }
             });
-          }
-        });
+          })();
+        }
       };
 
       for (var index = 0; index < this.map.length; index += 1) {

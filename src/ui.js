@@ -122,7 +122,7 @@ Nauper.UI.prototype.move = function move(event) {
     }
     if (this.engine.element.active !== this.lastActive) {
       this.lastActive = this.engine.element.active;
-      this.engine.element.draw();
+      this.engine.element.draw(false);
     }
   }
 };
