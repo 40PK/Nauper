@@ -1,6 +1,6 @@
 // creating app
 var engine = new Nauper.Engine({
-  font: "15pt Arial"
+  font: "21px Arial"
 });
 
 var lena = new Nauper.Character({

@@ -29,7 +29,16 @@ Nauper.Engine = function Engine(configs, elements = []) {
     }
   }.bind(this);
 
+  this.resize = function resize() {
+    this.size.width = document.documentElement.clientWidth;
+    this.size.height = document.documentElement.clientHeight;
+    this.canvas.width = this.size.width;
+    this.canvas.height = this.size.height;
+    this.elements[this.globalIndex][this.localIndex].draw();
+  }.bind(this);
+
   this.canvas.addEventListener('click', this.elementProcessor, false);
+  window.addEventListener('resize', this.resize, false);
 };
 
 Nauper.Engine.prototype.click = function click(event) {

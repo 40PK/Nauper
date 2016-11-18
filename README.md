@@ -89,18 +89,6 @@ P.S. If you want to see more gulp tasks just do `gulp help`
 
 ## How to run example
 
-There are two ways to do it:
-* Boring if you think that you're just user
-* Funny if you think that you're more than user
-
-#### Boring way:
-
-Just go to exaple folder and open 'index.html' using your browser
-
-
-
-#### Funny way:
-
 Install gulp globally using npm
 ```
 npm install gulp -g
@@ -128,17 +116,11 @@ then open your browser and go to `localhost:8000`
 Coming soon!
 
 ## TODO
-For help:
-* *Realizeable* - functions that we can create in a short period of time
-* *Unrealzeable* - we need to think and code very much to get this functions done
-
-Realizeable:
+That's what we have in our todo-list:
 * *Fix* name and text positioning
 * *Fix* characters display on mobile devices
 * *Add* default configs to all types
 * *Add* 'active' state of **Question**'s choice
-
-Unrealizeable:
+* *Fix* text size on window resize
 * *Fix* text positioning on mobile devices in album orientation
-* *Add* opportunity to put images as a textboxes
 * Increase performance
