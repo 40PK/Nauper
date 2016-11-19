@@ -348,7 +348,7 @@ Nauper.Engine = function Engine(configs) {
     this.size = getWindowSize();
     this.canvas.width = this.size.width;
     this.canvas.height = this.size.height;
-    this.elements[this.globalIndex][this.localIndex].draw();
+    this.element.draw();
   }.bind(this);
 
   this.move = function move(event) {
