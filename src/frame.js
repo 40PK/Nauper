@@ -8,6 +8,8 @@ Nauper.Frame = function Frame(engine, args) {
   this.displayOrder = args.displayOrder;
   this.background = args.background;
   this.text = args.textbox;
+  this.audio = args.audio;
+  this.once = args.once;
   this.type = 'frame';
 
   this.draw = function draw() {

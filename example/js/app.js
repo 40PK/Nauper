@@ -24,7 +24,9 @@ var frameOne = new Nauper.Frame(engine, {
 		"color": "black", 
 		"text": "It's a start frame"
 	}, 
-	"background": "1.jpg"
+	"background": "1.jpg",
+    "audio": "your_bright_side.mp3",
+    "once": true
 });
 var frameTwo = new Nauper.Frame(engine, {
     "characters": [lena.smile, yulya.smile],

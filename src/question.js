@@ -12,6 +12,8 @@ Nauper.Question = function Question(engine, args) {
   this.canvas = this.engine.canvas;
   this.size = this.engine.size;
   this.map = args.map;
+  this.audio = args.audio;
+  this.once = args.once;
   this.active = undefined;
 
   this.draw = function draw(clear = true) {

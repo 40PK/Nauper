@@ -2,6 +2,7 @@
 Nauper.Sound = function Sound(engine) {
   this.engine = engine;
   this.audio = this.engine.audio;
+  this.audio.volume = this.engine.audioVolume;
   this.repeating = false;
 
   this.repeatend = function repeatend() {

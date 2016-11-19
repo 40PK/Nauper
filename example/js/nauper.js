@@ -195,7 +195,11 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
 
 Nauper.UI.prototype.process = function process(event) {
   var result = void 0;
-  if (event) {
+  var element = this.engine.elements[0][0];
+  if (element === this.engine.element && !this.engine.firstPassed) {
+    result = 'draw';
+    this.engine.firstPassed = true;
+  } else if (event) {
     result = 'next';
   }
   return result;
@@ -236,6 +240,7 @@ Nauper.UI.prototype.move = function move(event) {
 Nauper.Sound = function Sound(engine) {
   this.engine = engine;
   this.audio = this.engine.audio;
+  this.audio.volume = this.engine.audioVolume;
   this.repeating = false;
 
   this.repeatend = function repeatend() {
@@ -292,10 +297,12 @@ Nauper.Engine = function Engine(configs) {
   this.render = this.canvas.getContext('2d');
   this.size = getWindowSize();
   this.ui = new Nauper.UI(this);
+  this.audioVolume = 0.5;
   this.sound = new Nauper.Sound(this);
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
   this.render.font = this.font;
+  this.firstPassed = false;
   this.element = null;
 
   this.elements = elements;
@@ -309,6 +316,9 @@ Nauper.Engine = function Engine(configs) {
       this.element.draw();
     } else if (task === 'next') {
       this.click(event);
+      this.sound.process(this.element.audio, this.element.once);
+    } else if (task === 'draw') {
+      this.element.draw();
       this.sound.process(this.element.audio, this.element.once);
     }
   }.bind(this);
@@ -387,7 +397,7 @@ Nauper.Engine.prototype.start = function start() {
     this.clickType = 'choice';
   }
   this.element = this.elements[0][0];
-  this.elements[0][0].draw.call(null, this);
+  this.elementProcessor({ pageX: -1, pageY: -1 });
   return true;
 };
 
@@ -406,6 +416,8 @@ Nauper.Frame = function Frame(engine, args) {
   this.displayOrder = args.displayOrder;
   this.background = args.background;
   this.text = args.textbox;
+  this.audio = args.audio;
+  this.once = args.once;
   this.type = 'frame';
 
   this.draw = function draw() {
@@ -504,6 +516,8 @@ Nauper.Question = function Question(engine, args) {
   this.canvas = this.engine.canvas;
   this.size = this.engine.size;
   this.map = args.map;
+  this.audio = args.audio;
+  this.once = args.once;
   this.active = undefined;
 
   this.draw = function draw() {

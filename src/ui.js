@@ -91,7 +91,11 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
 
 Nauper.UI.prototype.process = function process(event) {
   let result;
-  if (event) {
+  let element = this.engine.elements[0][0];
+  if (element === this.engine.element && !this.engine.firstPassed) {
+    result = 'draw';
+    this.engine.firstPassed = true;
+  } else if (event) {
     result = 'next';
   }
   return result;

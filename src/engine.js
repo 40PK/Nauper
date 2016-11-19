@@ -6,10 +6,12 @@ Nauper.Engine = function Engine(configs, elements = []) {
   this.render = this.canvas.getContext('2d');
   this.size = getWindowSize();
   this.ui = new Nauper.UI(this);
+  this.audioVolume = 0.5;
   this.sound = new Nauper.Sound(this);
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
   this.render.font = this.font;
+  this.firstPassed = false;
   this.element = null;
 
   this.elements = elements;
@@ -23,6 +25,9 @@ Nauper.Engine = function Engine(configs, elements = []) {
       this.element.draw();
     } else if (task === 'next') {
       this.click(event);
+      this.sound.process(this.element.audio, this.element.once);
+    } else if (task === 'draw') {
+      this.element.draw();
       this.sound.process(this.element.audio, this.element.once);
     }
   }.bind(this);
@@ -99,7 +104,7 @@ Nauper.Engine.prototype.start = function start() {
     this.clickType = 'choice';
   }
   this.element = this.elements[0][0];
-  this.elements[0][0].draw.call(null, this);
+  this.elementProcessor({ pageX: -1, pageY: -1 });
   return true;
 };
 
