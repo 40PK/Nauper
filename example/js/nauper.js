@@ -100,6 +100,9 @@ Nauper.UI = function UI(engine) {
   this.canvas = this.engine.canvas;
   this.render = this.engine.render;
   this.size = this.engine.size;
+  this.menu = [];
+  this.menuStyle = {};
+  this.currentMenuScreen = 0;
   this.lastActive = undefined;
 };
 
@@ -233,6 +236,24 @@ Nauper.UI.prototype.move = function move(event) {
       this.engine.element.draw(false);
     }
   }
+};
+
+Nauper.UI.prototype.addMenuScreen = function addMenuScreen(menumap) {
+  if (menumap.name && menumap.items.length !== 0) {
+    this.menu.push(menumap);
+  }
+};
+
+Nauper.UI.prototype.setMenuStyle = function setMenuStyle(sm) {
+  var defaults = {
+    mainbox: 'default',
+    mainboxcolor: '#fff',
+    littlebox: 'default',
+    littleboxcolor: '#eee',
+    title: '#000',
+    items: '#111'
+  };
+  this.menuStyle = putDefaults(defaults, sm);
 };
 'use strict';
 
