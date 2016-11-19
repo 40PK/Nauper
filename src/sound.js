@@ -17,7 +17,7 @@ Nauper.Sound = function Sound(engine) {
 };
 
 Nauper.Sound.prototype.play = function play(filename, once) {
-  this.audio.src = `./data/sounds/${filename}`;
+  this.audio.src = `/data/sounds/${filename}`;
   this.audio.play();
   if (once) {
     this.audio.addEventListener('ended', this.stopend);
@@ -40,7 +40,10 @@ Nauper.Sound.prototype.stop = function stop() {
 };
 
 Nauper.Sound.prototype.process = function process(audio, once) {
-  if (audio !== undefined) {
+  let path = `/data/sounds/${audio}`;
+  let substr = this.audio.src.substr(-(path.length), path.length);
+  console.log(audio, once, path, substr);
+  if (audio !== undefined && path !== substr) {
     this.stop();
     if (audio) {
       this.play(audio, once);
