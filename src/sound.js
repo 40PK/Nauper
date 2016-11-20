@@ -2,7 +2,6 @@
 Nauper.Sound = function Sound(engine) {
   this.engine = engine;
   this.audio = this.engine.audio;
-  this.audio.volume = this.engine.audioVolume;
   this.repeating = false;
 
   this.repeatend = function repeatend() {
@@ -24,6 +23,19 @@ Nauper.Sound.prototype.play = function play(filename, once) {
   } else if (!once) {
     this.audio.addEventListener('ended', this.repeatend);
   }
+};
+
+Nauper.Sound.prototype.init = function init() {
+  this.setVolume();
+  // Will be multiple functions call
+};
+
+Nauper.Sound.prototype.setVolume = function setVolume(volume) {
+  if (typeof volume === 'number' && volume <= 1) {
+    this.engine.audioVolume = volume;
+  }
+  this.volume = this.engine.audioVolume;
+  this.audio.volume = this.volume;
 };
 
 Nauper.Sound.prototype.pause = function pause() {

@@ -6,8 +6,8 @@ Nauper.Engine = function Engine(configs, elements = []) {
   this.render = this.canvas.getContext('2d');
   this.size = getWindowSize();
   this.ui = new Nauper.UI(this);
-  this.audioVolume = 0.5;
   this.sound = new Nauper.Sound(this);
+  this.audioVolume = 0.5;
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
   this.render.font = this.font;
@@ -98,6 +98,7 @@ Nauper.Engine.prototype.nextElement = function nextElement() {
 };
 
 Nauper.Engine.prototype.start = function start() {
+  this.sound.init();
   if (this.elements[0][0].type === 'frame') {
     this.clickType = 'nextElement';
   } else if (this.elements[0][0].type === 'choice') {
