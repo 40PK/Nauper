@@ -54,7 +54,6 @@ Nauper.Sound.prototype.stop = function stop() {
 Nauper.Sound.prototype.process = function process(audio, once) {
   let path = `/data/sounds/${audio}`;
   let substr = this.audio.src.substr(-(path.length), path.length);
-  console.log(audio, once, path, substr);
   if (audio !== undefined && path !== substr) {
     this.stop();
     if (audio) {

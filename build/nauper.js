@@ -104,6 +104,7 @@ Nauper.UI = function UI(engine) {
   this.menuStyle = {};
   this.currentMenuScreen = 0;
   this.lastActive = undefined;
+  this.menuOpened = false;
 };
 
 Nauper.UI.prototype.setBackground = function setBackground(background) {
@@ -202,7 +203,13 @@ Nauper.UI.prototype.process = function process(event) {
   if (element === this.engine.element && !this.engine.firstPassed) {
     result = 'draw';
     this.engine.firstPassed = true;
-  } else if (event) {
+  } else if (this.menuOpened) {
+    this.menuOpened = false;
+    result = 'draw';
+  } else if (event.pageX < 50 && event.pageY < 50) {
+    this.drawMenu();
+    result = null;
+  } else {
     result = 'next';
   }
   return result;
@@ -255,13 +262,24 @@ Nauper.UI.prototype.setMenuStyle = function setMenuStyle(sm) {
   };
   this.menuStyle = putDefaults(defaults, sm);
 };
+
+Nauper.UI.prototype.drawMenu = function drawMenu() {
+  this.drawTextBox({
+    type: this.menuStyle.mainbox,
+    color: this.menuStyle.mainboxcolor,
+    x: 0.25,
+    y: 0.25,
+    width: 0.50,
+    height: 0.50
+  });
+  this.menuOpened = true;
+};
 'use strict';
 
 /* global Nauper */
 Nauper.Sound = function Sound(engine) {
   this.engine = engine;
   this.audio = this.engine.audio;
-  this.audio.volume = this.engine.audioVolume;
   this.repeating = false;
 
   this.repeatend = function repeatend() {
@@ -285,6 +303,19 @@ Nauper.Sound.prototype.play = function play(filename, once) {
   }
 };
 
+Nauper.Sound.prototype.init = function init() {
+  this.setVolume();
+  // Will be multiple functions call
+};
+
+Nauper.Sound.prototype.setVolume = function setVolume(volume) {
+  if (typeof volume === 'number' && volume <= 1) {
+    this.engine.audioVolume = volume;
+  }
+  this.volume = this.engine.audioVolume;
+  this.audio.volume = this.volume;
+};
+
 Nauper.Sound.prototype.pause = function pause() {
   this.audio.pause();
 };
@@ -301,7 +332,6 @@ Nauper.Sound.prototype.stop = function stop() {
 Nauper.Sound.prototype.process = function process(audio, once) {
   var path = '/data/sounds/' + audio;
   var substr = this.audio.src.substr(-path.length, path.length);
-  console.log(audio, once, path, substr);
   if (audio !== undefined && path !== substr) {
     this.stop();
     if (audio) {
@@ -321,8 +351,8 @@ Nauper.Engine = function Engine(configs) {
   this.render = this.canvas.getContext('2d');
   this.size = getWindowSize();
   this.ui = new Nauper.UI(this);
-  this.audioVolume = 0.5;
   this.sound = new Nauper.Sound(this);
+  this.audioVolume = 0.5;
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
   this.render.font = this.font;
@@ -415,6 +445,7 @@ Nauper.Engine.prototype.nextElement = function nextElement() {
 };
 
 Nauper.Engine.prototype.start = function start() {
+  this.sound.init();
   if (this.elements[0][0].type === 'frame') {
     this.clickType = 'nextElement';
   } else if (this.elements[0][0].type === 'choice') {

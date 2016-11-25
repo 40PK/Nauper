@@ -8,6 +8,7 @@ Nauper.UI = function UI(engine) {
   this.menuStyle = {};
   this.currentMenuScreen = 0;
   this.lastActive = undefined;
+  this.menuOpened = false;
 };
 
 Nauper.UI.prototype.setBackground = function setBackground(background) {
@@ -98,7 +99,13 @@ Nauper.UI.prototype.process = function process(event) {
   if (element === this.engine.element && !this.engine.firstPassed) {
     result = 'draw';
     this.engine.firstPassed = true;
-  } else if (event) {
+  } else if (this.menuOpened) {
+    this.menuOpened = false;
+    result = 'draw';
+  } else if (event.pageX < 50 && event.pageY < 50) {
+    this.drawMenu();
+    result = null;
+  } else {
     result = 'next';
   }
   return result;
@@ -150,4 +157,16 @@ Nauper.UI.prototype.setMenuStyle = function setMenuStyle(sm) {
     items: '#111'
   };
   this.menuStyle = putDefaults(defaults, sm);
+};
+
+Nauper.UI.prototype.drawMenu = function drawMenu() {
+  this.drawTextBox({
+    type: this.menuStyle.mainbox,
+    color: this.menuStyle.mainboxcolor,
+    x: 0.25,
+    y: 0.25,
+    width: 0.50,
+    height: 0.50
+  });
+  this.menuOpened = true;
 };
