@@ -91,4 +91,20 @@ engine.addScene([frameTwo]);
 engine.addScene([frameThree]);
 engine.addScene([frameFour]);
 
+engine.ui.setMenuStyle({});
+engine.ui.addMenuScreen([
+    {
+        text: 'Test 1',
+        callback: () => { console.log('Test 1'); }
+    },
+    {
+        text: 'Test 2',
+        callback: () => { console.log('Test 2'); }
+    },
+    {
+        text: 'Test 3',
+        callback: () => { console.log('Test 3'); }
+    }
+]);
+
 engine.start();

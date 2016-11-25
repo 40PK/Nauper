@@ -94,7 +94,7 @@ var getWindowSize = function getWindowSize() {
 };
 'use strict';
 
-/* global Nauper, putDefaults, getTextOffset, wrapText, copyObject */
+/* global Nauper, putDefaults, getTextOffset, wrapText, copyObject, getTextHeight */
 Nauper.UI = function UI(engine) {
   this.engine = engine;
   this.canvas = this.engine.canvas;
@@ -102,7 +102,7 @@ Nauper.UI = function UI(engine) {
   this.size = this.engine.size;
   this.menu = [];
   this.menuStyle = {};
-  this.currentMenuScreen = 0;
+  this.currentMS = 0;
   this.lastActive = undefined;
   this.menuOpened = false;
 };
@@ -246,17 +246,17 @@ Nauper.UI.prototype.move = function move(event) {
 };
 
 Nauper.UI.prototype.addMenuScreen = function addMenuScreen(menumap) {
-  if (menumap.name && menumap.items.length !== 0) {
-    this.menu.push(menumap);
-  }
+  this.menu.push(menumap);
 };
 
 Nauper.UI.prototype.setMenuStyle = function setMenuStyle(sm) {
   var defaults = {
     mainbox: 'default',
-    mainboxcolor: '#fff',
-    littlebox: 'default',
-    littleboxcolor: '#eee',
+    maincolor: '#fff',
+    smallbox: 'default',
+    smallcolor: '#eee',
+    smallheight: 0.10,
+    smallspace: 0.025,
     title: '#000',
     items: '#111'
   };
@@ -264,13 +264,38 @@ Nauper.UI.prototype.setMenuStyle = function setMenuStyle(sm) {
 };
 
 Nauper.UI.prototype.drawMenu = function drawMenu() {
-  this.drawTextBox({
-    type: this.menuStyle.mainbox,
-    color: this.menuStyle.mainboxcolor,
+  var _this3 = this;
+
+  var curSlength = this.menu[this.currentMS].length;
+  var sh = this.menuStyle.smallheight;
+  var ss = this.menuStyle.smallspace;
+  var menu = {
     x: 0.25,
     y: 0.25,
-    width: 0.50,
-    height: 0.50
+    height: (sh + ss) * curSlength + ss,
+    width: 0.5
+  };
+  this.drawTextBox({
+    type: this.menuStyle.mainbox,
+    color: this.menuStyle.maincolor,
+    x: menu.x,
+    y: menu.y,
+    width: menu.width,
+    height: menu.height,
+    callback: function callback() {
+      _this3.menu[_this3.currentMS].forEach(function (i, index) {
+        var y = 0.25 + index * (sh + ss) + ss;
+        var width = menu.width - ss * 2;
+        _this3.drawTextBox({
+          type: _this3.menuStyle.smallbox,
+          color: _this3.menuStyle.smallcolor,
+          x: 0.25 + ss,
+          y: y,
+          height: _this3.menuStyle.smallheight,
+          width: width
+        });
+      });
+    }
   });
   this.menuOpened = true;
 };
