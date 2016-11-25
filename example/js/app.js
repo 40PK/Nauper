@@ -102,14 +102,8 @@ engine.ui.addMenuScreen([
         callback: () => { engine.sound.setVolume(engine.audioVolume + 0.1); }
     },
     {
-        text: 'Mute/Unmute',
-        callback: () => {
-            if (engine.audioVolume === 0) {
-                engine.sound.setVolume(0.5);
-            } else {
-                engine.sound.setVolume(0);
-            }
-        }
+        text: 'Mute',
+        callback: () => { engine.sound.setVolume(0); }
     }
 ]);
 

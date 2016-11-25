@@ -94,7 +94,7 @@ var getWindowSize = function getWindowSize() {
 };
 'use strict';
 
-/* global Nauper, putDefaults, getTextOffset, wrapText, copyObject, getTextHeight */
+/* global Nauper, putDefaults, getTextOffset, wrapText, getTextHeight */
 Nauper.UI = function UI(engine) {
   this.engine = engine;
   this.canvas = this.engine.canvas;
@@ -279,11 +279,11 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
   var sh = this.menuStyle.smallheight;
   var ss = this.menuStyle.smallspace;
   var menu = {
-    x: 0.25,
-    y: 0.25,
+    x: 0.125,
     height: (sh + ss) * curSlength + ss,
-    width: 0.5
+    width: 0.75
   };
+  menu.y = (1 - menu.height) / 2;
   this.drawTextBox({
     type: this.menuStyle.mainbox,
     color: this.menuStyle.maincolor,
@@ -293,16 +293,16 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
     height: menu.height,
     callback: function callback() {
       _this3.menu[_this3.currentMS].forEach(function (i, index) {
-        var y = 0.25 + index * (sh + ss) + ss;
+        var y = menu.y + index * (sh + ss) + ss;
         var width = menu.width - ss * 2;
-        _this3.menu[_this3.currentMS][index].x = (0.25 + ss) * _this3.size.width;
+        _this3.menu[_this3.currentMS][index].x = (menu.x + ss) * _this3.size.width;
         _this3.menu[_this3.currentMS][index].y = y * _this3.size.height;
         _this3.menu[_this3.currentMS][index].width = width * _this3.size.width;
         _this3.menu[_this3.currentMS][index].height = _this3.menuStyle.smallheight * _this3.size.height;
         _this3.drawTextBox({
           type: _this3.menuStyle.smallbox,
           color: _this3.menuStyle.smallcolor,
-          x: 0.25 + ss,
+          x: menu.x + ss,
           y: y,
           height: _this3.menuStyle.smallheight,
           width: width,
@@ -400,7 +400,7 @@ Nauper.Engine = function Engine(configs) {
   this.size = getWindowSize();
   this.ui = new Nauper.UI(this);
   this.sound = new Nauper.Sound(this);
-  this.audioVolume = 0.5;
+  this.audioVolume = 0.1;
   this.canvas.width = this.size.width;
   this.canvas.height = this.size.height;
   this.render.font = this.font;
@@ -427,20 +427,16 @@ Nauper.Engine = function Engine(configs) {
 
   this.resize = function resize() {
     this.size = getWindowSize();
+    this.ui.size = this.size;
     this.canvas.width = this.size.width;
     this.canvas.height = this.size.height;
     this.element.draw();
   }.bind(this);
 
-  this.move = function move(event) {
-    this.ui.move(event);
-    // now is only one function, at future we might use multiple
-  }.bind(this);
-
   this.canvas.addEventListener('click', this.elementProcessor, false);
 
   window.addEventListener('resize', this.resize, false);
-  window.addEventListener('mousemove', this.move, false);
+  window.addEventListener('mousemove', this.ui.move, false);
 };
 
 Nauper.Engine.prototype.click = function click(event) {

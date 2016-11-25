@@ -1,4 +1,4 @@
-/* global Nauper, putDefaults, getTextOffset, wrapText, copyObject, getTextHeight */
+/* global Nauper, putDefaults, getTextOffset, wrapText, getTextHeight */
 Nauper.UI = function UI(engine) {
   this.engine = engine;
   this.canvas = this.engine.canvas;
@@ -173,11 +173,11 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
   let sh = this.menuStyle.smallheight;
   let ss = this.menuStyle.smallspace;
   let menu = {
-    x: 0.25,
-    y: 0.25,
+    x: 0.125,
     height: ((sh + ss) * curSlength) + ss,
-    width: 0.5
+    width: 0.75
   };
+  menu.y = (1 - menu.height) / 2;
   this.drawTextBox({
     type: this.menuStyle.mainbox,
     color: this.menuStyle.maincolor,
@@ -187,16 +187,16 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
     height: menu.height,
     callback: () => {
       this.menu[this.currentMS].forEach((i, index) => {
-        let y = 0.25 + (index * (sh + ss)) + ss;
+        let y = menu.y + (index * (sh + ss)) + ss;
         let width = menu.width - (ss * 2);
-        this.menu[this.currentMS][index].x = (0.25 + ss) * this.size.width;
+        this.menu[this.currentMS][index].x = (menu.x + ss) * this.size.width;
         this.menu[this.currentMS][index].y = y * this.size.height;
         this.menu[this.currentMS][index].width = width * this.size.width;
         this.menu[this.currentMS][index].height = this.menuStyle.smallheight * this.size.height;
         this.drawTextBox({
           type: this.menuStyle.smallbox,
           color: this.menuStyle.smallcolor,
-          x: 0.25 + ss,
+          x: menu.x + ss,
           y,
           height: this.menuStyle.smallheight,
           width,
