@@ -127,10 +127,10 @@ Nauper.UI.prototype.move = function move(event) {
     let flag = false;
     for (let index = 0; index < this.engine.element.map.length; index += 1) {
       let sizes = {
-        x: 0.025 * this.size.width,
-        y: ((index * 0.25) + 0.025) * this.size.height,
-        height: 0.20 * this.size.height,
-        width: 0.95 * this.size.width
+        x: 0.025 * this.engine.size.width,
+        y: ((index * 0.25) + 0.025) * this.engine.size.height,
+        height: 0.20 * this.engine.size.height,
+        width: 0.95 * this.engine.size.width
       };
       if (x >= sizes.x && x <= (sizes.x + sizes.width)) {
         if (y >= sizes.y && y <= (sizes.y + sizes.height)) {
