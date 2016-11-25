@@ -342,7 +342,7 @@ Nauper.Sound = function Sound(engine) {
 };
 
 Nauper.Sound.prototype.play = function play(filename, once) {
-  this.audio.src = '/data/sounds/' + filename;
+  this.audio.src = './data/sounds/' + filename;
   this.audio.play();
   if (once) {
     this.audio.addEventListener('ended', this.stopend);
