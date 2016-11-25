@@ -20,8 +20,13 @@ That's this:
   * Background drawing
   * Textboxes drawing
   * Text drawing
+  * Menu drawing
+  * Click handling
+  * Mousemove handling
+* **Sound**, functionality:
+  * Music playing
 * **Frame**, functionality:
-  * Drawing characters on canvas
+  * Sending drawing coordinates to UI
 * **Question**, functionality:
   * Giving a choices to user, maximum is 4, they're redirecting user between scenes
 * **Engine**, functionality:
@@ -36,35 +41,29 @@ That's what they are:
   * wrapText - function, needed by **UI**
   * getTextOffset - function, needed by **UI** too
   * putDefaults - function that expands given object with default object
+  * getTextHeight - function that counts height of text, needed by UI
+  * copyObject - function that copies data from one object to another
+  * getWindowSize - function that returns size of user's browser's window
 * **nauper.js**, functionality:
   * In that file we can only see **Nauper** object definition
 
 ## Nauper's functionality
-You can draw background (oh, really?)
-![Background setting](images/bg.png)
+You can:
+  * Draw background
+  * Draw textboxes
+  * Draw characters
+  * Draw text
+  * Draw menu
 
-You can draw textboxes with text
-![Default text](images/text_default.png)
+Textboxes can be:
+  * With edges
+  * Rounded
+  * An images
+  * With different colors
 
-Textboxes can be rounded
-![Rounded text](images/text_rounded.png)
+Question's textboxes have an active state and can change their color when cursor is over it
 
-You can also change color of text
-![Colored text](images/text_colors.png)
-
-You can draw characters
-![Characters](images/characters.png)
-
-You can also draw characters and text at the same time
-![Characters with text](images/characters_text.png)
-
-You can create questions with maximum of four choices
-![Questions default](images/question_default.png)
-
-Question's textboxes can also be rounded
-![Questions rounded](images/question_rounded.png)
-
-And I think you understand that you can also change color of question's text, so I didn't put picture of this
+Menu is built from textboxes
 
 ## How to build
 
@@ -120,7 +119,7 @@ That's what we have in our todo-list:
 * *Fix* name and text positioning
 * *Fix* characters display on mobile devices
 * *Add* default configs to all types
-* *Add* 'active' state of **Question**'s choice
 * *Fix* text size on window resize
 * *Fix* text positioning on mobile devices in album orientation
+* *Make* menu's width adaptive
 * Increase performance
