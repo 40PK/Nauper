@@ -94,16 +94,22 @@ engine.addScene([frameFour]);
 engine.ui.setMenuStyle({});
 engine.ui.addMenuScreen([
     {
-        text: 'Test 1',
-        callback: () => { console.log('Test 1'); }
+        text: 'Decrease volume',
+        callback: () => { engine.sound.setVolume(engine.audioVolume - 0.1); }
     },
     {
-        text: 'Test 2',
-        callback: () => { console.log('Test 2'); }
+        text: 'Increase volume',
+        callback: () => { engine.sound.setVolume(engine.audioVolume + 0.1); }
     },
     {
-        text: 'Test 3',
-        callback: () => { console.log('Test 3'); }
+        text: 'Mute/Unmute',
+        callback: () => {
+            if (engine.audioVolume === 0) {
+                engine.sound.setVolume(0.5);
+            } else {
+                engine.sound.setVolume(0);
+            }
+        }
     }
 ]);
 

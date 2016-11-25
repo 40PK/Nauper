@@ -100,6 +100,15 @@ Nauper.UI.prototype.process = function process(event) {
     result = 'draw';
     this.engine.firstPassed = true;
   } else if (this.menuOpened) {
+    for (let index = 0; index < this.menu[this.currentMS].length; index += 1) {
+      let i = this.menu[this.currentMS][index];
+      if (event.pageX >= i.x && event.pageX <= (i.x + i.width)) {
+        if (event.pageY >= i.y && event.pageY <= (i.y + i.height)) {
+          i.callback();
+          break;
+        }
+      }
+    }
     this.menuOpened = false;
     result = 'draw';
   } else if (event.pageX < 50 && event.pageY < 50) {
@@ -180,6 +189,10 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
       this.menu[this.currentMS].forEach((i, index) => {
         let y = 0.25 + (index * (sh + ss)) + ss;
         let width = menu.width - (ss * 2);
+        this.menu[this.currentMS][index].x = (0.25 + ss) * this.size.width;
+        this.menu[this.currentMS][index].y = y * this.size.height;
+        this.menu[this.currentMS][index].width = width * this.size.width;
+        this.menu[this.currentMS][index].height = this.menuStyle.smallheight * this.size.height;
         this.drawTextBox({
           type: this.menuStyle.smallbox,
           color: this.menuStyle.smallcolor,
@@ -188,7 +201,7 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
           height: this.menuStyle.smallheight,
           width,
           callback: () => {
-            let textHeight = getTextHeight(this.engine.font) / this.engine.size.height;
+            let textHeight = getTextHeight(this.engine.font) / this.size.height;
             let textY = ((y + (this.menuStyle.smallheight / 2)) - (textHeight / 2)) + ss;
             this.drawText({
               align: 'center',
