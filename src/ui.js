@@ -186,7 +186,17 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
           x: 0.25 + ss,
           y,
           height: this.menuStyle.smallheight,
-          width
+          width,
+          callback: () => {
+            let textHeight = getTextHeight(this.engine.font) / this.engine.size.height;
+            let textY = ((y + (this.menuStyle.smallheight / 2)) - (textHeight / 2)) + ss;
+            this.drawText({
+              align: 'center',
+              color: this.menuStyle.items,
+              y: textY,
+              text: i.text
+            });
+          }
         });
       });
     }

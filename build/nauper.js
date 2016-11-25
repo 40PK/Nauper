@@ -292,7 +292,17 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
           x: 0.25 + ss,
           y: y,
           height: _this3.menuStyle.smallheight,
-          width: width
+          width: width,
+          callback: function callback() {
+            var textHeight = getTextHeight(_this3.engine.font) / _this3.engine.size.height;
+            var textY = y + _this3.menuStyle.smallheight / 2 - textHeight / 2 + ss;
+            _this3.drawText({
+              align: 'center',
+              color: _this3.menuStyle.items,
+              y: textY,
+              text: i.text
+            });
+          }
         });
       });
     }
