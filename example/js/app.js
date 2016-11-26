@@ -92,6 +92,7 @@ engine.addScene([frameThree]);
 engine.addScene([frameFour]);
 
 engine.ui.setMenuStyle({});
+engine.ui.setMenuIconStyle({});
 engine.ui.addMenuScreen([
     {
         text: 'Decrease volume',

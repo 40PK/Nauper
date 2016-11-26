@@ -9,6 +9,7 @@ Nauper.UI = function UI(engine) {
   this.currentMS = 0;
   this.lastActive = undefined;
   this.menuOpened = false;
+  this.menuIconStyle = {};
 };
 
 Nauper.UI.prototype.setBackground = function setBackground(background) {
@@ -215,4 +216,17 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
     }
   });
   this.menuOpened = true;
+};
+
+Nauper.UI.prototype.setMenuIconStyle = function setMenuIconStyle(mis) {
+  const defaults = {
+    type: 'default',
+    x: 0,
+    y: 0,
+    width: 0.05,
+    height: 0.028125,
+    link: '',
+    color: '#efefef'
+  };
+  this.menuIconStyle = putDefaults(defaults, mis);
 };
