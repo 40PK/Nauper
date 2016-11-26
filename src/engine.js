@@ -30,6 +30,7 @@ Nauper.Engine = function Engine(configs, elements = []) {
       this.element.draw();
       this.sound.process(this.element.audio, this.element.once);
     }
+    this.ui.drawMenuIcon();
   }.bind(this);
 
   this.resize = function resize() {

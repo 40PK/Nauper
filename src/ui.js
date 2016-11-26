@@ -179,6 +179,8 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
     width: 0.75
   };
   menu.y = (1 - menu.height) / 2;
+  this.render.fillStyle = 'rgba(0, 0, 0, 0.7)';
+  this.render.fillRect(0, 0, this.engine.size.width, this.engine.size.height);
   this.drawTextBox({
     type: this.menuStyle.mainbox,
     color: this.menuStyle.maincolor,
@@ -224,9 +226,14 @@ Nauper.UI.prototype.setMenuIconStyle = function setMenuIconStyle(mis) {
     x: 0,
     y: 0,
     width: 0.05,
-    height: 0.028125,
+    height: 0.05,
+    radius: 0.01,
     link: '',
     color: '#efefef'
   };
   this.menuIconStyle = putDefaults(defaults, mis);
+};
+
+Nauper.UI.prototype.drawMenuIcon = function drawMenuIcon() {
+  this.drawTextBox(this.menuIconStyle);
 };

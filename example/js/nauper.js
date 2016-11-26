@@ -105,6 +105,7 @@ Nauper.UI = function UI(engine) {
   this.currentMS = 0;
   this.lastActive = undefined;
   this.menuOpened = false;
+  this.menuIconStyle = {};
 };
 
 Nauper.UI.prototype.setBackground = function setBackground(background) {
@@ -284,6 +285,8 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
     width: 0.75
   };
   menu.y = (1 - menu.height) / 2;
+  this.render.fillStyle = 'rgba(0, 0, 0, 0.7)';
+  this.render.fillRect(0, 0, this.engine.size.width, this.engine.size.height);
   this.drawTextBox({
     type: this.menuStyle.mainbox,
     color: this.menuStyle.maincolor,
@@ -321,6 +324,24 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
     }
   });
   this.menuOpened = true;
+};
+
+Nauper.UI.prototype.setMenuIconStyle = function setMenuIconStyle(mis) {
+  var defaults = {
+    type: 'default',
+    x: 0,
+    y: 0,
+    width: 0.05,
+    height: 0.05,
+    radius: 0.01,
+    link: '',
+    color: '#efefef'
+  };
+  this.menuIconStyle = putDefaults(defaults, mis);
+};
+
+Nauper.UI.prototype.drawMenuIcon = function drawMenuIcon() {
+  this.drawTextBox(this.menuIconStyle);
 };
 'use strict';
 
@@ -423,6 +444,7 @@ Nauper.Engine = function Engine(configs) {
       this.element.draw();
       this.sound.process(this.element.audio, this.element.once);
     }
+    this.ui.drawMenuIcon();
   }.bind(this);
 
   this.resize = function resize() {
