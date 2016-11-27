@@ -94,6 +94,19 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
   }
 };
 
+Nauper.UI.prototype.checkMenuIconClick = function checkMenuIconClick(event) {
+  let x = this.menuIconStyle.x * this.engine.size.width;
+  let y = this.menuIconStyle.y * this.engine.size.width;
+  let width = this.menuIconStyle.width * this.engine.size.width;
+  let height = this.menuIconStyle.height * this.engine.size.width;
+  if (event.pageX >= x && event.pageY >= y) {
+    if (event.pageX <= x + width && event.pageY <= y + height) {
+      return true;
+    }
+  }
+  return false;
+};
+
 Nauper.UI.prototype.process = function process(event) {
   let result;
   let element = this.engine.elements[0][0];
@@ -112,7 +125,7 @@ Nauper.UI.prototype.process = function process(event) {
     }
     this.menuOpened = false;
     result = 'draw';
-  } else if (event.pageX < 50 && event.pageY < 50) {
+  } else if (this.checkMenuIconClick(event)) {
     this.drawMenu();
     result = null;
   } else {
@@ -122,7 +135,7 @@ Nauper.UI.prototype.process = function process(event) {
 };
 
 Nauper.UI.prototype.move = function move(event) {
-  if (this.engine.element.type === 'choice') {
+  if (this.engine.element.type === 'choice' && this.engine.ui.menuOpened === false) {
     let x = event.pageX;
     let y = event.pageY;
     let flag = false;
@@ -147,6 +160,7 @@ Nauper.UI.prototype.move = function move(event) {
     if (this.engine.element.active !== this.lastActive) {
       this.lastActive = this.engine.element.active;
       this.engine.element.draw(false);
+      this.engine.ui.drawMenuIcon();
     }
   }
 };
@@ -231,7 +245,10 @@ Nauper.UI.prototype.setMenuIconStyle = function setMenuIconStyle(mis) {
     link: '',
     color: '#efefef'
   };
-  this.menuIconStyle = putDefaults(defaults, mis);
+  let style = putDefaults(defaults, mis);
+  style.height *= this.engine.size.coff;
+  style.y *= this.engine.size.coff;
+  this.menuIconStyle = style;
 };
 
 Nauper.UI.prototype.drawMenuIcon = function drawMenuIcon() {

@@ -80,8 +80,8 @@ var questionOne = new Nauper.Question(engine, {
             "text": "#000"
         },
         "active": {
-            "background": "#000",
-            "text": "#fff"
+            "background": "#eee",
+            "text": "#111"
         }
     }
 });
@@ -92,7 +92,14 @@ engine.addScene([frameThree]);
 engine.addScene([frameFour]);
 
 engine.ui.setMenuStyle({});
-engine.ui.setMenuIconStyle({});
+engine.ui.setMenuIconStyle({
+    type: 'image',
+    link: './data/images/menu.png',
+    x: 0.005,
+    y: 0.005,
+    width: 0.05,
+    height: 0.05
+});
 engine.ui.addMenuScreen([
     {
         text: 'Decrease volume',

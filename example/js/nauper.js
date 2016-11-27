@@ -87,10 +87,12 @@ var copyObject = function copyObject(object) {
 
 var getWindowSize = function getWindowSize() {
   //eslint-disable-line
-  return {
+  var result = {
     width: document.documentElement.clientWidth,
     height: document.documentElement.clientHeight
   };
+  result.coff = result.width / result.height;
+  return result;
 };
 'use strict';
 
@@ -198,6 +200,19 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
   }
 };
 
+Nauper.UI.prototype.checkMenuIconClick = function checkMenuIconClick(event) {
+  var x = this.menuIconStyle.x * this.engine.size.width;
+  var y = this.menuIconStyle.y * this.engine.size.width;
+  var width = this.menuIconStyle.width * this.engine.size.width;
+  var height = this.menuIconStyle.height * this.engine.size.width;
+  if (event.pageX >= x && event.pageY >= y) {
+    if (event.pageX <= x + width && event.pageY <= y + height) {
+      return true;
+    }
+  }
+  return false;
+};
+
 Nauper.UI.prototype.process = function process(event) {
   var result = void 0;
   var element = this.engine.elements[0][0];
@@ -216,7 +231,7 @@ Nauper.UI.prototype.process = function process(event) {
     }
     this.menuOpened = false;
     result = 'draw';
-  } else if (event.pageX < 50 && event.pageY < 50) {
+  } else if (this.checkMenuIconClick(event)) {
     this.drawMenu();
     result = null;
   } else {
@@ -226,7 +241,7 @@ Nauper.UI.prototype.process = function process(event) {
 };
 
 Nauper.UI.prototype.move = function move(event) {
-  if (this.engine.element.type === 'choice') {
+  if (this.engine.element.type === 'choice' && this.engine.ui.menuOpened === false) {
     var x = event.pageX;
     var y = event.pageY;
     var flag = false;
@@ -251,6 +266,7 @@ Nauper.UI.prototype.move = function move(event) {
     if (this.engine.element.active !== this.lastActive) {
       this.lastActive = this.engine.element.active;
       this.engine.element.draw(false);
+      this.engine.ui.drawMenuIcon();
     }
   }
 };
@@ -337,7 +353,10 @@ Nauper.UI.prototype.setMenuIconStyle = function setMenuIconStyle(mis) {
     link: '',
     color: '#efefef'
   };
-  this.menuIconStyle = putDefaults(defaults, mis);
+  var style = putDefaults(defaults, mis);
+  style.height *= this.engine.size.coff;
+  style.y *= this.engine.size.coff;
+  this.menuIconStyle = style;
 };
 
 Nauper.UI.prototype.drawMenuIcon = function drawMenuIcon() {
@@ -542,18 +561,10 @@ Nauper.Frame = function Frame(engine, args) {
   this.type = 'frame';
 
   this.draw = function draw() {
-    if (this.check()) {
-      this.render.clearRect(0, 0, this.size.width, this.size.height);
-      this.engine.ui.setBackground(this.background);
-      this.displayCharacters();
-    } else {
-      this.engine.nextElement();
-    }
+    this.render.clearRect(0, 0, this.size.width, this.size.height);
+    this.engine.ui.setBackground(this.background);
+    this.displayCharacters();
   }.bind(this);
-};
-
-Nauper.Frame.prototype.check = function check() {
-  return true;
 };
 
 Nauper.Frame.prototype.setText = function setText() {

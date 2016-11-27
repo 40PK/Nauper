@@ -13,18 +13,10 @@ Nauper.Frame = function Frame(engine, args) {
   this.type = 'frame';
 
   this.draw = function draw() {
-    if (this.check()) {
-      this.render.clearRect(0, 0, this.size.width, this.size.height);
-      this.engine.ui.setBackground(this.background);
-      this.displayCharacters();
-    } else {
-      this.engine.nextElement();
-    }
+    this.render.clearRect(0, 0, this.size.width, this.size.height);
+    this.engine.ui.setBackground(this.background);
+    this.displayCharacters();
   }.bind(this);
-};
-
-Nauper.Frame.prototype.check = function check() {
-  return true;
 };
 
 Nauper.Frame.prototype.setText = function setText() {

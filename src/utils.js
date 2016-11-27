@@ -74,8 +74,10 @@ let copyObject = (object) => { //eslint-disable-line
 };
 
 let getWindowSize = () => { //eslint-disable-line
-  return {
+  let result = {
     width: document.documentElement.clientWidth,
     height: document.documentElement.clientHeight
   };
+  result.coff = result.width / result.height;
+  return result;
 };
