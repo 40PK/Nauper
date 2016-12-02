@@ -209,6 +209,16 @@ In engine default UI is `this.ui`.
   * Does:
     * draws one letter on the canvas
     * setups timeout to draw all letters in line
+    * pushes timeouts to `UI.animationTimeouts`
+
+`clearTimeouts()`:
+  * Gets:
+    * nothing
+  * Returns:
+    * nothing
+  * Does:
+    * calls `clearTimeout` for every element in `UI.animationTimeouts`
+    * reassigns `UI.animationTimeouts` with `[]`(empty list)
 
 #### Sound
 Before using this functions you need to do create `new Sound(engine)`.
