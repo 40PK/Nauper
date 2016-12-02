@@ -92,6 +92,13 @@ Going deeper.
   * Returns:
     * object, `obj.width` - window width, `obj.height` - window height, `obj.coff` - `obj.width / obj.height`
 
+`convertHexIntoRGBA(hexstring, opacity)`:
+  * Gets:
+    * hexstring - string with hex color map like '#edaf25' or '#bde'
+    * opacity - opacity of RGBA, min - 0, max - 1
+  * Returns:
+    * string like 'rgba(123, 234, 57, 0.7)'
+
 #### UI
 Before using this functions you need to do create `new UI(engine)`.
 In engine default UI is `this.ui`.
@@ -190,6 +197,18 @@ In engine default UI is `this.ui`.
     * nothing
   * Does:
     * draws menu icon on the canvas
+
+`drawTextLine(text, x, y, i)`:
+  * Gets:
+    * text - string with text we want to draw on canvas
+    * x - x offset for text
+    * y - y offset for text
+    * i - index of letter we want to draw
+  * Returns:
+    * nothing
+  * Does:
+    * draws one letter on the canvas
+    * setups timeout to draw all letters in line
 
 #### Sound
 Before using this functions you need to do create `new Sound(engine)`.
