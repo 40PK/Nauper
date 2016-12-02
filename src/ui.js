@@ -10,13 +10,15 @@ Nauper.UI = function UI(engine) {
   this.lastActive = undefined;
   this.menuOpened = false;
   this.menuIconStyle = {};
+  this.animationTimeouts = [];
 
   this.drawTextLine = function drawTextLine(text, x, y, i) {
     let width = 0;
     if (i < text.length) {
       width = this.render.measureText(text.substring(0, i)).width;
       this.render.fillText(text[i], x + width, y);
-      setTimeout.apply(this, [drawTextLine, this.engine.textDelay, text, x, y, i + 1]);
+      let tm = setTimeout.apply(this, [drawTextLine, this.engine.textDelay, text, x, y, i + 1]);
+      this.animationTimeouts.push(tm);
     }
   }.bind(this);
 };
@@ -25,6 +27,14 @@ Nauper.UI.prototype.setBackground = function setBackground(background) {
   if (background) {
     this.canvas.style.backgroundImage = `url(./data/images/backgrounds/${background})`;
   }
+};
+
+Nauper.UI.prototype.clearTimeouts = function clearTimeouts() {
+  this.animationTimeouts.forEach((i) => {
+    try {
+      clearTimeouts(i);
+    }
+  });
 };
 
 Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
