@@ -442,6 +442,9 @@ no methods yet
     * use with config.align === 'wrapped'
     * min, max and example is the same as in config.x
     * default is 0.80
+  * config.animation:
+    * boolean, if true text drawing will be animated
+    * default is false
 
 #### UI.setMenuStyle
   * config.mainbox:
