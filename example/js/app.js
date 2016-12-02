@@ -1,6 +1,7 @@
 // creating app
 var engine = new Nauper.Engine({
-  font: "21px Arial"
+  font: "21px Arial",
+  textInterval: 100
 });
 
 var lena = new Nauper.Character({
@@ -26,7 +27,8 @@ var frameOne = new Nauper.Frame(engine, {
 	}, 
 	"background": "1.jpg",
     "audio": "your_bright_side.mp3",
-    "once": true
+    "once": true,
+    "textAnimation": true
 });
 var frameTwo = new Nauper.Frame(engine, {
     "characters": [lena.smile, yulya.smile],

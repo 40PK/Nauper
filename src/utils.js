@@ -81,3 +81,18 @@ let getWindowSize = () => { //eslint-disable-line
   result.coff = result.width / result.height;
   return result;
 };
+
+let convertHexIntoRGBA = (hexstring, opacity) => { //eslint-disable-line
+  let hex = hexstring.replace('#', '');
+  let colors = {};
+  if (hex.length === 3) {
+    colors.r = parseInt(hex.substring(0, 1), 16);
+    colors.g = parseInt(hex.substring(1, 2), 16);
+    colors.b = parseInt(hex.substring(2, 3), 16);
+  } else if (hex.length === 6) {
+    colors.r = parseInt(hex.substring(0, 2), 16);
+    colors.g = parseInt(hex.substring(2, 4), 16);
+    colors.b = parseInt(hex.substring(4, 6), 16);
+  }
+  return `rgba(${colors.r}, ${colors.g}, ${colors.b}, ${opacity})`;
+};

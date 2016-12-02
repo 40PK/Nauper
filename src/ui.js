@@ -10,6 +10,15 @@ Nauper.UI = function UI(engine) {
   this.lastActive = undefined;
   this.menuOpened = false;
   this.menuIconStyle = {};
+
+  this.drawTextLine = function drawTextLine(text, x, y, i) {
+    let width = 0;
+    if (i < text.length) {
+      width = this.render.measureText(text.substring(0, i)).width;
+      this.render.fillText(text[i], x + width, y);
+      setTimeout.apply(this, [drawTextLine, this.engine.textDelay, text, x, y, i + 1]);
+    }
+  }.bind(this);
 };
 
 Nauper.UI.prototype.setBackground = function setBackground(background) {
@@ -74,6 +83,7 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
     text: '',
     align: 'wrapped',
     color: '#000',
+    animation: false,
     x: 0.10,
     y: 0.85,
     width: 0.80
@@ -82,11 +92,16 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
   const x = this.size.width * conf.x;
   const y = this.size.height * conf.y;
   const maxwidth = this.size.width * conf.width;
+
   this.render.fillStyle = conf.color;
   if (conf.align === 'wrapped') {
     let texts = wrapText(this.render, conf.text, this.render.font, maxwidth);
     texts.result.forEach((i, j) => {
-      this.render.fillText(i, x, y + (texts.height * j));
+      if (conf.animation) {
+        this.drawTextLine(i, x, y + (texts.height * j), 0);
+      } else {
+        this.render.fillText(i, x, y + (texts.height * j));
+      }
     });
   } else if (conf.align === 'center') {
     let offset = getTextOffset(this.render, { width: this.canvas.width }, conf.text);

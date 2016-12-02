@@ -13,6 +13,7 @@ Nauper.Engine = function Engine(configs, elements = []) {
   this.render.font = this.font;
   this.firstPassed = false;
   this.element = null;
+  this.textDelay = configs.textInterval;
 
   this.elements = elements;
   this.globalIndex = 0;

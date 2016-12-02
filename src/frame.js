@@ -11,6 +11,7 @@ Nauper.Frame = function Frame(engine, args) {
   this.audio = args.audio;
   this.once = args.once;
   this.type = 'frame';
+  this.textAnimation = args.textAnimation;
 
   this.draw = function draw() {
     this.render.clearRect(0, 0, this.size.width, this.size.height);
@@ -30,13 +31,15 @@ Nauper.Frame.prototype.setText = function setText() {
           text: this.text.name,
           color: this.text.ncl,
           x: 0.10,
-          y: 0.83
+          y: 0.83,
+          animation: this.textAnimation
         });
         this.engine.ui.drawText({
           text: this.text.text,
           color: this.text.color,
           x: 0.10,
-          y: 0.86
+          y: 0.86,
+          animation: this.textAnimation
         });
       }
     });

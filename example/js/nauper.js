@@ -3,6 +3,27 @@
 var Nauper = { // eslint-disable-line
   version: '0.1'
 };
+"use strict";
+
+/* eslint-disable */
+var __nativeST__ = window.setTimeout;
+var __nativeSI__ = window.setInterval;
+/* eslint-enable */
+window.setTimeout = function __timeout(vCallback, nDelay) {
+  var context = this;
+  var aArgs = Array.prototype.slice.call(arguments, 2);
+  return __nativeST__(vCallback instanceof Function ? function __cb() {
+    vCallback.apply(context, aArgs);
+  } : vCallback, nDelay);
+};
+
+window.setInterval = function __interval(vCallback, nDelay) {
+  var context = this;
+  var aArgs = Array.prototype.slice.call(arguments, 2);
+  return __nativeSI__(vCallback instanceof Function ? function __cb() {
+    vCallback.apply(context, aArgs);
+  } : vCallback, nDelay);
+};
 'use strict';
 
 var getTextHeight = function getTextHeight(style) {
@@ -94,6 +115,22 @@ var getWindowSize = function getWindowSize() {
   result.coff = result.width / result.height;
   return result;
 };
+
+var convertHexIntoRGBA = function convertHexIntoRGBA(hexstring, opacity) {
+  //eslint-disable-line
+  var hex = hexstring.replace('#', '');
+  var colors = {};
+  if (hex.length === 3) {
+    colors.r = parseInt(hex.substring(0, 1), 16);
+    colors.g = parseInt(hex.substring(1, 2), 16);
+    colors.b = parseInt(hex.substring(2, 3), 16);
+  } else if (hex.length === 6) {
+    colors.r = parseInt(hex.substring(0, 2), 16);
+    colors.g = parseInt(hex.substring(2, 4), 16);
+    colors.b = parseInt(hex.substring(4, 6), 16);
+  }
+  return 'rgba(' + colors.r + ', ' + colors.g + ', ' + colors.b + ', ' + opacity + ')';
+};
 'use strict';
 
 /* global Nauper, putDefaults, getTextOffset, wrapText, getTextHeight */
@@ -108,6 +145,15 @@ Nauper.UI = function UI(engine) {
   this.lastActive = undefined;
   this.menuOpened = false;
   this.menuIconStyle = {};
+
+  this.drawTextLine = function drawTextLine(text, x, y, i) {
+    var width = 0;
+    if (i < text.length) {
+      width = this.render.measureText(text.substring(0, i)).width;
+      this.render.fillText(text[i], x + width, y);
+      setTimeout.apply(this, [drawTextLine, this.engine.textDelay, text, x, y, i + 1]);
+    }
+  }.bind(this);
 };
 
 Nauper.UI.prototype.setBackground = function setBackground(background) {
@@ -178,6 +224,7 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
     text: '',
     align: 'wrapped',
     color: '#000',
+    animation: false,
     x: 0.10,
     y: 0.85,
     width: 0.80
@@ -186,12 +233,17 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
   var x = this.size.width * conf.x;
   var y = this.size.height * conf.y;
   var maxwidth = this.size.width * conf.width;
+
   this.render.fillStyle = conf.color;
   if (conf.align === 'wrapped') {
     (function () {
       var texts = wrapText(_this2.render, conf.text, _this2.render.font, maxwidth);
       texts.result.forEach(function (i, j) {
-        _this2.render.fillText(i, x, y + texts.height * j);
+        if (conf.animation) {
+          _this2.drawTextLine(i, x, y + texts.height * j, 0);
+        } else {
+          _this2.render.fillText(i, x, y + texts.height * j);
+        }
       });
     })();
   } else if (conf.align === 'center') {
@@ -446,6 +498,7 @@ Nauper.Engine = function Engine(configs) {
   this.render.font = this.font;
   this.firstPassed = false;
   this.element = null;
+  this.textDelay = configs.textInterval;
 
   this.elements = elements;
   this.globalIndex = 0;
@@ -559,6 +612,7 @@ Nauper.Frame = function Frame(engine, args) {
   this.audio = args.audio;
   this.once = args.once;
   this.type = 'frame';
+  this.textAnimation = args.textAnimation;
 
   this.draw = function draw() {
     this.render.clearRect(0, 0, this.size.width, this.size.height);
@@ -580,13 +634,15 @@ Nauper.Frame.prototype.setText = function setText() {
           text: _this.text.name,
           color: _this.text.ncl,
           x: 0.10,
-          y: 0.83
+          y: 0.83,
+          animation: _this.textAnimation
         });
         _this.engine.ui.drawText({
           text: _this.text.text,
           color: _this.text.color,
           x: 0.10,
-          y: 0.86
+          y: 0.86,
+          animation: _this.textAnimation
         });
       }
     });
