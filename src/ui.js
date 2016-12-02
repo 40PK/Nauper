@@ -35,6 +35,7 @@ Nauper.UI.prototype.clearTimeouts = function clearTimeouts() {
       clearTimeouts(i);
     }
   });
+  this.animationTimeouts = [];
 };
 
 Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
