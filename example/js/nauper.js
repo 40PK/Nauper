@@ -258,7 +258,11 @@ Nauper.UI.prototype.drawText = function drawText(configs) {
     })();
   } else if (conf.align === 'center') {
     var offset = getTextOffset(this.render, { width: this.canvas.width }, conf.text);
-    this.render.fillText(conf.text, offset, y);
+    if (conf.animation) {
+      this.drawTextLine(conf.text, offset, y, 0);
+    } else {
+      this.render.fillText(conf.text, offset, y);
+    }
   }
 };
 
