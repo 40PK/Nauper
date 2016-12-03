@@ -12,6 +12,7 @@ Nauper.Frame = function Frame(engine, args) {
   this.once = args.once;
   this.type = 'frame';
   this.textAnimation = args.textAnimation;
+  this.loaded = 0;
 
   this.draw = function draw() {
     this.render.clearRect(0, 0, this.size.width, this.size.height);
@@ -46,27 +47,31 @@ Nauper.Frame.prototype.setText = function setText() {
   }
 };
 
+Nauper.Frame.prototype.createImageDrawCallback = function createImageDrawCallback(img, index) {
+  let result = () => {
+    const ratio = (this.size.height * 1.20) / img.height;
+    const offsetY = this.size.height * 0.10;
+    const offsetX = this.size.width * (0.225 * index);
+    this.render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
+    this.loaded -= 1;
+    if (this.loaded === 0) {
+      this.setText();
+    }
+  };
+  return result;
+};
+
 Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
   if (this.displayOrder !== undefined && this.displayOrder.length !== 0) {
-    let loaded = this.displayOrder.length;
+    this.loaded = this.displayOrder.length;
     for (let index = 0; index < this.displayOrder.length; index += 1) {
       let i = this.displayOrder[index];
       if (i !== false && i !== undefined) {
         let img = new Image();
-        // Trying to fix it as fast as I can
-        img.onload = () => { //eslint-disable-line
-          const ratio = (this.size.height * 1.20) / img.height;
-          const offsetY = this.size.height * 0.10;
-          const offsetX = this.size.width * (0.225 * index);
-          this.render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
-          loaded -= 1;
-          if (loaded === 0) {
-            this.setText();
-          }
-        };
+        img.onload = this.createImageDrawCallback(img, index);
         img.src = this.characters[i];
       } else {
-        loaded -= 1;
+        this.loaded -= 1;
       }
     }
   } else {

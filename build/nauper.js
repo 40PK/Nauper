@@ -630,6 +630,7 @@ Nauper.Frame = function Frame(engine, args) {
   this.once = args.once;
   this.type = 'frame';
   this.textAnimation = args.textAnimation;
+  this.loaded = 0;
 
   this.draw = function draw() {
     this.render.clearRect(0, 0, this.size.width, this.size.height);
@@ -666,41 +667,35 @@ Nauper.Frame.prototype.setText = function setText() {
   }
 };
 
-Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
+Nauper.Frame.prototype.createImageDrawCallback = function createImageDrawCallback(img, index) {
   var _this2 = this;
 
+  var result = function result() {
+    var ratio = _this2.size.height * 1.20 / img.height;
+    var offsetY = _this2.size.height * 0.10;
+    var offsetX = _this2.size.width * (0.225 * index);
+    _this2.render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
+    _this2.loaded -= 1;
+    if (_this2.loaded === 0) {
+      _this2.setText();
+    }
+  };
+  return result;
+};
+
+Nauper.Frame.prototype.displayCharacters = function displayCharacters() {
   if (this.displayOrder !== undefined && this.displayOrder.length !== 0) {
-    (function () {
-      var loaded = _this2.displayOrder.length;
-
-      var _loop = function _loop(index) {
-        var i = _this2.displayOrder[index];
-        if (i !== false && i !== undefined) {
-          (function () {
-            var img = new Image();
-            // Trying to fix it as fast as I can
-            img.onload = function () {
-              //eslint-disable-line
-              var ratio = _this2.size.height * 1.20 / img.height;
-              var offsetY = _this2.size.height * 0.10;
-              var offsetX = _this2.size.width * (0.225 * index);
-              _this2.render.drawImage(img, offsetX, offsetY, img.width * ratio, img.height * ratio);
-              loaded -= 1;
-              if (loaded === 0) {
-                _this2.setText();
-              }
-            };
-            img.src = _this2.characters[i];
-          })();
-        } else {
-          loaded -= 1;
-        }
-      };
-
-      for (var index = 0; index < _this2.displayOrder.length; index += 1) {
-        _loop(index);
+    this.loaded = this.displayOrder.length;
+    for (var index = 0; index < this.displayOrder.length; index += 1) {
+      var i = this.displayOrder[index];
+      if (i !== false && i !== undefined) {
+        var img = new Image();
+        img.onload = this.createImageDrawCallback(img, index);
+        img.src = this.characters[i];
+      } else {
+        this.loaded -= 1;
       }
-    })();
+    }
   } else {
     this.setText();
   }
