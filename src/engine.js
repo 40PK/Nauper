@@ -71,6 +71,7 @@ Nauper.Engine.prototype.choice = function choice(event) {
           this.globalIndex = i.address;
           this.localIndex = -1;
         }
+        this.element.active = undefined;
         this.nextElement();
       }
     }
