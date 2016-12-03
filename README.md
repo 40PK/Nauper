@@ -34,19 +34,6 @@ That's this:
   * Handling clicks on canvas
   * Handling choices of **Question**
 
-So, if you opened /src directory, you saw two more files.
-
-That's what they are:
-* **utils.js**, functions:
-  * wrapText - function, needed by **UI**
-  * getTextOffset - function, needed by **UI** too
-  * putDefaults - function that expands given object with default object
-  * getTextHeight - function that counts height of text, needed by UI
-  * copyObject - function that copies data from one object to another
-  * getWindowSize - function that returns size of user's browser's window
-* **nauper.js**, functionality:
-  * In that file we can only see **Nauper** object definition
-
 ## Reference
 Going deeper.
 
@@ -309,6 +296,7 @@ Before using this functions you need to create `new Engine(configs, elements)`.
     * switches view to the next element
     * setups event listeners
     * draws element
+    * calls `UI.clearTimeouts`
 
 `start()`:
   * Gets:
@@ -340,6 +328,7 @@ Before using this functions you need to do create `new Frame(engine)`.
     * clears `<canvas>` element
     * calls `UI.setBackground`
     * calls `Frame.displayCharacters`
+    * calls `UI.clearTimeouts`
 
 `setText()`:
   * Gets:
@@ -371,6 +360,7 @@ Before using this functions you need to do create `new Frame(engine)`.
     * clears `<canvas>` if needed
     * calls `UI.setBackground`
     * draws Question's items using `UI.drawTextBox` and `UI.drawText`
+    * calls `UI.clearTimeouts`
 
 #### Character
 
