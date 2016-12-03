@@ -22,6 +22,7 @@ Nauper.Engine = function Engine(configs, elements = []) {
 
   this.elementProcessor = function elementProcessor(event) {
     let task = this.ui.process(event);
+    this.ui.clearTimeouts();
     if (task === 'redraw') {
       this.element.draw();
     } else if (task === 'next') {

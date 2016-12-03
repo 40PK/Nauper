@@ -145,13 +145,15 @@ Nauper.UI = function UI(engine) {
   this.lastActive = undefined;
   this.menuOpened = false;
   this.menuIconStyle = {};
+  this.animationTimeouts = [];
 
   this.drawTextLine = function drawTextLine(text, x, y, i) {
     var width = 0;
     if (i < text.length) {
       width = this.render.measureText(text.substring(0, i)).width;
       this.render.fillText(text[i], x + width, y);
-      setTimeout.apply(this, [drawTextLine, this.engine.textDelay, text, x, y, i + 1]);
+      var tm = setTimeout.apply(this, [drawTextLine, this.engine.textDelay, text, x, y, i + 1]);
+      this.animationTimeouts.push(tm);
     }
   }.bind(this);
 };
@@ -160,6 +162,14 @@ Nauper.UI.prototype.setBackground = function setBackground(background) {
   if (background) {
     this.canvas.style.backgroundImage = 'url(./data/images/backgrounds/' + background + ')';
   }
+};
+
+Nauper.UI.prototype.clearTimeouts = function clearTimeouts() {
+  for (var index = 0; index < this.animationTimeouts.length; index += 1) {
+    var i = this.animationTimeouts[index];
+    clearTimeout(i);
+  }
+  this.animationTimeouts = [];
 };
 
 Nauper.UI.prototype.drawTextBox = function drawTextBox(configs) {
@@ -353,6 +363,7 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
     width: 0.75
   };
   menu.y = (1 - menu.height) / 2;
+  this.clearTimeouts();
   this.render.fillStyle = 'rgba(0, 0, 0, 0.7)';
   this.render.fillRect(0, 0, this.engine.size.width, this.engine.size.height);
   this.drawTextBox({
@@ -507,6 +518,7 @@ Nauper.Engine = function Engine(configs) {
 
   this.elementProcessor = function elementProcessor(event) {
     var task = this.ui.process(event);
+    this.ui.clearTimeouts();
     if (task === 'redraw') {
       this.element.draw();
     } else if (task === 'next') {

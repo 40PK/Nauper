@@ -30,11 +30,10 @@ Nauper.UI.prototype.setBackground = function setBackground(background) {
 };
 
 Nauper.UI.prototype.clearTimeouts = function clearTimeouts() {
-  this.animationTimeouts.forEach((i) => {
-    try {
-      clearTimeouts(i);
-    }
-  });
+  for (let index = 0; index < this.animationTimeouts.length; index += 1) {
+    let i = this.animationTimeouts[index];
+    clearTimeout(i);
+  }
   this.animationTimeouts = [];
 };
 
@@ -219,6 +218,7 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
     width: 0.75
   };
   menu.y = (1 - menu.height) / 2;
+  this.clearTimeouts();
   this.render.fillStyle = 'rgba(0, 0, 0, 0.7)';
   this.render.fillRect(0, 0, this.engine.size.width, this.engine.size.height);
   this.drawTextBox({
