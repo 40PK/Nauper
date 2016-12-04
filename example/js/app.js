@@ -102,6 +102,20 @@ engine.ui.setMenuIconStyle({
     width: 0.05,
     height: 0.05
 });
+
+engine.ui.addMenuScreen([
+    {
+        text: 'Volume settings',
+        noclose: true,
+        callback: () => { engine.ui.currentMS = 1; engine.ui.drawMenu(); }
+    },
+    {
+        text: 'Frame redirects',
+        noclose: true,
+        callback: () => { engine.ui.currentMS = 2; engine.ui.drawMenu(); }
+    }
+]);
+
 engine.ui.addMenuScreen([
     {
         text: 'Decrease volume',
@@ -114,6 +128,23 @@ engine.ui.addMenuScreen([
     {
         text: 'Mute',
         callback: () => { engine.sound.setVolume(0); }
+    },
+    {
+        text: 'To main menu',
+        noclose: true,
+        callback: () => { engine.ui.currentMS = 0; engine.ui.drawMenu(); }
+    }
+]);
+
+engine.ui.addMenuScreen([
+    {
+        text: 'To start',
+        callback: () => { engine.globalIndex = 0; engine.localIndex = -1; engine.nextElement(); }
+    },
+    {
+        text: 'To main menu',
+        noclose: true,
+        callback: () => { engine.ui.currentMS = 0; engine.ui.drawMenu(); }
     }
 ]);
 

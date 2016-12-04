@@ -286,17 +286,25 @@ Nauper.UI.prototype.process = function process(event) {
     result = 'draw';
     this.engine.firstPassed = true;
   } else if (this.menuOpened) {
+    var menuKeepDrawed = false;
     for (var index = 0; index < this.menu[this.currentMS].length; index += 1) {
       var i = this.menu[this.currentMS][index];
       if (event.pageX >= i.x && event.pageX <= i.x + i.width) {
         if (event.pageY >= i.y && event.pageY <= i.y + i.height) {
           i.callback();
+          if (i.noclose) {
+            menuKeepDrawed = true;
+          }
           break;
         }
       }
     }
-    this.menuOpened = false;
-    result = 'draw';
+    if (menuKeepDrawed) {
+      result = null;
+    } else {
+      this.menuOpened = false;
+      result = 'draw';
+    }
   } else if (this.checkMenuIconClick(event)) {
     this.drawMenu();
     result = null;
@@ -368,6 +376,7 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
   };
   menu.y = (1 - menu.height) / 2;
   this.clearTimeouts();
+  this.render.clearRect(0, 0, this.engine.size.width, this.engine.size.height);
   this.render.fillStyle = 'rgba(0, 0, 0, 0.7)';
   this.render.fillRect(0, 0, this.engine.size.width, this.engine.size.height);
   this.drawTextBox({
@@ -464,7 +473,7 @@ Nauper.Sound.prototype.init = function init() {
 };
 
 Nauper.Sound.prototype.setVolume = function setVolume(volume) {
-  if (typeof volume === 'number' && volume <= 1) {
+  if (typeof volume === 'number' && volume <= 1 && volume >= 0) {
     this.engine.audioVolume = volume;
   }
   this.volume = this.engine.audioVolume;

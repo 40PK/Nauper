@@ -31,7 +31,7 @@ Nauper.Sound.prototype.init = function init() {
 };
 
 Nauper.Sound.prototype.setVolume = function setVolume(volume) {
-  if (typeof volume === 'number' && volume <= 1) {
+  if (typeof volume === 'number' && volume <= 1 && volume >= 0) {
     this.engine.audioVolume = volume;
   }
   this.volume = this.engine.audioVolume;

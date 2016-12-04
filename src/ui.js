@@ -143,17 +143,25 @@ Nauper.UI.prototype.process = function process(event) {
     result = 'draw';
     this.engine.firstPassed = true;
   } else if (this.menuOpened) {
+    let menuKeepDrawed = false;
     for (let index = 0; index < this.menu[this.currentMS].length; index += 1) {
       let i = this.menu[this.currentMS][index];
       if (event.pageX >= i.x && event.pageX <= (i.x + i.width)) {
         if (event.pageY >= i.y && event.pageY <= (i.y + i.height)) {
           i.callback();
+          if (i.noclose) {
+            menuKeepDrawed = true;
+          }
           break;
         }
       }
     }
-    this.menuOpened = false;
-    result = 'draw';
+    if (menuKeepDrawed) {
+      result = null;
+    } else {
+      this.menuOpened = false;
+      result = 'draw';
+    }
   } else if (this.checkMenuIconClick(event)) {
     this.drawMenu();
     result = null;
@@ -223,6 +231,7 @@ Nauper.UI.prototype.drawMenu = function drawMenu() {
   };
   menu.y = (1 - menu.height) / 2;
   this.clearTimeouts();
+  this.render.clearRect(0, 0, this.engine.size.width, this.engine.size.height);
   this.render.fillStyle = 'rgba(0, 0, 0, 0.7)';
   this.render.fillRect(0, 0, this.engine.size.width, this.engine.size.height);
   this.drawTextBox({
