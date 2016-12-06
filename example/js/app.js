@@ -27,7 +27,7 @@ var frameOne = new Nauper.Frame(engine, {
 	}, 
 	"background": "1.jpg",
     "audio": "your_bright_side.mp3",
-    "once": true,
+    "once": false,
     "textAnimation": true
 });
 var frameTwo = new Nauper.Frame(engine, {
@@ -35,7 +35,7 @@ var frameTwo = new Nauper.Frame(engine, {
     "displayOrder": [false, false, 1, 0],
     "textbox": {
         "background": "#fff",
-        "type": "default",
+        "type": "rounded",
         "ncl": "#000",
         "name": "Julia",
         "text": "black",
@@ -45,7 +45,7 @@ var frameTwo = new Nauper.Frame(engine, {
 var frameThree = new Nauper.Frame(engine, {
     "textbox": {
         "background": "#fff",
-        "type": "rounded",
+        "type": "default",
         "ncl": "#000",
         "name": "arseniypetrikor",
         "color": "#000",
@@ -113,6 +113,10 @@ engine.ui.addMenuScreen([
         text: 'Frame redirects',
         noclose: true,
         callback: () => { engine.ui.currentMS = 2; engine.ui.drawMenu(); }
+    },
+    {
+        text: 'Close this menu',
+        callback: () => {}
     }
 ]);
 

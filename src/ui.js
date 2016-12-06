@@ -160,6 +160,7 @@ Nauper.UI.prototype.process = function process(event) {
       result = null;
     } else {
       this.menuOpened = false;
+      this.currentMS = 0;
       result = 'draw';
     }
   } else if (this.checkMenuIconClick(event)) {
