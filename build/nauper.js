@@ -131,6 +131,16 @@ var convertHexIntoRGBA = function convertHexIntoRGBA(hexstring, opacity) {
   }
   return 'rgba(' + colors.r + ', ' + colors.g + ', ' + colors.b + ', ' + opacity + ')';
 };
+
+var makeRequest = function makeRequest(url, callback) {
+  //eslint-disable-line
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.addEventListener('readystatechange', function () {
+    callback(xhr);
+  });
+  xhr.send();
+};
 'use strict';
 
 /* global Nauper, putDefaults, getTextOffset, wrapText, getTextHeight */

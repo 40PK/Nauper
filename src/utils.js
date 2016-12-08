@@ -96,3 +96,12 @@ let convertHexIntoRGBA = (hexstring, opacity) => { //eslint-disable-line
   }
   return `rgba(${colors.r}, ${colors.g}, ${colors.b}, ${opacity})`;
 };
+
+let makeRequest = (url, callback) => { //eslint-disable-line
+  let xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.addEventListener('readystatechange', () => {
+    callback(xhr);
+  });
+  xhr.send();
+};
