@@ -141,6 +141,14 @@ var makeRequest = function makeRequest(url, callback) {
   });
   xhr.send();
 };
+
+var makeRequestSync = function makeRequestSync(url, callback) {
+  //eslint-disable-line
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, false);
+  xhr.send();
+  callback(xhr);
+};
 'use strict';
 
 /* global Nauper, putDefaults, getTextOffset, wrapText, getTextHeight */
