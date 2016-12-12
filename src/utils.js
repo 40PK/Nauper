@@ -58,7 +58,7 @@ let putDefaults = (defaults, given) => { //eslint-disable-line
   let keys = Object.getOwnPropertyNames(defaults);
   let result = {};
   keys.forEach((key) => {
-    if (given[key] === undefined) {
+    if (given === undefined || given[key] === undefined) {
       result[key] = defaults[key];
     } else if (given[key] !== undefined) {
       result[key] = given[key];

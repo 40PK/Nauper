@@ -88,10 +88,12 @@ var questionOne = new Nauper.Question(engine, {
     }
 });
 
+var redirect = new Nauper.Redirect(engine);
+
 engine.addScene([frameOne, questionOne]);
-engine.addScene([frameTwo]);
-engine.addScene([frameThree]);
-engine.addScene([frameFour]);
+engine.addScene([frameTwo, redirect]);
+engine.addScene([frameThree, redirect]);
+engine.addScene([frameFour, redirect]);
 
 engine.ui.setMenuStyle({});
 engine.ui.setMenuIconStyle({

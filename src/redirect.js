@@ -6,10 +6,10 @@ Nauper.Redirect = function Redirect(engine, configs) {
   };
   this.engine = engine;
   this.conf = putDefaults(defaults, configs);
-};
 
-Nauper.Redirect.prototype.draw = function draw() {
-  this.engine.globalIndex = this.conf.globalIndex;
-  this.engine.localIndex = this.conf.localIndex - 1;
-  this.engine.nextElement();
+  this.draw = function draw() {
+    this.engine.globalIndex = this.conf.globalIndex;
+    this.engine.localIndex = this.conf.localIndex - 1;
+    this.engine.nextElement();
+  }.bind(this);
 };

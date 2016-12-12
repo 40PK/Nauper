@@ -90,7 +90,7 @@ var putDefaults = function putDefaults(defaults, given) {
   var keys = Object.getOwnPropertyNames(defaults);
   var result = {};
   keys.forEach(function (key) {
-    if (given[key] === undefined) {
+    if (given === undefined || given[key] === undefined) {
       result[key] = defaults[key];
     } else if (given[key] !== undefined) {
       result[key] = given[key];
@@ -814,12 +814,12 @@ Nauper.Redirect = function Redirect(engine, configs) {
   };
   this.engine = engine;
   this.conf = putDefaults(defaults, configs);
-};
 
-Nauper.Redirect.prototype.draw = function draw() {
-  this.engine.globalIndex = this.conf.globalIndex;
-  this.engine.localIndex = this.conf.localIndex - 1;
-  this.engine.nextElement();
+  this.draw = function draw() {
+    this.engine.globalIndex = this.conf.globalIndex;
+    this.engine.localIndex = this.conf.localIndex - 1;
+    this.engine.nextElement();
+  }.bind(this);
 };
 "use strict";
 
