@@ -46,7 +46,9 @@ Nauper.Engine = function Engine(configs, elements = []) {
   this.canvas.addEventListener('click', this.elementProcessor, false);
 
   window.addEventListener('resize', this.resize, false);
-  window.addEventListener('mousemove', this.ui.move, false);
+  window.addEventListener('mousemove', (event) => {
+    this.ui.move(event);
+  });
 };
 
 Nauper.Engine.prototype.click = function click(event) {

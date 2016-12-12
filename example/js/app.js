@@ -26,7 +26,7 @@ var frameOne = new Nauper.Frame(engine, {
 		"text": "It's a start frame"
 	}, 
 	"background": "1.jpg",
-    "audio": "your_bright_side.mp3",
+    // "audio": "your_bright_side.mp3",
     "once": false,
     "textAnimation": true
 });

@@ -186,20 +186,20 @@ Nauper.UI.prototype.move = function move(event) {
       };
       if (x >= sizes.x && x <= (sizes.x + sizes.width)) {
         if (y >= sizes.y && y <= (sizes.y + sizes.height)) {
-          this.engine.element.active = index;
+          if (index !== this.engine.element.act) {
+            this.engine.element.drawQuestionBox(this.engine.element.act);
+            this.engine.element.act = index;
+            this.engine.element.drawQuestionBox(index, this.engine.element.activebox);
+          }
           flag = true;
           break;
         }
       }
     }
     if (!flag) {
-      this.engine.element.active = undefined;
+      this.engine.element.drawQuestionBox(this.engine.element.act);
     }
-    if (this.engine.element.active !== this.lastActive) {
-      this.lastActive = this.engine.element.active;
-      this.engine.element.draw(false);
-      this.engine.ui.drawMenuIcon();
-    }
+    this.drawMenuIcon();
   }
 };
 
@@ -292,5 +292,7 @@ Nauper.UI.prototype.setMenuIconStyle = function setMenuIconStyle(mis) {
 };
 
 Nauper.UI.prototype.drawMenuIcon = function drawMenuIcon() {
-  this.drawTextBox(this.menuIconStyle);
+  if (!this.menuOpened) {
+    this.drawTextBox(this.menuIconStyle);
+  }
 };

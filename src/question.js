@@ -14,49 +14,53 @@ Nauper.Question = function Question(engine, args) {
   this.map = args.map;
   this.audio = args.audio;
   this.once = args.once;
-  this.active = undefined;
+  this.act = -1;
+  this.box = this.inactivebox;
+  this.coordmap = {
+    x: 0.025,
+    height: 0.20,
+    width: 0.95,
+    radius: 0.05
+  };
 
-  this.draw = function draw(clear = true) {
+  this.draw = function draw() {
     if (this.map.length !== 0 && this.map.length <= 4) {
-      let x = 0.025;
-      let height = 0.20;
-      let width = 0.95;
-      let radius = 0.05;
-      if (clear) {
-        this.render.clearRect(0, 0, this.size.width, this.size.height);
-      }
+      this.render.clearRect(0, 0, this.engine.size.width, this.engine.size.height);
       this.engine.ui.setBackground(this.background);
       for (let index = 0; index < this.map.length; index += 1) {
-        if (this.active === undefined || this.active === index) {
-          let i = this.map[index];
-          let box;
-          if (this.active === index) {
-            box = this.activebox;
-          } else {
-            box = this.inactivebox;
-          }
-          this.engine.ui.drawTextBox({
-            type: this.boxtype,
-            color: box.background,
-            link: this.boxlink,
-            y: (index * 0.25) + 0.025,
-            x,
-            height,
-            width,
-            radius,
-            callback: () => {
-              this.engine.ui.drawText({
-                text: i.text,
-                align: 'center',
-                color: box.text,
-                y: (index * 0.25) + 0.125
-              });
-            }
-          });
-        }
+        this.drawQuestionBox(index, this.inactivebox);
       }
     } else {
       this.engine.nextElement();
+    }
+  }.bind(this);
+
+  this.drawQuestionBox = function drawQuestionBox(boxIndex, drawingBox) {
+    let box;
+    if (drawingBox === undefined) {
+      box = this.inactivebox;
+    } else {
+      box = drawingBox;
+    }
+    if (boxIndex !== -1) {
+      this.engine.ui.drawTextBox({
+        type: this.boxtype,
+        color: box.background,
+        link: this.boxlink,
+        y: (boxIndex * 0.25) + 0.025,
+        x: this.coordmap.x,
+        height: this.coordmap.height,
+        width: this.coordmap.width,
+        radius: this.coordmap.radius,
+        callback: () => {
+          this.engine.ui.drawText({
+            text: this.map[boxIndex].text,
+            align: 'center',
+            color: box.text,
+            y: (boxIndex * 0.25) + 0.125
+          });
+        }
+      });
     }
   }.bind(this);
 };

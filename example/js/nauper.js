@@ -347,20 +347,20 @@ Nauper.UI.prototype.move = function move(event) {
       };
       if (x >= sizes.x && x <= sizes.x + sizes.width) {
         if (y >= sizes.y && y <= sizes.y + sizes.height) {
-          this.engine.element.active = index;
+          if (index !== this.engine.element.act) {
+            this.engine.element.drawQuestionBox(this.engine.element.act);
+            this.engine.element.act = index;
+            this.engine.element.drawQuestionBox(index, this.engine.element.activebox);
+          }
           flag = true;
           break;
         }
       }
     }
     if (!flag) {
-      this.engine.element.active = undefined;
+      this.engine.element.drawQuestionBox(this.engine.element.act);
     }
-    if (this.engine.element.active !== this.lastActive) {
-      this.lastActive = this.engine.element.active;
-      this.engine.element.draw(false);
-      this.engine.ui.drawMenuIcon();
-    }
+    this.drawMenuIcon();
   }
 };
 
@@ -455,7 +455,9 @@ Nauper.UI.prototype.setMenuIconStyle = function setMenuIconStyle(mis) {
 };
 
 Nauper.UI.prototype.drawMenuIcon = function drawMenuIcon() {
-  this.drawTextBox(this.menuIconStyle);
+  if (!this.menuOpened) {
+    this.drawTextBox(this.menuIconStyle);
+  }
 };
 'use strict';
 
@@ -526,6 +528,8 @@ Nauper.Sound.prototype.process = function process(audio, once) {
 
 /* global Nauper, getWindowSize */
 Nauper.Engine = function Engine(configs) {
+  var _this = this;
+
   var elements = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
   this.font = configs.font;
@@ -574,7 +578,9 @@ Nauper.Engine = function Engine(configs) {
   this.canvas.addEventListener('click', this.elementProcessor, false);
 
   window.addEventListener('resize', this.resize, false);
-  window.addEventListener('mousemove', this.ui.move, false);
+  window.addEventListener('mousemove', function (event) {
+    _this.ui.move(event);
+  });
 };
 
 Nauper.Engine.prototype.click = function click(event) {
@@ -584,25 +590,25 @@ Nauper.Engine.prototype.click = function click(event) {
 };
 
 Nauper.Engine.prototype.choice = function choice(event) {
-  var _this = this;
+  var _this2 = this;
 
   var x = event.pageX;
   var y = event.pageY;
   this.element.map.forEach(function (i, index) {
     var sizes = {
-      x: 0.025 * _this.size.width,
-      y: (index * 0.25 + 0.025) * _this.size.height,
-      height: 0.20 * _this.size.height,
-      width: 0.95 * _this.size.width
+      x: 0.025 * _this2.size.width,
+      y: (index * 0.25 + 0.025) * _this2.size.height,
+      height: 0.20 * _this2.size.height,
+      width: 0.95 * _this2.size.width
     };
     if (x >= sizes.x && x <= sizes.x + sizes.width) {
       if (y >= sizes.y && y <= sizes.y + sizes.height) {
         if (i.address !== false) {
-          _this.globalIndex = i.address;
-          _this.localIndex = -1;
+          _this2.globalIndex = i.address;
+          _this2.localIndex = -1;
         }
-        _this.element.active = undefined;
-        _this.nextElement();
+        _this2.element.active = undefined;
+        _this2.nextElement();
       }
     }
   });
@@ -746,60 +752,55 @@ Nauper.Question = function Question(engine, args) {
   this.map = args.map;
   this.audio = args.audio;
   this.once = args.once;
-  this.active = undefined;
+  this.act = -1;
+  this.box = this.inactivebox;
+  this.coordmap = {
+    x: 0.025,
+    height: 0.20,
+    width: 0.95,
+    radius: 0.05
+  };
 
   this.draw = function draw() {
-    var _this = this;
-
-    var clear = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-
     if (this.map.length !== 0 && this.map.length <= 4) {
-      var x = 0.025;
-      var height = 0.20;
-      var width = 0.95;
-      var radius = 0.05;
-      if (clear) {
-        this.render.clearRect(0, 0, this.size.width, this.size.height);
-      }
+      this.render.clearRect(0, 0, this.engine.size.width, this.engine.size.height);
       this.engine.ui.setBackground(this.background);
-
-      var _loop = function _loop(index) {
-        if (_this.active === undefined || _this.active === index) {
-          (function () {
-            var i = _this.map[index];
-            var box = void 0;
-            if (_this.active === index) {
-              box = _this.activebox;
-            } else {
-              box = _this.inactivebox;
-            }
-            _this.engine.ui.drawTextBox({
-              type: _this.boxtype,
-              color: box.background,
-              link: _this.boxlink,
-              y: index * 0.25 + 0.025,
-              x: x,
-              height: height,
-              width: width,
-              radius: radius,
-              callback: function callback() {
-                _this.engine.ui.drawText({
-                  text: i.text,
-                  align: 'center',
-                  color: box.text,
-                  y: index * 0.25 + 0.125
-                });
-              }
-            });
-          })();
-        }
-      };
-
       for (var index = 0; index < this.map.length; index += 1) {
-        _loop(index);
+        this.drawQuestionBox(index, this.inactivebox);
       }
     } else {
       this.engine.nextElement();
+    }
+  }.bind(this);
+
+  this.drawQuestionBox = function drawQuestionBox(boxIndex, drawingBox) {
+    var _this = this;
+
+    var box = void 0;
+    if (drawingBox === undefined) {
+      box = this.inactivebox;
+    } else {
+      box = drawingBox;
+    }
+    if (boxIndex !== -1) {
+      this.engine.ui.drawTextBox({
+        type: this.boxtype,
+        color: box.background,
+        link: this.boxlink,
+        y: boxIndex * 0.25 + 0.025,
+        x: this.coordmap.x,
+        height: this.coordmap.height,
+        width: this.coordmap.width,
+        radius: this.coordmap.radius,
+        callback: function callback() {
+          _this.engine.ui.drawText({
+            text: _this.map[boxIndex].text,
+            align: 'center',
+            color: box.text,
+            y: boxIndex * 0.25 + 0.125
+          });
+        }
+      });
     }
   }.bind(this);
 };
