@@ -34,6 +34,73 @@ That's this:
   * Handling clicks on canvas
   * Handling choices of **Question**
 
+## Nauper's functionality
+You can:
+  * Draw background
+  * Draw textboxes
+  * Draw characters
+  * Draw text
+  * Draw menu
+
+Textboxes can be:
+  * With edges
+  * Rounded
+  * An images
+  * With different colors
+
+Question's textboxes have an active state and can change their color when cursor is over it
+
+Menu is built from textboxes
+
+## How to build
+
+At first, install NodeJS :)
+
+Install gulp globally using npm
+```
+npm install gulp -g
+```
+
+Go to a project folder and install dependencies
+```
+npm install
+```
+
+Build all using gulp
+```
+gulp build
+```
+
+P.S. If you want to see more gulp tasks just do `gulp help`
+
+## How to run example
+
+Install gulp globally using npm
+```
+npm install gulp -g
+```
+
+Go to a project folder and install all requirements
+```
+npm install
+```
+
+Run `default` gulp task to rebuild all
+```
+gulp default
+```
+
+or run just webserver
+
+```
+gulp webserver
+```
+
+then open your browser and go to `localhost:8000`
+
+## How to use
+Coming soon!
+
 ## Reference
 Going deeper.
 
@@ -521,74 +588,6 @@ no methods yet
     * color of the icon
     * use when config.type !== 'image'
     * default is '#efefef'
-
-
-## Nauper's functionality
-You can:
-  * Draw background
-  * Draw textboxes
-  * Draw characters
-  * Draw text
-  * Draw menu
-
-Textboxes can be:
-  * With edges
-  * Rounded
-  * An images
-  * With different colors
-
-Question's textboxes have an active state and can change their color when cursor is over it
-
-Menu is built from textboxes
-
-## How to build
-
-At first, install NodeJS :)
-
-Install gulp globally using npm
-```
-npm install gulp -g
-```
-
-Go to a project folder and install dependencies
-```
-npm install
-```
-
-Build all using gulp
-```
-gulp build
-```
-
-P.S. If you want to see more gulp tasks just do `gulp help`
-
-## How to run example
-
-Install gulp globally using npm
-```
-npm install gulp -g
-```
-
-Go to a project folder and install all requirements
-```
-npm install
-```
-
-Run `default` gulp task to rebuild all
-```
-gulp default
-```
-
-or run just webserver
-
-```
-gulp webserver
-```
-
-then open your browser and go to `localhost:8000`
-
-## How to use
-Coming soon!
 
 ## TODO
 That's what we have in our todo-list:
