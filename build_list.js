@@ -7,5 +7,6 @@ module.exports = [
   'src/engine.js',
   'src/frame.js',
   'src/question.js',
+  'src/redirect.js',
   'src/character.js'
 ];
