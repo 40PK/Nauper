@@ -29,6 +29,8 @@ That's this:
   * Sending drawing coordinates to UI
 * **Question**, functionality:
   * Giving a choices to user, maximum is 4, they're redirecting user between scenes
+* **Redirect**, functionality:
+  * Redirecting user to specified scene and element
 * **Engine**, functionality:
   * Starting **Frame**'s and **Question**'s drawing
   * Handling clicks on canvas
@@ -433,6 +435,18 @@ Before using this functions you need to do create `new Frame(engine)`.
 
 no methods yet
 
+#### Redirect
+
+`draw()`:
+  * Gets:
+    * nothing
+  * Returns:
+    * nothing
+  * Does:
+    * Editing Engine.globalConfig
+    * Editing Engine.localConfig
+    * Calling Engine.nextElement
+
 
 ## Configs
 #### UI.drawTextBox
@@ -588,6 +602,10 @@ no methods yet
     * color of the icon
     * use when config.type !== 'image'
     * default is '#efefef'
+
+#### Redirect
+  * config.globalIndex - index of scene in the Engine
+  * config.localIndex - index of an element in chosen element
 
 ## TODO
 That's what we have in our todo-list:
