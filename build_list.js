@@ -5,8 +5,5 @@ module.exports = [
   'src/ui.js',
   'src/sound.js',
   'src/engine.js',
-  'src/frame.js',
-  'src/question.js',
-  'src/redirect.js',
   'src/character.js'
 ];

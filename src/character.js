@@ -1,8 +1,6 @@
 /* global Nauper */
-Nauper.Character = function Character(args) {
-  let result = {};
-  args.emotions.forEach(function characterEmotions(emotion) {
-    result[emotion] = `${args.path}/${emotion}.png`;
-  });
-  return result;
+Nauper.Character = function Character(emotionPaths, name, color) {
+  this.emotions = emotionPaths;
+  this.name = name;
+  this.color = color;
 };
