@@ -1,7 +1,9 @@
 # Nauper
 
 **THIS IS A BRANCH CALLED "LINEAR"**
+
 **ALL YOU CAN FIND THERE IS UNSTABLE**
+
 **IT IS NOT RECOMMENDED TO USE**
 
 Nauper is a engine for visual novels based on web technologies.
