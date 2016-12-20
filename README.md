@@ -1,14 +1,14 @@
 # Nauper
 
+Nauper is a engine for visual novels based on web technologies.
+
 **THIS IS A BRANCH CALLED "LINEAR"**
 
 **ALL YOU CAN FIND THERE IS UNSTABLE**
 
 **IT IS NOT RECOMMENDED TO USE**
 
-Nauper is a engine for visual novels based on web technologies.
-
-Nauper uses HTML5 `<canvas>` element for rendering and controlling it by JS.
+This version of Nauper uses HTML elements.
 
 ## Code guide
 We use ES5 syntax with some ES6 features.
