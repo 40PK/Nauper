@@ -11,5 +11,9 @@ Nauper.Redirect = function Redirect(engine, configs) {
     this.engine.globalIndex = this.conf.globalIndex;
     this.engine.localIndex = this.conf.localIndex - 1;
     this.engine.nextElement();
+    this.engine.sound.process(
+      this.engine.element.audio,
+      this.engine.element.once
+    );
   }.bind(this);
 };
