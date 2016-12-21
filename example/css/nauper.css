@@ -1,0 +1,93 @@
+html {
+  background-color: #000;
+  transition-duration: 2s;
+  transition-property: opacity;
+}
+
+body {
+  font-family: Helvetica;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+}
+
+#sayBox {
+  position: absolute;
+  display: none;
+  z-index: 2;
+  width: 95%;
+  height: 18%;
+  bottom: 2%;
+  left: 2.5%;
+  padding: 1%;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+#name, #text {
+  margin: 0.25%;
+  font-size: 125%;
+}
+
+.character {
+  position: absolute;
+  z-index: 1;
+  width: 25%;
+  height: auto;
+  bottom: 0;
+}
+
+.characterPos0 {
+  left: 0;
+}
+
+.characterPos1 {
+  left: 25%;
+}
+
+.characterPos2 {
+  left: 50%;
+}
+
+.characterPos3 {
+  left: 75%;
+}
+
+.characterPosCenter {
+  left: 50%;
+  margin-left: -12.5%;
+}
+
+.inactiveQuestionBox, .activeQuestionBox {
+  position: absolute;
+  z-index: 2;
+  width: 95%;
+  height: 22.5%;
+  margin: 1% 0;
+  left: 2.5%;
+}
+
+.inactiveQuestionBox {
+  background-color: #fff
+}
+
+.activeQuestionBox {
+  background-color: #eee;
+}
+
+.inactiveQuestionText, .activeQuestionText {
+  position: absolute;
+  display: inline-block;
+  left: 50%;
+  top: 50%;
+  margin-left: -0.5em;
+  margin-top: -0.5em;
+}
+
+.inactiveQuestionText {
+  color: #000;
+}
+
+.activeQuestionText {
+  color: #111;
+}
