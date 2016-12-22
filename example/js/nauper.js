@@ -350,10 +350,10 @@ Nauper.Character.prototype.draw = function draw(emotion) {
       _this2.image.src = _this2.emotions[emotion];
       _this2.currentEmotion = emotion;
       var listener = function listener() {
-        console.log(_this2.image.offsetHeight);
-        console.log(document.documentElement.offsetHeight);
-        if (_this2.image.offsetHeight > document.documentElement.offsetHeight) {
-          _this2.image.classList.add('characterAlternative');
+        var doc = document.documentElement.offsetHeight;
+        var img = _this2.image.offsetHeight;
+        if (img > doc) {
+          _this2.image.style.top = '0';
         }
         _this2.image.removeEventListener('load', listener);
       };

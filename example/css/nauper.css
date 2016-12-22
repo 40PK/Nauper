@@ -8,6 +8,7 @@ html {
 body {
   font-family: Helvetica;
   background-size: cover;
+  overflow: hidden;
   margin: 0;
   padding: 0;
 }
@@ -35,11 +36,6 @@ body {
   width: 25%;
   height: auto;
   bottom: 0;
-}
-
-.characterAlternative {
-  height: 100%;
-  width: auto;
 }
 
 .characterPos0 {
