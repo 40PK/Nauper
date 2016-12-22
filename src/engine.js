@@ -13,9 +13,11 @@ Nauper.Engine = function Engine() {
   this.click = function click() {
     this.localIndex += 1;
     if (this.localIndex < this.elements[this.globalIndex].length) {
-      this.UI.clearQuestion();
-      this.UI.hideTextBox();
       this.element = this.elements[this.globalIndex][this.localIndex];
+      if (this.element.func !== 'fade') {
+        this.UI.clearQuestion();
+        this.UI.hideTextBox();
+      }
       this.element.parent[this.element.func].apply(this.element.parent, this.element.arguments);
       if (this.notSkip.indexOf(this.element.func) === -1) {
         this.click();
@@ -29,7 +31,12 @@ Nauper.Engine = function Engine() {
 Nauper.Engine.prototype.redirect = function redirect(globalIndex = 0, localIndex = 0) {
   this.globalIndex = globalIndex;
   this.localIndex = localIndex - 1;
-  this.UI.hideCharacters();
+  if (this.elements[this.globalIndex][this.localIndex + 1].func !== 'fade') {
+    this.UI.hideCharacters();
+  } else {
+    setTimeout(this.UI.hideCharacters,
+      this.elements[this.globalIndex][this.localIndex + 1].arguments[2] || 2000);
+  }
 };
 
 Nauper.Engine.prototype.addLabel = function addLabel(label) {

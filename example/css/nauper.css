@@ -2,7 +2,7 @@ html {
   background-color: #000;
   transition-duration: 2s;
   transition-property: opacity;
-  font-size: 125%;
+  /*font-size: 125%;*/
 }
 
 body {
