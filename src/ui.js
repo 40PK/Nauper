@@ -38,6 +38,7 @@ Nauper.UI.prototype.drawQuestion = function drawQuestion(questionMap) {
       this.engine.redirect(i.address);
     });
   });
+  this.hideCharacters();
 };
 
 Nauper.UI.prototype.clearQuestion = function clearQuestion() {
