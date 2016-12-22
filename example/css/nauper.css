@@ -2,7 +2,6 @@ html {
   background-color: #000;
   transition-duration: 2s;
   transition-property: opacity;
-  /*font-size: 125%;*/
 }
 
 body {
@@ -79,10 +78,10 @@ body {
 .inactiveQuestionText, .activeQuestionText {
   position: absolute;
   display: inline-block;
-  left: 50%;
   top: 50%;
-  margin-left: -0.5em;
-  margin-top: -0.5em;
+  margin-top: -0.625em;
+  width: 100%;
+  text-align: center;
 }
 
 .inactiveQuestionText {
