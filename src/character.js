@@ -46,8 +46,8 @@ Nauper.Character.prototype.createImage = function createImage() {
   this.image.id = this.id;
   this.image.classList.add('character');
   this.image.classList.add(characterClass);
-  this.image.style.display = 'none';
   document.body.appendChild(this.image);
+  this.image.style.display = 'none';
 };
 
 Nauper.Character.prototype.draw = function draw(emotion) {
@@ -55,6 +55,15 @@ Nauper.Character.prototype.draw = function draw(emotion) {
   if (this.emotions[emotion] && this.currentEmotion !== emotion) {
     this.image.src = this.emotions[emotion];
     this.currentEmotion = emotion;
+    let listener = () => {
+      console.log(this.image.offsetHeight);
+      console.log(document.documentElement.offsetHeight);
+      if (this.image.offsetHeight > document.documentElement.offsetHeight) {
+        this.image.classList.add('characterAlternative');
+      }
+      this.image.removeEventListener('load', listener);
+    };
+    this.image.addEventListener('load', listener);
   }
 };
 

@@ -2,6 +2,7 @@ html {
   background-color: #000;
   transition-duration: 2s;
   transition-property: opacity;
+  font-size: 125%;
 }
 
 body {
@@ -26,7 +27,6 @@ body {
 
 #name, #text {
   margin: 0.25%;
-  font-size: 125%;
 }
 
 .character {
@@ -35,6 +35,11 @@ body {
   width: 25%;
   height: auto;
   bottom: 0;
+}
+
+.characterAlternative {
+  height: 100%;
+  width: auto;
 }
 
 .characterPos0 {

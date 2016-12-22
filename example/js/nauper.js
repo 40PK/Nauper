@@ -337,15 +337,28 @@ Nauper.Character.prototype.createImage = function createImage() {
   this.image.id = this.id;
   this.image.classList.add('character');
   this.image.classList.add(characterClass);
-  this.image.style.display = 'none';
   document.body.appendChild(this.image);
+  this.image.style.display = 'none';
 };
 
 Nauper.Character.prototype.draw = function draw(emotion) {
+  var _this2 = this;
+
   this.image.style.display = 'block';
   if (this.emotions[emotion] && this.currentEmotion !== emotion) {
-    this.image.src = this.emotions[emotion];
-    this.currentEmotion = emotion;
+    (function () {
+      _this2.image.src = _this2.emotions[emotion];
+      _this2.currentEmotion = emotion;
+      var listener = function listener() {
+        console.log(_this2.image.offsetHeight);
+        console.log(document.documentElement.offsetHeight);
+        if (_this2.image.offsetHeight > document.documentElement.offsetHeight) {
+          _this2.image.classList.add('characterAlternative');
+        }
+        _this2.image.removeEventListener('load', listener);
+      };
+      _this2.image.addEventListener('load', listener);
+    })();
   }
 };
 
